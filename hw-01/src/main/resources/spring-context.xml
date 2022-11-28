@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns="http://www.springframework.org/schema/beans"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <bean id="questionDaoCSVImpl" class="dao.impl.QuestionDaoCSVImpl" />
+    <bean id="questionService" class="service.QuestionService">
+        <constructor-arg name="questionDao" ref="questionDaoCSVImpl"/>
+    </bean>
+    <bean id="answerDaoCSVImpl" class="dao.impl.AnswerDaoCSVImpl" />
+    <bean id="answerService" class="service.AnswerService">
+        <constructor-arg name="answerDao" ref="answerDaoCSVImpl"/>
+    </bean>
+
+</beans>
