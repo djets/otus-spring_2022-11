@@ -1,4 +1,4 @@
-package model;
+package ru.otus.spring.model;
 
 import java.util.UUID;
 
@@ -8,7 +8,10 @@ public class Answer {
     private boolean rightAnswer;
     private Question question;
 
-    public Answer(){};
+    public Answer() {
+    }
+
+    ;
 
     private Answer(Long id, String text, boolean rightAnswer, Question question) {
         this.id = id;

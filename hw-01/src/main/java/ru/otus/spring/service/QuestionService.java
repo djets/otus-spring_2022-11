@@ -1,8 +1,8 @@
-package service;
+package ru.otus.spring.service;
 
 import com.opencsv.exceptions.CsvException;
-import dao.AbstractDao;
-import model.Question;
+import ru.otus.spring.dao.AbstractDao;
+import ru.otus.spring.model.Question;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

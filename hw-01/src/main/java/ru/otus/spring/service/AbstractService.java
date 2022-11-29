@@ -1,4 +1,4 @@
-package service;
+package ru.otus.spring.service;
 
 import java.util.List;
 

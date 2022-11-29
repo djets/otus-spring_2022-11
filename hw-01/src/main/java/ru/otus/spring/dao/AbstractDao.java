@@ -1,4 +1,4 @@
-package dao;
+package ru.otus.spring.dao;
 
 import com.opencsv.exceptions.CsvException;
 

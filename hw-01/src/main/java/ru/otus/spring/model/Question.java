@@ -1,4 +1,4 @@
-package model;
+package ru.otus.spring.model;
 
 import java.util.UUID;
 
