@@ -16,14 +16,4 @@ public class ConfigCSV {
         this.fileNameCSV = fileNameCSV;
     }
 
-    public static ConfigCSV getFileNameCsv() {
-        return FILE_NAME_CSV;
-    }
-
-    @Override
-    public String toString() {
-        return "ConfigCSV{" +
-                "fileNameCSV='" + fileNameCSV + '\'' +
-                '}';
-    }
 }

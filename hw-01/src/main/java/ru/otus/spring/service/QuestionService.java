@@ -3,14 +3,11 @@ package ru.otus.spring.service;
 import com.opencsv.exceptions.CsvException;
 import ru.otus.spring.dao.AbstractDao;
 import ru.otus.spring.model.Question;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.List;
 
 public class QuestionService implements AbstractService<Question> {
-    static Logger log = LoggerFactory.getLogger(QuestionService.class);
     private final AbstractDao<Question> questionDao;
 
     public QuestionService(AbstractDao<Question> questionDao) {

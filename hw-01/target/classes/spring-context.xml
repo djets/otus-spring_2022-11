@@ -20,5 +20,5 @@
     <bean id="answerService" class="ru.otus.spring.service.AnswerService">
         <constructor-arg name="answerDao" ref="answerDaoCSVImpl"/>
     </bean>
-
+    <bean id="consoleOutputController" class="ru.otus.spring.controller.ConsoleOutputController"/>
 </beans>

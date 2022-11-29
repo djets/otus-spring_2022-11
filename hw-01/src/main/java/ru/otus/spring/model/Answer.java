@@ -1,5 +1,6 @@
 package ru.otus.spring.model;
 
+import java.util.Objects;
 import java.util.UUID;
 
 public class Answer {
@@ -48,6 +49,26 @@ public class Answer {
                 ", rightAnswer=" + rightAnswer +
                 ", question=" + question +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Answer answer = (Answer) o;
+
+        if (rightAnswer != answer.rightAnswer) return false;
+        if (!text.equals(answer.text)) return false;
+        return Objects.equals(question, answer.question);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = text.hashCode();
+        result = 31 * result + (rightAnswer ? 1 : 0);
+        result = 31 * result + (question != null ? question.hashCode() : 0);
+        return result;
     }
 
     public static AnswerBuilder builder() {
