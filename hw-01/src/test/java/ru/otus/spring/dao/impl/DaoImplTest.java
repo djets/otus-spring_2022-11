@@ -58,12 +58,23 @@ public class DaoImplTest {
         try {
             getCsvReader();
             answerList = Optional.of(csvReader.readAll().stream()
-                    .map(s -> Answer.builder().setText(s[1]).setRightAnswer(Boolean.parseBoolean(s[2]))
-                            .setQuestion(Question.builder().setText(s[0]).build()).build()).distinct()
-                    .collect(Collectors.toList())).get();
+                            .map(s -> Answer.builder()
+                                    .setText(s[1])
+                                    .setRightAnswer(Boolean.parseBoolean(s[2]))
+                                    .setQuestion(Question.builder().setText(s[0]).build())
+                                    .build())
+                            .distinct()
+                            .collect(Collectors.toList()))
+                    .get();
+
             getCsvReader();
             questionList = Optional.of(csvReader.readAll().stream()
-                    .map(s -> Question.builder().setText(s[0]).build()).distinct().collect(Collectors.toList())).get();
+                            .map(s -> Question.builder()
+                                    .setText(s[0])
+                                    .build())
+                            .distinct()
+                            .collect(Collectors.toList()))
+                    .get();
         } catch (IOException | CsvException e) {
             throw new RuntimeException(e);
         }
