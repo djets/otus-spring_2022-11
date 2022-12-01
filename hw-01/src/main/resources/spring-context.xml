@@ -8,17 +8,12 @@
                            http://www.springframework.org/schema/util/spring-util-3.1.xsd">
 
     <util:constant id="fileCsv" static-field="ru.otus.spring.config.ConfigCSV.FILE_NAME_CSV"/>
-    <bean id="questionDaoCSVImpl" class="ru.otus.spring.dao.impl.QuestionDaoCSVImpl">
-        <property name="fileNameCSV" ref="fileCsv"/>
+    <bean id="questionDaoCSV" class="ru.otus.spring.dao.QuestionsDaoCSV">
+        <property name="configCSV" ref="fileCsv"/>
     </bean>
-    <bean id="questionService" class="ru.otus.spring.service.QuestionService">
-        <constructor-arg name="questionDao" ref="questionDaoCSVImpl"/>
+    <bean id="consoleOutputController" class="ru.otus.spring.controller.ConsoleOutputController" />
+    <bean id="questionServiceImpl" class="ru.otus.spring.service.QuestionServiceImpl">
+        <constructor-arg name="questionDao" ref="questionDaoCSV"/>
+        <constructor-arg name="consoleOutput" ref="consoleOutputController"/>
     </bean>
-    <bean id="answerDaoCSVImpl" class="ru.otus.spring.dao.impl.AnswerDaoCSVImpl">
-        <property name="fileNameCSV" ref="fileCsv"/>
-    </bean>
-    <bean id="answerService" class="ru.otus.spring.service.AnswerService">
-        <constructor-arg name="answerDao" ref="answerDaoCSVImpl"/>
-    </bean>
-    <bean id="consoleOutputController" class="ru.otus.spring.controller.ConsoleOutputController"/>
 </beans>

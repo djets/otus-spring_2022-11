@@ -1,56 +1,55 @@
 package ru.otus.spring.service;
 
-import com.opencsv.exceptions.CsvException;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import ru.otus.spring.dao.impl.AnswerDaoCSVImpl;
-import ru.otus.spring.dao.impl.QuestionDaoCSVImpl;
+import ru.otus.spring.controller.OutputController;
+import ru.otus.spring.dao.QuestionsDao;
 import ru.otus.spring.model.Answer;
 import ru.otus.spring.model.Question;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
+import java.util.*;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 @ExtendWith(MockitoExtension.class)
 public class ServiceTest {
-    Logger logger = LoggerFactory.getLogger(ServiceTest.class);
-    QuestionService questionService;
-    AnswerService answerService;
+    QuestionServiceImpl questionService;
     @Mock
-    QuestionDaoCSVImpl questionDaoCSV;
+    QuestionsDao questionDaoCSV;
     @Mock
-    AnswerDaoCSVImpl answerDaoCSV;
+    OutputController outputController;
+
+    Map<Question, Set<Answer>> questionMap;
 
     @BeforeEach
     void init() {
-        questionService = new QuestionService(questionDaoCSV);
-        answerService = new AnswerService(answerDaoCSV);
+        var question = new Question("On an American $100 bill, there is portrait of American statesman?");
+        var answerSet = new HashSet<Answer>();
+        answerSet.add(new Answer("Benjamin Franklin", true, question));
+        answerSet.add(new Answer("Franklin Roosevelt", false, question));
+        answerSet.add(new Answer("George Washington", false, question));
+        answerSet.add(new Answer("Abraham Lincoln", false, question));
+        questionMap = new HashMap<>();
+        questionMap.put(question, answerSet);
+        questionService = new QuestionServiceImpl(questionDaoCSV, outputController);
     }
 
     @Test
-    void getListQuestionTest() throws IOException, CsvException {
-        List<Question> questionList = new ArrayList<>(Stream.iterate(1, n -> n + 1).limit(5).map(i -> Question.builder().setText("Question" + i).build()).collect(Collectors.toList()));
-        Mockito.when(questionDaoCSV.getAll()).thenReturn(Optional.of(questionList));
-        logger.info(questionList.stream().map(Question::getText).collect(Collectors.joining(", ")));
-        Assertions.assertEquals(questionList, questionDaoCSV.getAll().get());
+    void getQuestions() {
+        Mockito.when(questionDaoCSV.getAll()).thenReturn(Optional.of(questionMap));
+        assertThat(questionMap).usingRecursiveComparison().isEqualTo(questionService.getQuestions());
     }
+
     @Test
-    void getListAnswerTest() throws IOException, CsvException {
-        List<Answer> answerList = new ArrayList<>(Stream.iterate(1, n -> n + 1).limit(5).map(i -> Answer.builder().setText("Answer" + i).build()).collect(Collectors.toList()));
-        Mockito.when(answerDaoCSV.getAll()).thenReturn(Optional.of(answerList));
-        logger.info(answerList.stream().map(Answer::getText).collect(Collectors.joining(", ")));
-        Assertions.assertEquals(answerList, answerDaoCSV.getAll().get());
+    void getListAnswerTest() {
+        Mockito.when(questionDaoCSV.getAll()).thenReturn(Optional.of(questionMap));
+        questionService.printAllQuestions();
+        Mockito.verify(outputController).stdout(Mockito.anyString());
+
     }
 
 }

@@ -9,7 +9,12 @@ public class Question {
     public Question() {
     }
 
-    private Question(Long id, String text) {
+    public Question(String text) {
+        this.id = null;
+        this.text = text;
+    }
+
+    public Question(Long id, String text) {
         this.id = id;
         this.text = text;
     }
@@ -43,23 +48,5 @@ public class Question {
                 "id=" + id +
                 ", text='" + text + '\'' +
                 '}';
-    }
-
-    public static QuestionBuilder builder() {
-        return new QuestionBuilder();
-    }
-
-    public static class QuestionBuilder {
-        private Long id;
-        private String text;
-
-        public QuestionBuilder setText(final String text) {
-            this.text = text;
-            return this;
-        }
-
-        public Question build() {
-            return new Question(this.id = UUID.randomUUID().getMostSignificantBits(), text);
-        }
     }
 }

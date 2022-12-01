@@ -1,7 +1,6 @@
 package ru.otus.spring.model;
 
 import java.util.Objects;
-import java.util.UUID;
 
 public class Answer {
     private Long id;
@@ -12,9 +11,14 @@ public class Answer {
     public Answer() {
     }
 
-    ;
+    public Answer(String text, boolean rightAnswer, Question question) {
+        this.id = null;
+        this.text = text;
+        this.rightAnswer = rightAnswer;
+        this.question = question;
+    }
 
-    private Answer(Long id, String text, boolean rightAnswer, Question question) {
+    public Answer(Long id, String text, boolean rightAnswer, Question question) {
         this.id = id;
         this.text = text;
         this.rightAnswer = rightAnswer;
@@ -69,36 +73,5 @@ public class Answer {
         result = 31 * result + (rightAnswer ? 1 : 0);
         result = 31 * result + (question != null ? question.hashCode() : 0);
         return result;
-    }
-
-    public static AnswerBuilder builder() {
-        return new AnswerBuilder();
-    }
-
-    public static class AnswerBuilder {
-        private Long id;
-        private String text;
-        private boolean rightAnswer;
-        private Question question;
-
-        public AnswerBuilder setText(final String text) {
-            this.text = text;
-            return this;
-        }
-
-        public AnswerBuilder setRightAnswer(final boolean rightAnswer) {
-            this.rightAnswer = rightAnswer;
-            return this;
-        }
-
-        public AnswerBuilder setQuestion(final Question question) {
-            this.question = question;
-            return this;
-        }
-
-        public Answer build() {
-            return new Answer(this.id = UUID.randomUUID().getMostSignificantBits(), text, rightAnswer, question);
-        }
-
     }
 }
