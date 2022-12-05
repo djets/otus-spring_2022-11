@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import ru.otus.spring.controllers.IOService;
 import ru.otus.spring.dao.UserRegistry;
 import ru.otus.spring.model.User;
+
 @Service
 public class UserServiceImpl implements UserService {
     private final UserRegistry userRegistry;

@@ -3,6 +3,7 @@ package ru.otus.spring.services;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import ru.otus.spring.controllers.IOService;
+
 @Component
 public class ApplicationRunner {
     private final IOService ioService;
@@ -14,6 +15,7 @@ public class ApplicationRunner {
         this.userService = userService;
         this.questionsProcessor = questionsProcessor;
     }
+
     public void run() {
         ioService.outString("Welcome to game 'Who Wants To Be A Millionaire!'\n");
         Long userId = userService.createUser();

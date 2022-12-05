@@ -1,6 +1,5 @@
 package ru.otus.spring.model;
 
-import java.util.Objects;
 import java.util.UUID;
 
 public class Answer {
@@ -13,7 +12,7 @@ public class Answer {
     }
 
     public Answer(String text, boolean rightAnswer, Question question) {
-        this(UUID.randomUUID().getLeastSignificantBits(), text,rightAnswer, question);
+        this(UUID.randomUUID().getLeastSignificantBits(), text, rightAnswer, question);
     }
 
     public Answer(Long id, String text, boolean rightAnswer, Question question) {

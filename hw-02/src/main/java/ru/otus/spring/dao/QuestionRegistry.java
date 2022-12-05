@@ -7,6 +7,8 @@ import java.util.List;
 
 public interface QuestionRegistry {
     Question getQuestionById(Long id);
+
     Answer getAnswerById(Long id);
+
     List<Question> getQuestionList();
 }

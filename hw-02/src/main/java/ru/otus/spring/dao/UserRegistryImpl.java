@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Component
-public class UserRegistryImpl implements UserRegistry{
+public class UserRegistryImpl implements UserRegistry {
     private final List<User> userList;
 
     public UserRegistryImpl() {

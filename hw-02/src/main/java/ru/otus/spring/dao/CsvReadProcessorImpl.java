@@ -9,12 +9,13 @@ import org.springframework.stereotype.Component;
 import java.io.*;
 import java.util.List;
 import java.util.Objects;
+
 @Component
 @PropertySource("classpath:application.properties")
 public class CsvReadProcessorImpl implements CsvReadProcessor {
     private final String configCSV;
 
-    public CsvReadProcessorImpl(@Value("${dao.csvFilename:data.csv}")String configCSV) {
+    public CsvReadProcessorImpl(@Value("${dao.csvFilename:data.csv}") String configCSV) {
         this.configCSV = configCSV;
     }
 

@@ -6,6 +6,7 @@ import ru.otus.spring.model.Answer;
 import ru.otus.spring.model.Question;
 
 import java.util.List;
+
 @Service
 public class QuestionServiceImpl implements QuestionService {
     private final QuestionRegistry questionRegistry;

@@ -8,6 +8,7 @@ import ru.otus.spring.model.Question;
 
 import java.util.HashMap;
 import java.util.Map;
+
 @Service
 public class QuestionProcessorImpl implements QuestionProcessor {
     private final Map<Long, Boolean> resultMap;
