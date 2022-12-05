@@ -1,6 +1,6 @@
 package ru.otus.spring.services;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import ru.otus.spring.controllers.IOService;
 @Component
@@ -9,8 +9,7 @@ public class ApplicationRunner {
     private final UserService userService;
     private final QuestionProcessor questionsProcessor;
 
-    @Autowired
-    public ApplicationRunner(IOService ioService, UserService userService, QuestionProcessor questionsProcessor) {
+    public ApplicationRunner(@Qualifier("ioServiceConsole") IOService ioService, UserService userService, QuestionProcessor questionsProcessor) {
         this.ioService = ioService;
         this.userService = userService;
         this.questionsProcessor = questionsProcessor;

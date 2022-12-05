@@ -1,13 +1,12 @@
 package ru.otus.spring.dao;
 
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Repository;
 import ru.otus.spring.model.User;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@Repository
+@Component
 public class UserRegistryImpl implements UserRegistry{
     private final List<User> userList;
 

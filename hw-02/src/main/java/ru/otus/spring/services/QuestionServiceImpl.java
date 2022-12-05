@@ -1,17 +1,15 @@
 package ru.otus.spring.services;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.otus.spring.dao.QuestionRegistry;
 import ru.otus.spring.model.Answer;
 import ru.otus.spring.model.Question;
 
-import java.util.*;
+import java.util.List;
 @Service
 public class QuestionServiceImpl implements QuestionService {
     private final QuestionRegistry questionRegistry;
 
-    @Autowired
     public QuestionServiceImpl(QuestionRegistry questionRegistry) {
         this.questionRegistry = questionRegistry;
     }

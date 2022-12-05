@@ -1,6 +1,6 @@
 package ru.otus.spring.services;
 
-import org.springframework.stereotype.Component;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import ru.otus.spring.controllers.IOService;
 import ru.otus.spring.model.Answer;
@@ -15,7 +15,7 @@ public class QuestionProcessorImpl implements QuestionProcessor {
     private final QuestionService questionService;
     private final IOService ioService;
 
-    public QuestionProcessorImpl(QuestionService questionService, IOService inputService) {
+    public QuestionProcessorImpl(QuestionService questionService, @Qualifier("ioServiceConsole") IOService inputService) {
         this.questionService = questionService;
         this.ioService = inputService;
         resultMap = new HashMap<>();

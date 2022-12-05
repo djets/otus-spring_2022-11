@@ -1,7 +1,5 @@
 package ru.otus.spring.dao;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 import ru.otus.spring.model.Answer;
 import ru.otus.spring.model.Question;
@@ -14,7 +12,7 @@ public class QuestionRegistryImpl implements QuestionRegistry {
     private final Map<Long, Answer> idAnswersMap;
     private final CsvReadProcessor csvReadProcessor;
 
-    public QuestionRegistryImpl(@Autowired CsvReadProcessor csvReadProcessor) {
+    public QuestionRegistryImpl(CsvReadProcessor csvReadProcessor) {
         this.csvReadProcessor = csvReadProcessor;
         this.idQuestionMap = new HashMap<>();
         this.idAnswersMap = new HashMap<>();

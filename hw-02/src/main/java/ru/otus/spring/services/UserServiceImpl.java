@@ -1,6 +1,6 @@
 package ru.otus.spring.services;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import ru.otus.spring.controllers.IOService;
 import ru.otus.spring.dao.UserRegistry;
@@ -10,8 +10,7 @@ public class UserServiceImpl implements UserService {
     private final UserRegistry userRegistry;
     private final IOService ioService;
 
-    @Autowired
-    public UserServiceImpl(UserRegistry userRegistry, IOService ioService) {
+    public UserServiceImpl(UserRegistry userRegistry, @Qualifier("ioServiceConsole") IOService ioService) {
         this.userRegistry = userRegistry;
         this.ioService = ioService;
     }
