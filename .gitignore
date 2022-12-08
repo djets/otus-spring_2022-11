@@ -29,3 +29,8 @@ hs_err_pid*
 *.ipr
 *.idea
 
+#Maven
+.classpath
+.project
+.settings/
+target/
