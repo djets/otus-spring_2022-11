@@ -1,12 +1,13 @@
 package ru.otus.spring.dao;
 
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 import ru.otus.spring.model.Answer;
 import ru.otus.spring.model.Question;
 
 import java.util.*;
 
-@Repository
+@Component
 public class QuestionRegistryImpl implements QuestionRegistry {
     private final Map<Long, Question> idQuestionMap;
     private final Map<Long, Answer> idAnswersMap;
@@ -34,7 +35,7 @@ public class QuestionRegistryImpl implements QuestionRegistry {
         return new ArrayList<>(idQuestionMap.values());
     }
 
-    void saveQuestionsAndAnswersWithId() {
+    private void saveQuestionsAndAnswersWithId() {
         if (getOptionalQuestionList().isPresent()) {
             for (Question question : getOptionalQuestionList().get()) {
                 idQuestionMap.put(question.getId(), question);
@@ -43,7 +44,7 @@ public class QuestionRegistryImpl implements QuestionRegistry {
         }
     }
 
-    public Optional<List<Question>> getOptionalQuestionList() {
+    private Optional<List<Question>> getOptionalQuestionList() {
         List<Question> questionList = new ArrayList<>();
         List<String[]> list = csvReadProcessor.read();
         for (String[] strings : list) {
