@@ -1,5 +1,9 @@
 package ru.otus.spring.controllers;
 
+import org.springframework.context.MessageSource;
+import org.springframework.stereotype.Service;
+import ru.otus.spring.config.AppLocaleProperties;
+
 import java.io.InputStream;
 import java.io.PrintStream;
 import java.util.Scanner;

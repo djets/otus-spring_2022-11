@@ -14,32 +14,19 @@ import java.util.List;
 import java.util.Objects;
 
 @Component
-@PropertySource("classpath:application.yaml")
 public class CsvReadProcessorImpl implements CsvReadProcessor {
-    private String configCSV;
-    private final AppLocaleProperties appLocaleProperties;
+    private final String configCSV;
+    private final AppLocaleProperties properties;
     private final MessageSource messageSource;
 
-//    public CsvReadProcessorImpl(AppLocaleProperties appLocaleProperties, @Value("${dao.csvFilename:data.csv}") String configCSV) {
-//        this.appLocaleProperties = appLocaleProperties;
-//        this.configCSV = configCSV;
-//    }
-
     public CsvReadProcessorImpl(AppLocaleProperties appLocaleProperties, MessageSource messageSource) {
-        this.appLocaleProperties = appLocaleProperties;
+        this.properties = appLocaleProperties;
         this.messageSource = messageSource;
-//        String csvLocalized = getCsvLocalized(appLocaleProperties, messageSource);
-//        this.configCSV = csvLocalized;
+        this.configCSV = messageSource.getMessage("csv.filename", null, properties.getLocale());
     }
 
     public String getConfigCSV() {
         return configCSV;
-    }
-
-    @PostConstruct
-    private void setCsvLocalized() {
-        var test = this.messageSource.getMessage("test.text", null, appLocaleProperties.getLocale());
-        configCSV = this.messageSource.getMessage("csv.filename", null, "data.csv", appLocaleProperties.getLocale());
     }
 
     @Override

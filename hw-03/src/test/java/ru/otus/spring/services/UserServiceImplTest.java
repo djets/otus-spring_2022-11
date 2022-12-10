@@ -10,9 +10,13 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.support.ResourceBundleMessageSource;
+import ru.otus.spring.config.AppLocaleProperties;
 import ru.otus.spring.controllers.IOService;
 import ru.otus.spring.dao.UserRegistry;
 import ru.otus.spring.model.User;
+
+import java.util.Locale;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.ArgumentMatchers.any;
@@ -30,7 +34,12 @@ class UserServiceImplTest {
 
     @BeforeEach
     void setUp() {
-        userService = new UserServiceImpl(userRegistry, ioService);
+        ResourceBundleMessageSource messageSource = new ResourceBundleMessageSource();
+        messageSource.setBasename("slumdog");
+        messageSource.setDefaultEncoding("UTF-8");
+        AppLocaleProperties properties = new AppLocaleProperties();
+        properties.setLocale(Locale.ENGLISH);
+        userService = new UserServiceImpl(userRegistry, ioService, messageSource, properties);
     }
 
     @ParameterizedTest
