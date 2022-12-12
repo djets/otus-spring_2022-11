@@ -3,6 +3,7 @@ package ru.otus.spring.services;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Component;
+import ru.otus.spring.aop.Additional;
 import ru.otus.spring.config.AppLocaleProperties;
 import ru.otus.spring.controllers.IOService;
 
@@ -23,6 +24,7 @@ public class ApplicationRunner {
         this.messageSource = messageSource;
         this.properties = properties;
     }
+    @Additional
     public void run() {
         var messageGreetings = messageSource.getMessage("message.greetings", null, properties.getLocale());
         ioService.outString(messageGreetings);
