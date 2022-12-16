@@ -1,0 +1,6 @@
+spring:
+  messages:
+    basename: "slumdog"
+    encoding: "UTF-8"
+application:
+  locale: ru_RU
