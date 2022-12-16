@@ -20,14 +20,15 @@ class SpringBootTestQuestionProcessorImplTest {
     Logger logger = LoggerFactory.getLogger(SpringBootTestQuestionProcessorImplTest.class);
     @Autowired
     private QuestionProcessor questionProcessor;
-   @Test
+
+    @Test
     void whenTestContextLoadedAsksQuestionAnswerShouldBeCorrectTest() {
         questionProcessor.askQuestions();
         logger.info("ResultMap size: {}", questionProcessor.getResultMap().size());
         assertThat(questionProcessor.getResultMap().size()).isEqualTo(1);
         questionProcessor.getResultMap()
                 .forEach((q, b) -> {
-                    logger.info("Question id:{}; "+ "\u001b[32m" + "Answer should be correct: {}", q, b);
+                    logger.info("Question id:{}; " + "\u001b[32m" + "Answer should be correct: {}", q, b);
                     assertThat(b).isEqualTo(true);
                 });
     }

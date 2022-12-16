@@ -14,7 +14,6 @@ import ru.otus.spring.services.QuestionProcessorImpl;
 import ru.otus.spring.services.QuestionService;
 
 @TestConfiguration
-
 public class IOServiceTestConfiguration {
     private final Logger logger = LoggerFactory.getLogger(IOServiceTestConfiguration.class);
     @Autowired
