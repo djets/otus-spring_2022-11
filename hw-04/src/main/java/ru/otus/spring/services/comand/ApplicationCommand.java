@@ -8,7 +8,6 @@ import org.springframework.shell.standard.ShellMethodAvailability;
 import ru.otus.spring.config.AppLocaleProperties;
 import ru.otus.spring.model.User;
 import ru.otus.spring.services.ApplicationRunner;
-import ru.otus.spring.services.QuestionProcessor;
 import ru.otus.spring.services.UserService;
 
 import java.util.HashMap;
@@ -18,20 +17,14 @@ import java.util.Map;
 public class ApplicationCommand {
     private final ApplicationRunner applicationRunner;
     private final UserService userService;
-    private final QuestionProcessor questionProcessor;
     private final MessageSource messageSource;
     private final AppLocaleProperties properties;
     private Map<String, Long> mapIdFullUserName;
     private Long userId;
 
-    public ApplicationCommand(ApplicationRunner applicationRunner,
-                              UserService userService,
-                              QuestionProcessor questionProcessor,
-                              MessageSource messageSource,
-                              AppLocaleProperties properties) {
+    public ApplicationCommand(ApplicationRunner applicationRunner, UserService userService, MessageSource messageSource, AppLocaleProperties properties) {
         this.applicationRunner = applicationRunner;
         this.userService = userService;
-        this.questionProcessor = questionProcessor;
         this.messageSource = messageSource;
         this.properties = properties;
         this.mapIdFullUserName = new HashMap<>();
@@ -62,8 +55,7 @@ public class ApplicationCommand {
     }
 
     private Availability isTheUserCreated() {
-        var messageNoCreateUser = messageSource.getMessage("message.no-create-user",
-                null, properties.getLocale());
+        var messageNoCreateUser = messageSource.getMessage("message.no-create-user", null, properties.getLocale());
         return userId == null ? Availability.unavailable(messageNoCreateUser) : Availability.available();
     }
 }

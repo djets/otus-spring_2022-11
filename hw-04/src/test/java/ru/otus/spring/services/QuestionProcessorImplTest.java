@@ -48,10 +48,10 @@ class QuestionProcessorImplTest {
     @Test
     void whenAsksQuestionAnswerShouldBeCorrectTest() {
         Mockito.when(ioService.inputInt()).thenReturn(3);
-        questionProcessor.askQuestions();
-        logger.info("ResultMap size: {}", questionProcessor.getResultMapByUserId().size());
-        assertThat(questionProcessor.getResultMapByUserId().size()).isEqualTo(1);
-        questionProcessor.getResultMapByUserId()
+        questionProcessor.askQuestions(1L);
+        logger.info("ResultMap size: {}", questionProcessor.getResultMapByUserId(1L).size());
+        assertThat(questionProcessor.getResultMapByUserId(1L).size()).isEqualTo(1);
+        questionProcessor.getResultMapByUserId(1L)
                 .forEach((q, b) -> {
                     logger.info("Question id:{}; Answer should be correct: {}", q, b);
                     assertThat(b).isEqualTo(true);

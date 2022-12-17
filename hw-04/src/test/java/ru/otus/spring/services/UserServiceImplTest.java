@@ -25,7 +25,6 @@ import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class UserServiceImplTest {
-    Logger logger = LoggerFactory.getLogger(UserServiceImplTest.class);
     @Mock
     private UserRegistry userRegistry;
     @Mock

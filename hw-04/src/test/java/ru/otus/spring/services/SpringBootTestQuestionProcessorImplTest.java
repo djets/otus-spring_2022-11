@@ -23,10 +23,10 @@ class SpringBootTestQuestionProcessorImplTest {
 
     @Test
     void whenTestContextLoadedAsksQuestionAnswerShouldBeCorrectTest() {
-        questionProcessor.askQuestions();
-        logger.info("ResultMap size: {}", questionProcessor.getResultMapByUserId().size());
-        assertThat(questionProcessor.getResultMapByUserId().size()).isEqualTo(1);
-        questionProcessor.getResultMapByUserId()
+        questionProcessor.askQuestions(1L);
+        logger.info("ResultMap size: {}", questionProcessor.getResultMapByUserId(1L).size());
+        assertThat(questionProcessor.getResultMapByUserId(1L).size()).isEqualTo(1);
+        questionProcessor.getResultMapByUserId(1L)
                 .forEach((q, b) -> {
                     logger.info("Question id:{}; " + "\u001b[32m" + "Answer should be correct: {}", q, b);
                     assertThat(b).isEqualTo(true);
