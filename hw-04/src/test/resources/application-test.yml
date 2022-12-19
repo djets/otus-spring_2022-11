@@ -1,0 +1,6 @@
+spring:
+  messages:
+    basename: "test"
+    encoding: "UTF-8"
+application:
+  locale: en
