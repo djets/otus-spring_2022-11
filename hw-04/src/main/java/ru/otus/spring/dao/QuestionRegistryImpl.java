@@ -27,7 +27,7 @@ public class QuestionRegistryImpl implements QuestionRegistry {
 
     @Override
     public Answer getAnswerById(Long id) {
-        return null;
+        return idAnswersMap.get(id);
     }
 
     @Override

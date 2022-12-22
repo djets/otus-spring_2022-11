@@ -11,7 +11,6 @@ import org.springframework.test.context.TestPropertySource;
 import ru.otus.spring.config.IOServiceTestConfiguration;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-
 @SpringBootTest
 @ActiveProfiles("test")
 @TestPropertySource("classpath:application-test.yml")
