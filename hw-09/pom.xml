@@ -15,20 +15,20 @@
     <description>hw-09</description>
     <properties>
         <java.version>11</java.version>
-        <spring-shell.version>2.1.4</spring-shell.version>
     </properties>
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jdbc</artifactId>
         </dependency>
-        <dependency>
-            <groupId>org.flywaydb</groupId>
-            <artifactId>flyway-core</artifactId>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>org.flywaydb</groupId>-->
+<!--            <artifactId>flyway-core</artifactId>-->
+<!--        </dependency>-->
         <dependency>
             <groupId>org.springframework.shell</groupId>
             <artifactId>spring-shell-starter</artifactId>
+            <version>2.1.4</version>
         </dependency>
 
         <dependency>
@@ -47,17 +47,6 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
-    <dependencyManagement>
-        <dependencies>
-            <dependency>
-                <groupId>org.springframework.shell</groupId>
-                <artifactId>spring-shell-dependencies</artifactId>
-                <version>${spring-shell.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-        </dependencies>
-    </dependencyManagement>
 
     <build>
         <plugins>
