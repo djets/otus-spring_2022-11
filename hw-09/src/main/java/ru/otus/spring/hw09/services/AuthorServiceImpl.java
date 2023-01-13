@@ -6,54 +6,19 @@ import lombok.experimental.FieldDefaults;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
-import ru.otus.spring.hw09.dao.AuthorJdbcModelDao;
+import ru.otus.spring.hw09.dao.AuthorDao;
 import ru.otus.spring.hw09.model.Author;
 
-import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 @Service
 @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
 @RequiredArgsConstructor
 public class AuthorServiceImpl implements AuthorService {
     Logger logger = LoggerFactory.getLogger(AuthorServiceImpl.class);
-    AuthorJdbcModelDao dao;
-
-    @Override
-    public void save(Author author) {
-        dao.save(author);
-        logger.info("Author {} {} - save", author.getFirstName(), author.getLastName());
-    }
-
-    @Override
-    public void save(Long id, Author author) {
-        dao.save(id, author);
-        logger.info("Author {} {} - update", author.getFirstName(), author.getLastName());
-    }
-
-    @Override
-    public Long saveIfAbsentFirstNameLastName(String authorFirstName, String authorLastName) {
-        Author author = new Author();
-        Long id = null;
-        for (Author a : dao.findAll()) {
-            if (a.getFirstName().equals(authorFirstName) && a.getLastName().equals(authorLastName)) {
-                id = a.getId();
-                throw new RuntimeException("There is already an author with the same Name and Surname" +  a.getId());
-            }
-        }
-        if (author.getId() == null) {
-            id = UUID.randomUUID().getMostSignificantBits();
-            author.setId(id);
-            author.setFirstName(authorFirstName);
-            author.setLastName(authorLastName);
-            author.setBooks(new ArrayList<>());
-            dao.save(author);
-            return id;
-        }
-        return id;
-    }
+    AuthorDao dao;
 
     @Override
     public Author getById(Long id) {
@@ -61,11 +26,51 @@ public class AuthorServiceImpl implements AuthorService {
     }
 
     @Override
-    public void delete(Long id) {
-        Author author = new Author();
-        author.getId();
-        dao.delete(author);
-        logger.info("Author id: {} - delete", id);
+    public Long save(String name, String surname) {
+        Long foundId = findByFirstNameLastName(name, surname);
+        if (foundId == null) {
+            Author author = new Author();
+            author.setName(name);
+            author.setSurname(surname);
+            Long receivedId = dao.insert(author);
+            logger.info("Author {} {} - save. id: {}", author.getName(), author.getSurname(), receivedId);
+        }
+        logger.info("Author {} {} - is already in base. id: {}", name, surname, foundId);
+        return foundId;
+    }
+
+    @Override
+    public void update(Long id, String name, String surname) {
+        Map<String, String> changedParam = new LinkedHashMap<>();
+        if (name != null) {
+            changedParam.put("name", name);
+        }
+        if (surname != null) {
+            changedParam.put("surname", surname);
+        }
+        int update = dao.update(id, changedParam);
+        if (update > 0) {
+            logger.info("Author - update");
+        }
+    }
+
+    @Override
+    public Long findByFirstNameLastName(String name, String surname) {
+        List<Long> idList = dao.findByName(name, surname);
+        if (idList.iterator().hasNext()) {
+            return idList.iterator().next();
+        }
+        return null;
+    }
+
+    @Override
+    public boolean delete(Long id) {
+        int delete = dao.delete(id);
+        if (delete > 0) {
+            logger.info("Author id: {} - delete", id);
+            return true;
+        }
+        return false;
     }
 
     @Override

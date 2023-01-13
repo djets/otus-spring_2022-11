@@ -6,9 +6,7 @@ import lombok.experimental.FieldDefaults;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
 import org.springframework.shell.standard.ShellOption;
-import ru.otus.spring.hw09.model.Book;
 import ru.otus.spring.hw09.model.Genre;
-import ru.otus.spring.hw09.services.BookService;
 import ru.otus.spring.hw09.services.GenreService;
 
 import java.util.List;
@@ -20,50 +18,31 @@ import java.util.stream.Collectors;
 public class GenreCommands {
     GenreService genreService;
 
-    BookService bookService;
-
-    @ShellMethod(value = "Create genre", key = {"-cg", "--create-genre"})
-    public String createGenre(@ShellOption String genreName) {
-        genreService.saveIfAbsentName(genreName);
-        return "Result: create " + genreName;
+    @ShellMethod(value = "Create Genre Books", key = {"-cg", "--create-fiction-books"})
+    public String createGenre(@ShellOption String nameGenre) {
+        genreService.save(nameGenre);
+        return "======================================================================";
     }
 
-    @ShellMethod(value = "Get genre by id", key = {"-g", "--genre"})
+    @ShellMethod(value = "Get Genre by id", key = {"-g", "--genre-books"})
     public String getGenreById(Long id) {
         Genre genre = genreService.getById(id);
-        return genre.getId() + " " + genre.getName();
+        return "Result: " + genre.getId() + " " + genre.getName();
     }
 
-    @ShellMethod(value = "Get all genres", key = {"-ggs", "--get-genres"})
+    @ShellMethod(value = "Get all Genre", key = {"-ggs", "--get-fiction-books"})
     public String getGenres() {
         List<Genre> genres = genreService.getAll();
-        return genres.stream()
+        return "Result: " + genres.stream()
                 .map(genre -> genre.getName() + " id: " + genre.getId())
-                .collect(Collectors.joining("; "));
+                .collect(Collectors.joining(";\n"));
     }
 
     public String editGenre(
             @ShellOption(help = "Input id genre") Long id,
-            @ShellOption(help = "You can edit name Genre", defaultValue = "none") String name,
-            @ShellOption(help = "If you have add Book, input book id ", defaultValue = "0") String addBookId,
-            @ShellOption(help = "If you have remove Book, input book id ", defaultValue = "0") String removeBookId
+            @ShellOption(help = "You can edit name Genre") String name
     ) {
-        Genre genre = genreService.getById(id);
-        Book book = bookService.getById(Long.parseLong(addBookId));
-        if (!name.equals("none")) {
-            genre.setName(name);
-        }
-        if (!(Long.parseLong(addBookId) == 0)) {
-            book.setGenre(genre);
-            genre.getBooks().add(book);
-            bookService.save(book.getId(), book);
-        }
-        if (!(Long.parseLong(addBookId) == 0)) {
-            book.setGenre(null);
-            bookService.save(book.getId(), book);
-            genre.getBooks().remove(book);
-        }
-        genreService.save(genre.getId(), genre);
-        return "Result: " + genre.getId() + " " + genre.getName();
+        genreService.update(id, name);
+        return "======================================================================";
     }
 }
