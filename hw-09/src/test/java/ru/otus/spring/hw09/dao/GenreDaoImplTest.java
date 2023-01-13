@@ -20,7 +20,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 @TestPropertySource(locations = "classpath:application-test.yml")
 @JdbcTest
 @Import(GenreDaoImpl.class)
-class GenreJdbcModelDaoTest {
+class GenreDaoImplTest {
     @Autowired
     GenreDao genreDao;
 

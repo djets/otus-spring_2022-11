@@ -23,7 +23,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 @TestPropertySource(locations = "classpath:application-test.yml")
 @JdbcTest
 @Import(BookDaoImpl.class)
-class BookJdbcModelDaoTest {
+class BookDaoImplTest {
     @Autowired
     private BookDao bookDao;
 
