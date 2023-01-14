@@ -1,0 +1,12 @@
+INSERT INTO AUTHOR (NAME, SURNAME) VALUES ( 'Robert Louis', 'Stevenson' );
+INSERT INTO AUTHOR (NAME, SURNAME) VALUES ( 'Lewis', 'Carroll' );
+INSERT INTO AUTHOR (NAME, SURNAME) VALUES ( 'Daniel', 'Defoe' );
+INSERT INTO AUTHOR (NAME, SURNAME) VALUES ( 'Arthur', 'Conan Doyle' );
+INSERT INTO GENRE (NAME) VALUES ( 'Classic' );
+INSERT INTO GENRE (NAME) VALUES ( 'Action and Adventure' );
+INSERT INTO GENRE (NAME) VALUES ( 'Detective' );
+INSERT INTO GENRE (NAME) VALUES ( 'Fantasy' );
+INSERT INTO BOOK (NAME, AUTHOR_ID, GENRE_ID) VALUES ( 'Treasure Island', 1, 2 );
+INSERT INTO BOOK (NAME, AUTHOR_ID, GENRE_ID) VALUES ( 'Alice in Wonderland', 2, 4 );
+INSERT INTO BOOK (NAME, AUTHOR_ID, GENRE_ID) VALUES ( 'Robinson Crusoe', 3, 1 );
+INSERT INTO BOOK (NAME, AUTHOR_ID, GENRE_ID) VALUES ( 'The Hound of the Baskervilles', 4, 3 );
