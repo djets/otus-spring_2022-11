@@ -4,6 +4,7 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -32,12 +33,12 @@ public class Genre {
     String name;
 
     @OneToMany(mappedBy = "genre")
-    List<Book> books;
+    List<Book> books = new ArrayList<>();
 
     public Genre(long id, String name) {
     }
 
-    public void addBooks(Book book) {
+    public void addBook(Book book) {
         books.add(book);
         book.setGenre(this);
     }

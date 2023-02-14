@@ -5,8 +5,6 @@ import lombok.experimental.FieldDefaults;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
-import java.sql.Timestamp;
-import java.time.LocalDateTime;
 import java.util.Date;
 
 @Entity
@@ -21,8 +19,7 @@ public class Comment {
     @SequenceGenerator(
             name = "comment_generator",
             sequenceName = "comment_seq",
-            initialValue = 1000,
-            allocationSize = 50
+            initialValue = 1000
     )
     @GeneratedValue(
             strategy = GenerationType.SEQUENCE,
@@ -50,6 +47,6 @@ public class Comment {
 
     @Override
     public String toString() {
-        return createData.toString() + "; \n" + textComment;
+        return createData.toString() + ";\n" + textComment;
     }
 }

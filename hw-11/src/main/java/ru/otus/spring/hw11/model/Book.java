@@ -51,7 +51,7 @@ public class Book {
             foreignKey = @ForeignKey(name = "fk_book_author_on_book"),
             inverseForeignKey = @ForeignKey(name = "fk_book_author_on_author")
     )
-    List<Author> authors;
+    List<Author> authors = new ArrayList<>();
 
     @ManyToOne(
             fetch = FetchType.LAZY,
@@ -76,6 +76,16 @@ public class Book {
     )
     List<Comment> comments = new ArrayList<>();
 
+    public void addAuthor(Author author) {
+        authors.add(author);
+        author.addBook(this);
+    }
+
+    public void removeAuthor(Author author) {
+        authors.remove(author);
+        author.removeBook(this);
+    }
+
     public void addComment(Comment comment) {
         comments.add(comment);
         comment.setBook(this);
@@ -84,6 +94,5 @@ public class Book {
     public void removeComment(Comment comment) {
         comments.remove(comment);
         comment.setBook(null);
-
     }
 }

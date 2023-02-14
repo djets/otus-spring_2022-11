@@ -7,8 +7,8 @@ import java.util.List;
 public interface GenreServiceShell {
     Long save(String name);
     Genre findById(Long id);
-    void updateNameById(Long id, String changedName);
     Long findByName(String name);
+    List<Genre> findAll();
+    void updateNameById(Long id, String changedName);
     void delete(Long id);
-    List<Genre> getAll();
 }
