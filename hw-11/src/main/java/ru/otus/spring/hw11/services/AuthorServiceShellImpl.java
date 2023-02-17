@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.otus.spring.hw11.dao.AuthorRepository;
 import ru.otus.spring.hw11.model.Author;
+import ru.otus.spring.hw11.model.Book;
 
 import java.util.List;
 import java.util.Optional;
@@ -30,7 +31,12 @@ public class AuthorServiceShellImpl implements AuthorServiceShell {
     }
 
     @Override
-    public Author findById(Long id) {
+    public Author findById(Long id, boolean loadBooks) {
+        if (loadBooks) {
+            Optional<Author> optionalAuthor = repository.findById(id);
+            optionalAuthor.ifPresent(book -> book.getBooks().forEach(Book::getName));
+            return optionalAuthor.orElse(null);
+        }
         return repository.findById(id).orElse(null);
     }
 

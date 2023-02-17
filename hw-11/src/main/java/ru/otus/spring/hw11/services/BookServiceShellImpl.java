@@ -68,10 +68,13 @@ public class BookServiceShellImpl implements BookServiceShell {
 
     @Override
     @Transactional(readOnly = true)
-    public Book findById(Long id) {
-        Optional<Book> optionalBook = repository.getBookById(id);
-        optionalBook.ifPresent(book -> book.getComments().forEach(Comment::getTextComment));
-        return repository.getBookById(id).orElse(null);
+    public Book findById(Long id, boolean loadComments) {
+        if (loadComments) {
+            Optional<Book> optionalBook = repository.findById(id);
+            optionalBook.ifPresent(book -> book.getComments().forEach(Comment::getTextComment));
+            return optionalBook.orElse(null);
+        }
+        return repository.findById(id).orElse(null);
     }
 
     @Override

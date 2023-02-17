@@ -9,7 +9,6 @@ import ru.otus.spring.hw11.dao.GenreRepository;
 import ru.otus.spring.hw11.model.Genre;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service

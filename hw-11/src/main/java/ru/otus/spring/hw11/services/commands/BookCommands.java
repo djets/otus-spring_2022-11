@@ -6,13 +6,10 @@ import lombok.experimental.FieldDefaults;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
 import org.springframework.shell.standard.ShellOption;
-import ru.otus.spring.hw11.model.Author;
 import ru.otus.spring.hw11.model.Book;
-import ru.otus.spring.hw11.model.Comment;
 import ru.otus.spring.hw11.services.BookServiceShell;
 
 import java.util.List;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 
@@ -40,7 +37,7 @@ public class BookCommands {
 
     @ShellMethod(value = "Find book by id", key = "-b")
     public String findBookById(Long id) {
-        Book book = bookService.findById(id);
+        Book book = bookService.findById(id, false);
         if (book != null) {
             return "Found book id: " + book.getId() + ", name: " + book.getName();
         }
@@ -48,8 +45,8 @@ public class BookCommands {
     }
 
     @ShellMethod(value = "Find book by id with all parameters", key = "-B")
-    public String findBookByIdWithAllParameters(Long id) {
-        Book book = bookService.findById(id);
+    public String findBookWithAllParametersById(Long id) {
+        Book book = bookService.findById(id, true);
         if (book != null) {
             return "Found book id: " + book.getId() + ", name: " + book.getName() +
                     "\nAuthors: " + book.getAuthors().stream()

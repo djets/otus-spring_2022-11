@@ -8,7 +8,7 @@ import java.util.List;
 public interface AuthorServiceShell {
     Long save(String name, String surname);
 
-    Author findById(Long id);
+    Author findById(Long id, boolean loadBooks);
 
     List<Long> findByNameAndSurname(String name, String surname);
 

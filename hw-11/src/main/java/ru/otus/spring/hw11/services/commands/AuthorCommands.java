@@ -7,6 +7,7 @@ import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
 import org.springframework.shell.standard.ShellOption;
 import ru.otus.spring.hw11.model.Author;
+import ru.otus.spring.hw11.model.Book;
 import ru.otus.spring.hw11.services.AuthorServiceShell;
 
 import java.util.List;
@@ -25,11 +26,25 @@ public class AuthorCommands {
 
     @ShellMethod(value = "Find author by id", key = "-a")
     public String findAuthorById(@ShellOption(help = "Input id author") Long id) {
-        Author author = authorService.findById(id);
+        Author author = authorService.findById(id, false);
         if (author != null) {
             return "Found author id: " + author.getId() +
                     ", name: " + author.getName() +
                     ", surname: " + author.getSurname();
+        }
+        return "Author not found";
+    }
+
+    @ShellMethod(value = "Find author by id with Books ", key = "-A")
+    public String findAuthorWithBooksById(@ShellOption(help = "Input id author") Long id) {
+        Author author = authorService.findById(id, true);
+        if (author != null) {
+            return "Found author id: " + author.getId() +
+                    ", name: " + author.getName() +
+                    ", surname: " + author.getSurname() +
+                    "\nBooks:\n" + author.getBooks().stream()
+                    .map(Book::getName)
+                    .collect(Collectors.joining(", "));
         }
         return "Author not found";
     }

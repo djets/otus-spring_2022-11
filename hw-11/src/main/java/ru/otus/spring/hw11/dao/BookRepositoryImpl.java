@@ -6,12 +6,10 @@ import lombok.experimental.FieldDefaults;
 import org.springframework.stereotype.Repository;
 import ru.otus.spring.hw11.model.Book;
 
-import javax.persistence.EntityGraph;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 @Repository
@@ -34,18 +32,7 @@ public class BookRepositoryImpl implements BookRepository {
 
     @Override
     public Optional<Book> findById(Long id) {
-        EntityGraph<?> graph = em.getEntityGraph("book-only-entity-graph");
-        Map<String, Object> properties = Map.of("javax.persistence.fetchgraph", graph);
-        Book book = em.find(Book.class, id, properties);
-        return Optional.ofNullable(book);
-    }
-
-    @Override
-    public Optional<Book> findByIdWithGenreAndAuthors(Long id) {
-        EntityGraph<?> graph = em.getEntityGraph("book-genre-authors-entity-graph");
-        Map<String, Object> properties = Map.of("javax.persistence.fetchgraph", graph);
-        Book book = em.find(Book.class, id, properties);
-        return Optional.ofNullable(book);
+        return Optional.ofNullable(em.find(Book.class, id));
     }
 
     @Override
@@ -75,10 +62,5 @@ public class BookRepositoryImpl implements BookRepository {
     @Override
     public void delete(Book book) {
         em.remove(em.contains(book) ? book : em.merge(book));
-    }
-
-    @Override
-    public Optional<Book> getBookById(Long id) {
-        return Optional.ofNullable(em.find(Book.class, id));
     }
 }

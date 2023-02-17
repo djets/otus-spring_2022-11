@@ -9,8 +9,6 @@ public interface BookRepository {
     Book save(Book book);
     Optional<Book> findById(Long id);
 
-    Optional<Book> findByIdWithGenreAndAuthors(Long id);
-
     List<Book> findAll();
 
     List<Book> findByName(String name);
@@ -18,6 +16,4 @@ public interface BookRepository {
     void update(Book book);
 
     void delete(Book book);
-
-    Optional<Book> getBookById(Long id);
 }

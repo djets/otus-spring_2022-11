@@ -10,7 +10,7 @@ public interface BookServiceShell {
 
     Long saveBookWithGenreAndAuthor(String name, String authorName, String authorSurname, String genreName);
 
-    Book findById(Long id);
+    Book findById(Long id, boolean loadComments);
 
     List<Long> findByName(String name);
 
