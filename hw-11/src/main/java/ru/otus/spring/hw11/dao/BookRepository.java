@@ -13,13 +13,11 @@ public interface BookRepository {
 
     List<Book> findAll();
 
-    Optional<Book> findByName(String name);
-
-    void updateNameById(Long id, String updatedName);
+    List<Book> findByName(String name);
 
     void update(Book book);
 
-    void deleteById(Long id);
-
     void delete(Book book);
+
+    Optional<Book> getBookById(Long id);
 }

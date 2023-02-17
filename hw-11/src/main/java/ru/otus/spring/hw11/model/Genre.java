@@ -27,24 +27,35 @@ public class Genre {
             generator = "genre_generator"
     )
     @Column(name = "id", nullable = false)
-    long id;
+    Long id;
 
     @Column(name = "name")
     String name;
 
-    @OneToMany(mappedBy = "genre")
+    @OneToMany(
+            mappedBy = "genre",
+            fetch = FetchType.LAZY,
+            cascade = {
+                    CascadeType.PERSIST,
+                    CascadeType.MERGE,
+                    CascadeType.REFRESH,
+                    CascadeType.DETACH
+            }
+    )
     List<Book> books = new ArrayList<>();
 
-    public Genre(long id, String name) {
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Genre genre = (Genre) o;
+
+        return getName().equals(genre.getName());
     }
 
-    public void addBook(Book book) {
-        books.add(book);
-        book.setGenre(this);
-    }
-
-    public void removeBooks(Book book) {
-        books.remove(book);
-        book.setGenre(null);
+    @Override
+    public int hashCode() {
+        return getName().hashCode();
     }
 }

@@ -25,7 +25,7 @@ public class Comment {
             strategy = GenerationType.SEQUENCE,
             generator = "comment_generator"
     )
-    long id;
+    Long id;
     @Column(name = "text_comment", length = 3000)
     String textComment;
 
@@ -37,13 +37,33 @@ public class Comment {
             updatable = false)
     Date createData;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(
+            fetch = FetchType.EAGER
+    )
     @JoinColumn(
             name = "book_id",
             referencedColumnName = "id",
             foreignKey = @ForeignKey(name = "fk_book_comments")
     )
     Book book;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Comment comment = (Comment) o;
+
+        if (!getTextComment().equals(comment.getTextComment())) return false;
+        return getCreateData() != null ? getCreateData().equals(comment.getCreateData()) : comment.getCreateData() == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = getTextComment().hashCode();
+        result = 31 * result + (getCreateData() != null ? getCreateData().hashCode() : 0);
+        return result;
+    }
 
     @Override
     public String toString() {

@@ -22,7 +22,7 @@ public class CommentRepositoryImpl implements CommentRepository {
 
     @Override
     public Comment save(Comment comment) {
-        if (comment.getId() == 0) {
+        if (comment.getId() == null) {
             em.persist(comment);
             return comment;
         } else {
@@ -36,27 +36,10 @@ public class CommentRepositoryImpl implements CommentRepository {
     }
 
     @Override
-    public List<Comment> findAllByBookId(Long bookId) {
-        TypedQuery<Comment> comments = em.createQuery(
-                "SELECT c FROM Comment c WHERE c.book.id = :bookId",
-                Comment.class
-        );
-        comments.setParameter("bookId", bookId);
-        return comments.getResultList();
-    }
-
-    @Override
     public void update(Comment comment) {
         em.merge(comment);
     }
 
-    @Override
-    public void deleteById(Long id) {
-        Query query = em.createQuery(
-                "DELETE FROM Comment c WHERE c.id = :id");
-        query.setParameter("id", id);
-        query.executeUpdate();
-    }
 
     @Override
     public void delete(Comment comment) {

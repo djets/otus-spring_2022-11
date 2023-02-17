@@ -17,12 +17,13 @@ import ru.otus.spring.hw11.model.Genre;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
 @RequiredArgsConstructor
 public class BookServiceShellImpl implements BookServiceShell {
-    BookRepository bookRepository;
+    BookRepository repository;
     AuthorRepository authorRepository;
     GenreRepository genreRepository;
     CommentRepository commentRepository;
@@ -30,8 +31,8 @@ public class BookServiceShellImpl implements BookServiceShell {
     @Override
     @Transactional
     public Long save(String name) {
-        return bookRepository.save(
-                        new Book(0L, name, new ArrayList<>(), null, new ArrayList<>())
+        return repository.save(
+                        new Book(null, name, new ArrayList<>(), null, new ArrayList<>())
                 )
                 .getId();
     }
@@ -39,127 +40,120 @@ public class BookServiceShellImpl implements BookServiceShell {
     @Override
     @Transactional
     public Long saveBookWithGenreAndAuthor(String name, String authorName, String authorSurname, String genreName) {
-        Optional<Book> optionalBook = bookRepository.findByName(name);
-        Optional<Author> optionalAuthor = authorRepository.findByNameAndSurname(authorName, authorSurname);
-        Optional<Genre> optionalGenre = genreRepository.findByName(genreName);
+        List<Book> optionalBook = repository.findByName(name);
+        List<Author> optionalAuthor = authorRepository.findByNameAndSurname(authorName, authorSurname);
+        List<Genre> optionalGenre = genreRepository.findByName(genreName);
         if (optionalBook.isEmpty()) {
-            Book book = new Book();
-            book.setName(name);
+            Book book = new Book(null, name, new ArrayList<>(), null, new ArrayList<>());
             if (optionalAuthor.isEmpty()) {
                 Author author = new Author(0L, authorName, authorSurname, new ArrayList<>());
                 Author savedAuthor = authorRepository.save(author);
-                book.addAuthor(savedAuthor);
+                book.getAuthors().add(savedAuthor);
             } else {
-                book.addAuthor(optionalAuthor.get());
+                optionalAuthor.forEach(author -> book.getAuthors().add(author));
             }
             if (optionalGenre.isEmpty()) {
-                Genre genre = new Genre(0L, genreName, new ArrayList<>());
+                Genre genre = new Genre(null, genreName, new ArrayList<>());
                 Genre savedGenre = genreRepository.save(genre);
-                savedGenre.addBook(book);
+                savedGenre.getBooks().add(book);
             } else {
-                optionalGenre.get().addBook(book);
+                optionalGenre.forEach(genre -> genre.getBooks().add(book));
             }
-            Book savedBook = bookRepository.save(book);
+            Book savedBook = repository.save(book);
             return savedBook.getId();
         } else {
-            return optionalBook.orElseThrow(RuntimeException::new).getId();
+            return optionalBook.get(0).getId();
         }
     }
 
     @Override
     @Transactional(readOnly = true)
     public Book findById(Long id) {
-        Optional<Book> optionalBook = bookRepository.findById(id);
-        if (optionalBook.isPresent()) {
-            return optionalBook.get();
-        }
-        System.out.println("Book id: " + id + " not found");
-        return null;
+        Optional<Book> optionalBook = repository.getBookById(id);
+        optionalBook.ifPresent(book -> book.getComments().forEach(Comment::getTextComment));
+        return repository.getBookById(id).orElse(null);
     }
 
     @Override
     @Transactional(readOnly = true)
-    public Long findByName(String name) {
-        Optional<Book> optionalBook = bookRepository.findByName(name);
-        if (optionalBook.isPresent()) {
-            return optionalBook.get().getId();
-        }
-        System.out.println("Book name: " + name + " not found");
-        return null;
+    public List<Long> findByName(String name) {
+        return repository.findByName(name).stream()
+                .map(Book::getId)
+                .collect(Collectors.toList());
     }
 
     @Override
     @Transactional(readOnly = true)
     public List<Book> findAll() {
-        return bookRepository.findAll();
+        return repository.findAll();
     }
 
     @Override
     @Transactional
     public void addAuthor(Long id, String authorName, String authorSurname) {
-        Optional<Book> optionalBook = bookRepository.findById(id);
-        Optional<Author> optionalAuthor = authorRepository.findByNameAndSurname(authorName, authorSurname);
+        Optional<Book> optionalBook = repository.findById(id);
+        List<Author> authors = authorRepository.findByNameAndSurname(authorName, authorSurname);
         if (optionalBook.isPresent()) {
             Book book = optionalBook.get();
-            if (optionalAuthor.isEmpty()) {
-                Author author = new Author(0L, authorName, authorSurname, new ArrayList<>());
+            if (authors.isEmpty()) {
+                Author author = new Author(null, authorName, authorSurname, new ArrayList<>());
+                author.getBooks().add(book);
                 Author savedAuthor = authorRepository.save(author);
-                book.addAuthor(savedAuthor);
+                book.getAuthors().add(savedAuthor);
             } else {
-                book.addAuthor(optionalAuthor.get());
+                authors.forEach(author -> book.getAuthors().add(author));
             }
-            bookRepository.update(book);
-        } else {
-            System.out.println("Book id: " + id + " not found");
+            repository.update(book);
         }
-
     }
 
     @Override
     @Transactional
     public void addGenre(Long id, String nameGenre) {
-        Optional<Book> optionalBook = bookRepository.findById(id);
-        Optional<Genre> optionalGenre = genreRepository.findByName(nameGenre);
+        Optional<Book> optionalBook = repository.findById(id);
+        List<Genre> genres = genreRepository.findByName(nameGenre);
         if (optionalBook.isPresent()) {
             Book book = optionalBook.get();
-            if (optionalGenre.isEmpty()) {
-                Genre genre = new Genre(0L, nameGenre, new ArrayList<>());
+            if (genres.isEmpty()) {
+                Genre genre = new Genre(null, nameGenre, new ArrayList<>());
+                genre.getBooks().add(book);
                 Genre savedGenre = genreRepository.save(genre);
-                savedGenre.addBook(book);
+                savedGenre.getBooks().add(book);
+                book.setGenre(genre);
             } else {
-                optionalGenre.get().addBook(book);
+                genres.forEach(genre -> genre.getBooks().add(book));
             }
-            bookRepository.update(book);
-        } else {
-        System.out.println("Book id: " + id + " not found");
-    }
+            repository.update(book);
+        }
     }
 
     @Override
     @Transactional
     public void addCommentById(Long id, String commentText) {
-        Optional<Book> optionalBook = bookRepository.findById(id);
+        Optional<Book> optionalBook = repository.findById(id);
         if (optionalBook.isPresent()) {
             Book book = optionalBook.get();
             Comment comment = new Comment();
             comment.setTextComment(commentText);
             Comment savedComment = commentRepository.save(comment);
-            book.addComment(savedComment);
-            bookRepository.update(book);
-        } else {
-            System.out.println("Book id: " + id + " not found");
+            book.getComments().add(savedComment);
+            repository.update(book);
         }
     }
 
     @Override
     @Transactional
     public void updateNameById(Long id, String changedName) {
-        bookRepository.updateNameById(id, changedName);
+        repository.findById(id).ifPresent(author -> {
+            author.setName(changedName);
+            repository.update(author);
+        });
+
     }
 
     @Override
     @Transactional
     public void delete(Long id) {
-        bookRepository.deleteById(id);
+        repository.findById(id).ifPresent(repository::delete);
     }
 }

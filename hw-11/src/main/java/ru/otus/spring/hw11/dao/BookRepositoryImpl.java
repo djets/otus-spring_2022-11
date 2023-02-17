@@ -3,11 +3,13 @@ package ru.otus.spring.hw11.dao;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import ru.otus.spring.hw11.model.Book;
 
-import javax.persistence.*;
+import javax.persistence.EntityGraph;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -22,7 +24,7 @@ public class BookRepositoryImpl implements BookRepository {
 
     @Override
     public Book save(Book book) {
-        if (book.getId() == 0) {
+        if (book.getId() == null) {
             em.persist(book);
             return book;
         } else {
@@ -56,24 +58,13 @@ public class BookRepositoryImpl implements BookRepository {
     }
 
     @Override
-    //TODO добавить жанр и авторов
-    public Optional<Book> findByName(String name) {
+    public List<Book> findByName(String name) {
         TypedQuery<Book> query = em.createQuery(
                 "SELECT b FROM Book b WHERE b.name = :name",
                 Book.class
         );
         query.setParameter("name", name);
-        List<Book> resultList = query.getResultList();
-        return resultList.isEmpty() ? Optional.empty() : Optional.of(resultList.get(0));
-    }
-
-    @Override
-    public void updateNameById(Long id, String updatedName) {
-        Query query = em.createQuery(
-                "UPDATE Book SET name = :name WHERE id = :id");
-        query.setParameter("name", updatedName);
-        query.setParameter("id", id);
-        query.executeUpdate();
+        return query.getResultList();
     }
 
     @Override
@@ -82,15 +73,12 @@ public class BookRepositoryImpl implements BookRepository {
     }
 
     @Override
-    public void deleteById(Long id) {
-        Query query = em.createQuery(
-                "DELETE FROM Book b WHERE b.id = :id");
-        query.setParameter("id", id);
-        query.executeUpdate();
+    public void delete(Book book) {
+        em.remove(em.contains(book) ? book : em.merge(book));
     }
 
     @Override
-    public void delete(Book book) {
-        em.remove(em.contains(book) ? book : em.merge(book));
+    public Optional<Book> getBookById(Long id) {
+        return Optional.ofNullable(em.find(Book.class, id));
     }
 }

@@ -20,13 +20,11 @@ import ru.otus.spring.hw11.model.Genre;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.PersistenceUtil;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 
 @DataJpaTest
 @DisplayName("BookRepositoryImpl")
@@ -35,14 +33,14 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 class BookRepositoryImplTest {
 
     final Logger logger = LoggerFactory.getLogger(GenreRepositoryImplTest.class);
-    EntityManagerFactory emf;
+    final EntityManagerFactory emf;
     final TestEntityManager tem;
 
     final BookRepository repository;
     Book book;
 
     @Autowired
-    public BookRepositoryImplTest(EntityManagerFactory emf, EntityManager em, TestEntityManager tem){
+    public BookRepositoryImplTest(EntityManagerFactory emf, EntityManager em, TestEntityManager tem) {
         this.repository = new BookRepositoryImpl(em);
         this.emf = emf;
         this.tem = tem;
@@ -51,7 +49,7 @@ class BookRepositoryImplTest {
     @BeforeEach
     @Transactional
     void setUp() {
-        book = new Book(0L, "Test Name", null, null, null);
+        book = new Book(null, "Test Name", null, null, null);
         tem.persist(book);
         tem.flush();
     }
@@ -60,13 +58,19 @@ class BookRepositoryImplTest {
     @DisplayName("should save author to the database")
     @Transactional
     void shouldSave() {
-        Author expectedAuthor = new Author(0L, "Test new Name", "Test new Surname", new ArrayList<>());
-        Genre expectedGenre = new Genre(0L, "Test Genre", new ArrayList<>());
-        Comment expectedComment = new Comment(0L, "This is a new test comment", null, null);
-        Book expectedBook = new Book(0L, "Test Book", new ArrayList<>(), null, new ArrayList<>());
-        expectedBook.addAuthor(expectedAuthor);
-        expectedBook.addComment(expectedComment);
-        expectedGenre.addBook(expectedBook);
+        Author expectedAuthor = new Author(null, "Test new Name", "Test new Surname", new ArrayList<>());
+        Genre expectedGenre = new Genre(null, "Test Genre", new ArrayList<>());
+        Comment expectedComment = new Comment(null, "This is a new test comment", null, null);
+        Book expectedBook = new Book(null, "Test Book", new ArrayList<>(), null, new ArrayList<>());
+
+        //в сущностях должны быть определены equals и hashcode
+        expectedBook.getAuthors().add(expectedAuthor);
+        expectedAuthor.getBooks().add(expectedBook);
+
+        expectedBook.getComments().add(expectedComment);
+
+        expectedGenre.getBooks().add(expectedBook);
+        expectedBook.setGenre(expectedGenre);
 
         Book savedBook = repository.save(expectedBook);
         logger.info("save book id: {}, name: {}", savedBook.getId(), savedBook.getName());
@@ -121,20 +125,8 @@ class BookRepositoryImplTest {
     @DisplayName("should find by name")
     @Transactional(readOnly = true)
     void findByName() {
-        Optional<Book> optionalGenre = repository.findByName(book.getName());
-        assertThat(optionalGenre.orElseThrow().getName()).isEqualTo(book.getName());
-    }
-
-    @Test
-    @DisplayName("should update the name by id")
-    @Transactional
-    void shouldUpdateNameById() {
-        repository.updateNameById(book.getId(), "Updated name");
-        tem.detach(book);
-        Optional<Book> updateGenre = repository.findById(book.getId());
-        logger.info("id: {}, name: {}", updateGenre.orElseThrow().getId(), updateGenre.get().getName());
-        assertThat(updateGenre).isNotEmpty();
-        assertThat(updateGenre.get().getName()).isEqualTo("Updated name");
+        List<Book> foundBooks = repository.findByName(book.getName());
+        assertThat(foundBooks.get(0).getName()).isEqualTo(book.getName());
     }
 
     @Test
@@ -149,22 +141,11 @@ class BookRepositoryImplTest {
     }
 
     @Test
-    @DisplayName("book should be deleted by id")
-    @Transactional
-    void shouldDeletedGenreById() {
-        repository.deleteById(101L);
-        Optional<Book> optionalGenre = repository.findById(101L);
-        assertThatThrownBy(() -> optionalGenre.orElseThrow(() -> new RuntimeException("Not found")))
-                .hasMessage("Not found");
-    }
-
-    @Test
     @DisplayName("genre should be deleted")
     @Transactional
     void shouldDeletedGenre() {
-        repository.deleteById(101L);
+        repository.findById(101L).ifPresent(repository::delete);
         Optional<Book> optionalGenre = repository.findById(101L);
-        assertThatThrownBy(() -> optionalGenre.orElseThrow(() -> new RuntimeException("Not found")))
-                .hasMessage("Not found");
+        assertThat(optionalGenre).isEmpty();
     }
 }

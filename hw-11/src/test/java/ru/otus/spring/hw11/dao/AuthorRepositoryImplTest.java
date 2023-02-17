@@ -19,7 +19,6 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 
 @DataJpaTest
 @DisplayName("AuthorRepositoryImpl")
@@ -41,7 +40,7 @@ class AuthorRepositoryImplTest {
     @BeforeEach
     @Transactional
     void setUp() {
-        author = new Author(0L, "Test Name", "Test Surname", null);
+        author = new Author(null, "Test Name", "Test Surname", null);
         tem.persist(author);
         tem.flush();
     }
@@ -91,31 +90,9 @@ class AuthorRepositoryImplTest {
     @DisplayName("should find by name and surname")
     @Transactional(readOnly = true)
     void findByNameAndSurname() {
-        Optional<Author> optionalGenre = repository.findByNameAndSurname(author.getName(), author.getSurname());
-        assertThat(optionalGenre.orElseThrow().getName()).isEqualTo(author.getName());
-        assertThat(optionalGenre.orElseThrow().getSurname()).isEqualTo(author.getSurname());
-    }
-
-    @Test
-    @DisplayName("should update the name by id")
-    @Transactional
-    void shouldUpdateNameById() {
-        repository.updateNameById(author.getId(), "Updated name");
-        tem.detach(author);
-        Optional<Author> updatedAuthor = repository.findById(author.getId());
-        logger.info("id: {}, name: {}", updatedAuthor.orElseThrow().getId(), updatedAuthor.get().getName());
-        assertThat(updatedAuthor).isNotEmpty();
-        assertThat(updatedAuthor.get().getName()).isEqualTo("Updated name");
-    }
-
-    @Test
-    void shouldUpdateSurnameById() {
-        repository.updateSurnameById(author.getId(), "Updated surname");
-        tem.detach(author);
-        Optional<Author> updatedAuthor = repository.findById(author.getId());
-        logger.info("id: {}, surname: {}", updatedAuthor.orElseThrow().getId(), updatedAuthor.get().getSurname());
-        assertThat(updatedAuthor).isNotEmpty();
-        assertThat(updatedAuthor.orElseThrow().getSurname()).isEqualTo("Updated surname");
+        List<Author> foundAuthors = repository.findByNameAndSurname(author.getName(), author.getSurname());
+        assertThat(foundAuthors.get(0).getName()).isEqualTo(author.getName());
+        assertThat(foundAuthors.get(0).getSurname()).isEqualTo(author.getSurname());
     }
 
     @Test
@@ -132,23 +109,11 @@ class AuthorRepositoryImplTest {
     }
 
     @Test
-    @DisplayName("author should be deleted by id")
-    @Transactional
-    void shouldDeletedAuthorById() {
-        repository.deleteById(101L);
-        Optional<Author> optionalAuthor = repository.findById(101L);
-        assertThatThrownBy(() -> optionalAuthor.orElseThrow(() -> new RuntimeException("Not found")))
-                .hasMessage("Not found");
-    }
-
-    @Test
     @DisplayName("author should be deleted")
     @Transactional
     void shouldDeletedAuthor() {
-        repository.delete(author);
-        Optional<Author> optionalAuthor = repository.findById(author.getId());
+        repository.findById(101L).ifPresent(repository::delete);
+        Optional<Author> optionalAuthor = repository.findById(101L);
         assertThat(optionalAuthor).isEmpty();
-        assertThatThrownBy(() -> optionalAuthor.orElseThrow(() -> new RuntimeException("Not found")))
-                .hasMessage("Not found");
     }
 }

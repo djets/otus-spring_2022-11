@@ -10,7 +10,7 @@ public interface AuthorServiceShell {
 
     Author findById(Long id);
 
-    Long findByNameAndSurname(String name, String surname);
+    List<Long> findByNameAndSurname(String name, String surname);
 
     List<Author> findAll();
 

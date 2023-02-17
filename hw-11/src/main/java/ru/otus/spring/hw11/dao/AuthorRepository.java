@@ -10,14 +10,9 @@ public interface AuthorRepository {
     Optional<Author> findById(Long id);
     List<Author> findAll();
 
-    Optional<Author> findByNameAndSurname(String name, String surname);
-
-    void updateNameById(Long id,  String updatedName);
-    void updateSurnameById(Long id,  String updatedSurname);
+    List<Author> findByNameAndSurname(String name, String surname);
 
     void update(Author author);
-
-    void deleteById(Long id);
 
     void delete(Author author);
 }

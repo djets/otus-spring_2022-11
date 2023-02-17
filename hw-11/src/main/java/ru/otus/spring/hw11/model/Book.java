@@ -38,12 +38,20 @@ public class Book {
             generator = "book_generator"
     )
     @Column(name = "id", nullable = false)
-    long id;
+    Long id;
 
     @Column(name = "name")
     String name;
 
-    @ManyToMany
+    @ManyToMany(
+            fetch = FetchType.EAGER,
+            cascade = {
+                    CascadeType.PERSIST,
+                    CascadeType.MERGE,
+                    CascadeType.REFRESH,
+                    CascadeType.DETACH
+            }
+    )
     @JoinTable(
             name = "book_authors",
             joinColumns = @JoinColumn(name = "book_id"),
@@ -54,11 +62,12 @@ public class Book {
     List<Author> authors = new ArrayList<>();
 
     @ManyToOne(
-            fetch = FetchType.LAZY,
+            fetch = FetchType.EAGER,
             cascade = {
                     CascadeType.PERSIST,
                     CascadeType.MERGE,
-                    CascadeType.REFRESH
+                    CascadeType.REFRESH,
+                    CascadeType.DETACH
             }
     )
     @JoinColumn(
@@ -76,23 +85,18 @@ public class Book {
     )
     List<Comment> comments = new ArrayList<>();
 
-    public void addAuthor(Author author) {
-        authors.add(author);
-        author.addBook(this);
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Book book = (Book) o;
+
+        return getName().equals(book.getName());
     }
 
-    public void removeAuthor(Author author) {
-        authors.remove(author);
-        author.removeBook(this);
-    }
-
-    public void addComment(Comment comment) {
-        comments.add(comment);
-        comment.setBook(this);
-    }
-
-    public void removeComment(Comment comment) {
-        comments.remove(comment);
-        comment.setBook(null);
+    @Override
+    public int hashCode() {
+        return getName().hashCode();
     }
 }

@@ -22,7 +22,6 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 
 @DataJpaTest
 @DisplayName("GenreRepositoryImpl")
@@ -43,7 +42,7 @@ class GenreRepositoryImplTest {
     @BeforeEach
     @Transactional
     void setUp() {
-        genre = new Genre(0L, "Test Name", new ArrayList<>());
+        genre = new Genre(null, "Test Name", new ArrayList<>());
         tem.persist(genre);
         tem.flush();
     }
@@ -57,7 +56,7 @@ class GenreRepositoryImplTest {
     @DisplayName("should save genre to the database")
     @Transactional
     void shouldSaveGenre(String name) {
-        Genre expectedGenre = new Genre(0L, name);
+        Genre expectedGenre = new Genre(null, name, new ArrayList<>());
         Genre savedGenre = repository.save(expectedGenre);
         logger.info("save genre: {}, {}", savedGenre.getName(), savedGenre.getId());
         assertThat(savedGenre).isNotNull();
@@ -100,20 +99,8 @@ class GenreRepositoryImplTest {
     @DisplayName("should find by name")
     @Transactional(readOnly = true)
     void shouldFindByName() {
-        Optional<Genre> optionalGenre = repository.findByName(genre.getName());
-        assertThat(optionalGenre.orElseThrow().getName()).isEqualTo(genre.getName());
-    }
-
-    @Test
-    @DisplayName("should update the name by id")
-    @Transactional
-    void shouldUpdateNameById() {
-        repository.updateNameById(genre.getId(), "Updated name");
-        tem.detach(genre);
-        Optional<Genre> updateGenre = repository.findById(genre.getId());
-        logger.info("id: {}, name: {}", updateGenre.orElseThrow().getId(), updateGenre.get().getName());
-        assertThat(updateGenre).isNotEmpty();
-        assertThat(updateGenre.get().getName()).isEqualTo("Updated name");
+        List<Genre> foundGenres = repository.findByName(genre.getName());
+        assertThat(foundGenres.get(0).getName()).isEqualTo(genre.getName());
     }
 
     @Test
@@ -128,22 +115,11 @@ class GenreRepositoryImplTest {
     }
 
     @Test
-    @DisplayName("genre should be deleted by id")
-    @Transactional
-    void shouldDeletedGenreById() {
-        repository.deleteById(101L);
-        Optional<Genre> optionalGenre = repository.findById(101L);
-        assertThatThrownBy(() -> optionalGenre.orElseThrow(() -> new RuntimeException("Not found")))
-                .hasMessage("Not found");
-    }
-
-    @Test
     @DisplayName("genre should be deleted")
     @Transactional
     void shouldDeletedGenre() {
-        repository.deleteById(101L);
-        Optional<Genre> optionalGenre = repository.findById(101L);
-        assertThatThrownBy(() -> optionalGenre.orElseThrow(() -> new RuntimeException("Not found")))
-                .hasMessage("Not found");
+        repository.findById(101L).ifPresent(repository::delete);
+        Optional<Genre> deletedGenreOptional = repository.findById(101L);
+        assertThat(deletedGenreOptional).isEmpty();
     }
 }

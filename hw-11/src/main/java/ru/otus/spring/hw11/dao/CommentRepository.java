@@ -9,11 +9,7 @@ public interface CommentRepository {
     Comment save(Comment comment);
     Optional<Comment> findById(Long id);
 
-    List<Comment> findAllByBookId(Long bookId);
-
     void update(Comment comment);
 
     void delete(Comment comment);
-
-    void deleteById(Long id);
 }

@@ -26,22 +26,43 @@ public class Author {
             strategy = GenerationType.SEQUENCE,
             generator = "author_generator"
     )
-    long id;
+    Long id;
     @Column(name = "name")
     String name;
     @Column(name = "surname")
     String surname;
     @ManyToMany(
             mappedBy = "authors",
-            fetch = FetchType.LAZY
+            fetch = FetchType.LAZY,
+            cascade = {
+            CascadeType.PERSIST,
+            CascadeType.MERGE,
+            CascadeType.REFRESH,
+            CascadeType.DETACH
+    }
     )
     List<Book> books = new ArrayList<>();
 
-    public void addBook(Book book) {
-        books.add(book);
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Author author = (Author) o;
+
+        if (!getName().equals(author.getName())) return false;
+        return getSurname().equals(author.getSurname());
     }
 
-    public void removeBook(Book book) {
-        books.remove(book);
+    @Override
+    public int hashCode() {
+        int result = getName().hashCode();
+        result = 31 * result + getSurname().hashCode();
+        return result;
+    }
+
+    @Override
+    public String toString() {
+        return name + " " + surname;
     }
 }

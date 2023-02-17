@@ -12,7 +12,7 @@ public interface BookServiceShell {
 
     Book findById(Long id);
 
-    Long findByName(String name);
+    List<Long> findByName(String name);
 
     List<Book> findAll();
 

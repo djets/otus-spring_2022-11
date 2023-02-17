@@ -23,7 +23,7 @@ public class AuthorRepositoryImpl implements AuthorRepository {
 
     @Override
     public Author save(Author author) {
-        if (author.getId() == 0) {
+        if (author.getId() == null) {
             em.persist(author);
             return author;
         } else {
@@ -46,46 +46,19 @@ public class AuthorRepositoryImpl implements AuthorRepository {
     }
 
     @Override
-    public Optional<Author> findByNameAndSurname(String name, String surname) {
+    public List<Author> findByNameAndSurname(String name, String surname) {
         TypedQuery<Author> query = em.createQuery(
                 "SELECT a FROM Author a WHERE a.name = :name AND a.surname = :surname",
                 Author.class
         );
         query.setParameter("name", name);
         query.setParameter("surname", surname);
-        List<Author> resultList = query.getResultList();
-        return resultList.isEmpty() ? Optional.empty() : Optional.of(resultList.get(0));
-    }
-
-    @Override
-    public void updateNameById(Long id, String updatedName) {
-        Query query = em.createQuery(
-                "UPDATE Author SET name = :name WHERE id = :id");
-        query.setParameter("name", updatedName);
-        query.setParameter("id", id);
-        query.executeUpdate();
-    }
-
-    @Override
-    public void updateSurnameById(Long id, String updatedSurname) {
-        Query query = em.createQuery(
-                "UPDATE Author SET surname = :surname WHERE id = :id");
-        query.setParameter("surname", updatedSurname);
-        query.setParameter("id", id);
-        query.executeUpdate();
+        return query.getResultList();
     }
 
     @Override
     public void update(Author author) {
         em.merge(author);
-    }
-
-    @Override
-    public void deleteById(Long id) {
-        Query query = em.createQuery(
-                "DELETE FROM Author a WHERE a.id = :id");
-        query.setParameter("id", id);
-        query.executeUpdate();
     }
 
     @Override

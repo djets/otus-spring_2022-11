@@ -12,15 +12,12 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.transaction.annotation.Transactional;
-import ru.otus.spring.hw11.model.Book;
 import ru.otus.spring.hw11.model.Comment;
 
 import javax.persistence.EntityManager;
-import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 
 
 @DataJpaTest
@@ -41,7 +38,7 @@ class CommentRepositoryImplTest {
 
     @BeforeEach
     void setUp() {
-        comment = new Comment(0L, "This is a test comment", null, null);
+        comment = new Comment(null, "This is a test comment", null, null);
         tem.persist(comment);
         tem.flush();
     }
@@ -50,7 +47,7 @@ class CommentRepositoryImplTest {
     @DisplayName("should save comment to the database")
     @Transactional
     void shouldSaveComment() {
-        Comment expectedComment = new Comment(0L, "This is a new test comment", null, null);
+        Comment expectedComment = new Comment(null, "This is a new test comment", null, null);
         Comment savedComment = repository.save(expectedComment);
         logger.info("save comment: {}, id: {}", savedComment.getTextComment(), savedComment.getId());
         assertThat(savedComment).isNotNull();
@@ -77,18 +74,6 @@ class CommentRepositoryImplTest {
     }
 
     @Test
-    @DisplayName("should return a list of comments for a book with a specific id")
-    @Transactional(readOnly = true)
-    void shouldFindAllByBookId() {
-        List<Comment> allByBookId = repository.findAllByBookId(102L);
-        assertThat(allByBookId.size()).isEqualTo(2);
-        allByBookId.stream()
-                .map(Comment::getBook)
-                .map(Book::getId)
-                .forEach(idBook -> assertThat(idBook).isEqualTo(102L));
-    }
-
-    @Test
     @DisplayName("should update comment")
     @Transactional
     void shouldUpdateComment() {
@@ -100,21 +85,11 @@ class CommentRepositoryImplTest {
     }
 
     @Test
-    @DisplayName("author should be deleted by id")
-    @Transactional
-    void shouldDeletedCommentById() {
-        repository.deleteById(101L);
-        Optional<Comment> optionalComment = repository.findById(101L);
-        assertThatThrownBy(() -> optionalComment.orElseThrow(() -> new RuntimeException("Not found")))
-                .hasMessage("Not found");
-    }
-
-    @Test
     @DisplayName("should delete comment")
     @Transactional
-    void shouldDeleteCommentById() {
-        repository.delete(comment);
-        Optional<Comment> optionalComment = repository.findById(comment.getId());
-        assertThat(optionalComment).isEmpty();
+    void shouldDeleteComment() {
+        repository.findById(101L).ifPresent(repository::delete);
+        Optional<Comment> deletedCommentOptional = repository.findById(101L);
+        assertThat(deletedCommentOptional).isEmpty();
     }
 }

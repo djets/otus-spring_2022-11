@@ -10,13 +10,9 @@ public interface GenreRepository {
     Optional<Genre> findById(Long id);
     List<Genre> findAll();
 
-    Optional<Genre> findByName(String name);
-
-    void updateNameById(Long id, String updatedName);
+    List<Genre> findByName(String name);
 
     void update(Genre genre);
-
-    void deleteById(Long id);
 
     void delete(Genre genre);
 }

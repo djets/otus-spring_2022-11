@@ -18,18 +18,18 @@ import java.util.stream.Collectors;
 public class CommentCommand {
     CommentsServiceShell commentsService;
 
-    @ShellMethod(value = "Find all comment by book id", key = "-fcab")
-    public String findAllCommentsByBookId(Long id) {
-        List<Comment> comments = commentsService.findAllByBook_BookId(id);
-        if (comments != null) {
-            return "Comment found for the book id: " + id + "\n" +
-                    comments.stream()
-                            .map(comment -> comment.getCreateData() +
-                                    ", " + comment.getTextComment())
-                            .collect(Collectors.joining("\n"));
-        }
-        return "Comments not found";
-    }
+//    @ShellMethod(value = "Find all comment by book id", key = "-fcab")
+//    public String findAllCommentsByBookId(Long id) {
+//        List<Comment> comments = commentsService.findAllByBook_BookId(id);
+//        if (comments != null) {
+//            return "Comment found for the book id: " + id + "\n" +
+//                    comments.stream()
+//                            .map(comment -> comment.getCreateData() +
+//                                    ", " + comment.getTextComment())
+//                            .collect(Collectors.joining("\n"));
+//        }
+//        return "Comments not found";
+//    }
 
     @ShellMethod(value = "Delete comment by id", key = "-dc")
     public void deleteById(

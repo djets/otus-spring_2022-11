@@ -6,10 +6,13 @@ import lombok.experimental.FieldDefaults;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
 import org.springframework.shell.standard.ShellOption;
+import ru.otus.spring.hw11.model.Author;
 import ru.otus.spring.hw11.model.Book;
+import ru.otus.spring.hw11.model.Comment;
 import ru.otus.spring.hw11.services.BookServiceShell;
 
 import java.util.List;
+import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 
@@ -40,6 +43,23 @@ public class BookCommands {
         Book book = bookService.findById(id);
         if (book != null) {
             return "Found book id: " + book.getId() + ", name: " + book.getName();
+        }
+        return "Book not found";
+    }
+
+    @ShellMethod(value = "Find book by id with all parameters", key = "-B")
+    public String findBookByIdWithAllParameters(Long id) {
+        Book book = bookService.findById(id);
+        if (book != null) {
+            return "Found book id: " + book.getId() + ", name: " + book.getName() +
+                    "\nAuthors: " + book.getAuthors().stream()
+                    .map(author -> author.getName() + " " + author.getSurname())
+                    .collect(Collectors.joining(", ")) +
+                    "\nGenre: " + book.getGenre().getName() +
+                    "\nComments:\n" + book.getComments().stream()
+                    .map(comment -> comment.getCreateData().toString().substring(0,19) +
+                            " " + comment.getTextComment())
+                    .collect(Collectors.joining("\n-------\n"));
         }
         return "Book not found";
     }
