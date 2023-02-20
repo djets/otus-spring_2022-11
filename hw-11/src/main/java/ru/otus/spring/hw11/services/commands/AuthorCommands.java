@@ -8,7 +8,7 @@ import org.springframework.shell.standard.ShellMethod;
 import org.springframework.shell.standard.ShellOption;
 import ru.otus.spring.hw11.model.Author;
 import ru.otus.spring.hw11.model.Book;
-import ru.otus.spring.hw11.services.AuthorServiceShell;
+import ru.otus.spring.hw11.services.AuthorService;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
 @RequiredArgsConstructor
 public class AuthorCommands {
-    AuthorServiceShell authorService;
+    AuthorService authorService;
 
     @ShellMethod(value = "Create author", key = "-ca")
     public String createAuthor(@ShellOption String nameAuthor, @ShellOption String surnameAuthor) {

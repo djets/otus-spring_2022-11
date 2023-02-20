@@ -7,7 +7,7 @@ import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
 import org.springframework.shell.standard.ShellOption;
 import ru.otus.spring.hw11.model.Book;
-import ru.otus.spring.hw11.services.BookServiceShell;
+import ru.otus.spring.hw11.services.BookService;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
 @RequiredArgsConstructor
 public class BookCommands {
-    BookServiceShell bookService;
+    BookService bookService;
 
     @ShellMethod(value = "Create book", key = "-cb")
     public String createBook(@ShellOption(help = "Input book name") String name) {

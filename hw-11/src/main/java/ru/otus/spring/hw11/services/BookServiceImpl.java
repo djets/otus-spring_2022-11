@@ -22,7 +22,7 @@ import java.util.stream.Collectors;
 @Service
 @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
 @RequiredArgsConstructor
-public class BookServiceShellImpl implements BookServiceShell {
+public class BookServiceImpl implements BookService {
     BookRepository repository;
     AuthorRepository authorRepository;
     GenreRepository genreRepository;

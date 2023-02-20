@@ -4,7 +4,7 @@ import ru.otus.spring.hw11.model.Book;
 
 import java.util.List;
 
-public interface BookServiceShell {
+public interface BookService {
 
     Long save(String name);
 

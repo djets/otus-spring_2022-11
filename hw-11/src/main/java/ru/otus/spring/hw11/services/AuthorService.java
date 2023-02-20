@@ -1,11 +1,10 @@
 package ru.otus.spring.hw11.services;
 
-import org.springframework.transaction.annotation.Transactional;
 import ru.otus.spring.hw11.model.Author;
 
 import java.util.List;
 
-public interface AuthorServiceShell {
+public interface AuthorService {
     Long save(String name, String surname);
 
     Author findById(Long id, boolean loadBooks);

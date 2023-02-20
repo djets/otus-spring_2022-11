@@ -4,7 +4,7 @@ import ru.otus.spring.hw11.model.Genre;
 
 import java.util.List;
 
-public interface GenreServiceShell {
+public interface GenreService {
     Long save(String name);
     Genre findById(Long id);
     List<Long> findByName(String name);

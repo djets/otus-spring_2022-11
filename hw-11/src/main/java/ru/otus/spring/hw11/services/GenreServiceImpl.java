@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 @Service
 @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
 @RequiredArgsConstructor
-public class GenreServiceShellImpl implements GenreServiceShell {
+public class GenreServiceImpl implements GenreService {
     GenreRepository repository;
 
     @Override

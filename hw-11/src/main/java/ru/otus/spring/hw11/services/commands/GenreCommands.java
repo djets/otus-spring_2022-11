@@ -7,7 +7,7 @@ import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
 import org.springframework.shell.standard.ShellOption;
 import ru.otus.spring.hw11.model.Genre;
-import ru.otus.spring.hw11.services.GenreServiceShell;
+import ru.otus.spring.hw11.services.GenreService;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
 @RequiredArgsConstructor
 public class GenreCommands {
-    GenreServiceShell genreService;
+    GenreService genreService;
 
     @ShellMethod(value = "Create genre", key = "-cg")
     public String createGenre(@ShellOption String nameGenre) {
