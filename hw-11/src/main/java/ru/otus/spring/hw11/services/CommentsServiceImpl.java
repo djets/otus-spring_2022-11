@@ -24,7 +24,7 @@ public class CommentsServiceImpl implements CommentsService {
     }
 
     @Override
-    @Transactional
+    @Transactional(readOnly = true)
     public List<Comment> findAllByBookId(Long id) {
         return bookService.findById(id, true).getComments();
     }
