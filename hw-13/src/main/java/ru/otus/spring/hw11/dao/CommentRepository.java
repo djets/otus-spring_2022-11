@@ -6,7 +6,6 @@ import ru.otus.spring.hw11.model.Book;
 import ru.otus.spring.hw11.model.Comment;
 
 import java.util.List;
-import java.util.Optional;
 
 @Repository
 public interface CommentRepository extends JpaRepository<Comment, Long> {

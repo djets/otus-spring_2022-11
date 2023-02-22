@@ -31,10 +31,9 @@ public class BookServiceImpl implements BookService {
     @Override
     @Transactional
     public Long save(String name) {
-        return repository.save(
-                        new Book(null, name, new ArrayList<>(), null, new ArrayList<>())
-                )
-                .getId();
+        Book book = new Book();
+        book.setName(name);
+        return repository.save(book).getId();
     }
 
     @Override
@@ -68,10 +67,18 @@ public class BookServiceImpl implements BookService {
 
     @Override
     @Transactional(readOnly = true)
-    public Book findById(Long id, boolean loadComments) {
-        if (loadComments) {
+    public Book findById(Long id, boolean loadAllParams) {
+        if (loadAllParams) {
             Optional<Book> optionalBook = repository.findById(id);
-            optionalBook.ifPresent(book -> book.getComments().forEach(Comment::getTextComment));
+            optionalBook.ifPresent(book -> {
+                Optional.ofNullable(book.getAuthors()).ifPresent(
+                        authors -> authors.forEach(Author::getName)
+                );
+                Optional.ofNullable(book.getComments()).ifPresent(
+                        comments -> comments.forEach(Comment::getTextComment)
+                );
+                Optional.ofNullable(book.getGenre()).ifPresent(Genre::getName);
+            });
             return optionalBook.orElse(null);
         }
         return repository.findById(id).orElse(null);
@@ -101,8 +108,7 @@ public class BookServiceImpl implements BookService {
             if (authors.isEmpty()) {
                 Author author = new Author(null, authorName, authorSurname, new ArrayList<>());
                 author.getBooks().add(book);
-                Author savedAuthor = authorRepository.save(author);
-                book.getAuthors().add(savedAuthor);
+                book.getAuthors().add(author);
             } else {
                 authors.forEach(author -> book.getAuthors().add(author));
             }
@@ -120,11 +126,9 @@ public class BookServiceImpl implements BookService {
             if (genres.isEmpty()) {
                 Genre genre = new Genre(null, nameGenre, new ArrayList<>());
                 genre.getBooks().add(book);
-                Genre savedGenre = genreRepository.save(genre);
-                savedGenre.getBooks().add(book);
                 book.setGenre(genre);
             } else {
-                genres.forEach(genre -> genre.getBooks().add(book));
+                book.setGenre(genres.stream().findFirst().get());
             }
             repository.save(book);
         }

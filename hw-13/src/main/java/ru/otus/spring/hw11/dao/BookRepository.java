@@ -5,7 +5,6 @@ import org.springframework.stereotype.Repository;
 import ru.otus.spring.hw11.model.Book;
 
 import java.util.List;
-import java.util.Optional;
 
 @Repository
 public interface BookRepository extends JpaRepository<Book, Long> {

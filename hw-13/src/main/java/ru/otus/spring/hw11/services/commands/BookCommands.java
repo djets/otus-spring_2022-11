@@ -6,10 +6,13 @@ import lombok.experimental.FieldDefaults;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
 import org.springframework.shell.standard.ShellOption;
+import org.springframework.transaction.annotation.Transactional;
 import ru.otus.spring.hw11.model.Book;
+import ru.otus.spring.hw11.model.Genre;
 import ru.otus.spring.hw11.services.BookService;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 
@@ -52,7 +55,7 @@ public class BookCommands {
                     "\nAuthors: " + book.getAuthors().stream()
                     .map(author -> author.getName() + " " + author.getSurname())
                     .collect(Collectors.joining(", ")) +
-                    "\nGenre: " + book.getGenre().getName() +
+                    "\nGenre: " + (Optional.ofNullable(book.getGenre()).isPresent() ? book.getGenre().getName() : "") +
                     "\nComments:\n" + book.getComments().stream()
                     .map(comment -> comment.getCreateData().toString().substring(0,19) +
                             " " + comment.getTextComment())
