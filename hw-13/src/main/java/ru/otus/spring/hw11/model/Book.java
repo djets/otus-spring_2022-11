@@ -17,14 +17,6 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-@NamedEntityGraphs({
-        @NamedEntityGraph(name = "book-only-entity-graph"),
-        @NamedEntityGraph(name = "book-genre-authors-entity-graph",
-                attributeNodes = {
-                    @NamedAttributeNode(value = "genre"),
-                    @NamedAttributeNode(value = "authors"),
-            }),
-})
 public class Book {
     @Id
     @SequenceGenerator(

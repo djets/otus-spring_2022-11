@@ -27,13 +27,11 @@ public class GenreServiceImpl implements GenreService {
     }
 
     @Override
-    @Transactional(readOnly = true)
     public Genre findById(Long id) {
         return repository.findById(id).orElse(null);
     }
 
     @Override
-    @Transactional(readOnly = true)
     public List<Long> findByName(String name) {
         return repository.findByName(name).stream()
                 .map(Genre::getId)
@@ -41,7 +39,6 @@ public class GenreServiceImpl implements GenreService {
     }
 
     @Override
-    @Transactional(readOnly = true)
     public List<Genre> findAll() {
         return repository.findAll();
     }

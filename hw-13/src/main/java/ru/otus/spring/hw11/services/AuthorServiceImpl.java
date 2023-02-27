@@ -16,7 +16,6 @@ import java.util.stream.Collectors;
 @Service
 @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
 @RequiredArgsConstructor
-@Transactional(readOnly = true)
 public class AuthorServiceImpl implements AuthorService {
     AuthorRepository repository;
 

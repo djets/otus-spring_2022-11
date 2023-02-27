@@ -29,6 +29,7 @@ public class Author {
     Long id;
     @Column(name = "name")
     String name;
+
     @Column(name = "surname")
     String surname;
     @ManyToMany(

@@ -66,7 +66,6 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    @Transactional(readOnly = true)
     public Book findById(Long id, boolean loadAllParams) {
         if (loadAllParams) {
             Optional<Book> optionalBook = repository.findById(id);
@@ -85,7 +84,6 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    @Transactional(readOnly = true)
     public List<Long> findByName(String name) {
         return repository.findByName(name).stream()
                 .map(Book::getId)
@@ -93,7 +91,6 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    @Transactional(readOnly = true)
     public List<Book> findAll() {
         return repository.findAll();
     }
