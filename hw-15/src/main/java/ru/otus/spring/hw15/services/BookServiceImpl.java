@@ -48,16 +48,16 @@ public class BookServiceImpl implements BookService {
 
             if (optionalAuthor.isEmpty()) {
                 Author author = new Author(null, authorName, authorSurname, List.of(savedBook));
-                Author savedAuthor = authorRepository.save(author);
-                book.getAuthors().add(savedAuthor);
+                authorRepository.save(author);
+                book.getAuthors().add(author);
             } else {
                 optionalAuthor.forEach(author -> book.getAuthors().add(author));
                 savedBook.getAuthors().addAll(optionalAuthor);
             }
             if (optionalGenre.isEmpty()) {
                 Genre genre = new Genre(null, genreName, List.of(savedBook));
-                Genre savedGenre = genreRepository.save(genre);
-                book.setGenre(savedGenre);
+                genreRepository.save(genre);
+                book.setGenre(genre);
             } else {
                 optionalGenre.forEach(genre -> genre.getBooks().add(book));
                 savedBook.setGenre(optionalGenre.stream().findFirst().orElse(null));
