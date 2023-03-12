@@ -2,46 +2,27 @@ package ru.otus.spring.hw15.model;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.Transient;
+import org.springframework.data.mongodb.core.mapping.DBRef;
+import org.springframework.data.mongodb.core.mapping.Document;
 
-import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
-@Entity
 @Getter
 @Setter
-@Table(name = "genres")
+@Document(collection = "genres")
 @AllArgsConstructor
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class Genre {
     @Id
-    @SequenceGenerator(
-            name = "genre_generator",
-            sequenceName = "genre_seq",
-            initialValue = 1000,
-            allocationSize = 10
-    )
-    @GeneratedValue(
-            strategy = GenerationType.SEQUENCE,
-            generator = "genre_generator"
-    )
-    @Column(name = "id", nullable = false)
-    Long id;
+    String _id;
 
-    @Column(name = "name")
     String name;
 
-    @OneToMany(
-            mappedBy = "genre",
-            fetch = FetchType.LAZY,
-            cascade = {
-                    CascadeType.PERSIST,
-                    CascadeType.MERGE,
-                    CascadeType.REFRESH,
-                    CascadeType.DETACH
-            }
-    )
+    @DBRef
     List<Book> books = new ArrayList<>();
 
     @Override

@@ -1,14 +1,16 @@
 package ru.otus.spring.hw15.model;
 
+import com.mongodb.lang.NonNull;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.DBRef;
+import org.springframework.data.mongodb.core.mapping.Document;
 
-import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
-@Entity
-@Table(name = "authors")
+@Document(collection = "authors")
 @Getter
 @Setter
 @AllArgsConstructor
@@ -16,31 +18,13 @@ import java.util.List;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class Author {
     @Id
-    @SequenceGenerator(
-            name = "author_generator",
-            sequenceName = "author_seq",
-            initialValue = 1000,
-            allocationSize = 10
-    )
-    @GeneratedValue(
-            strategy = GenerationType.SEQUENCE,
-            generator = "author_generator"
-    )
-    Long id;
-    @Column(name = "name")
+    String _id;
+
     String name;
-    @Column(name = "surname")
+
     String surname;
-    @ManyToMany(
-            mappedBy = "authors",
-            fetch = FetchType.LAZY,
-            cascade = {
-            CascadeType.PERSIST,
-            CascadeType.MERGE,
-            CascadeType.REFRESH,
-            CascadeType.DETACH
-    }
-    )
+
+    @DBRef(lazy = true)
     List<Book> books = new ArrayList<>();
 
     @Override

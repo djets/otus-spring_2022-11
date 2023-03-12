@@ -7,8 +7,8 @@ import java.util.List;
 
 public interface CommentsService {
 
-    void delete(Long id);
+    void delete(String _id);
 
     @Transactional
-    List<Comment> findAllByBookId(Long id);
+    List<Comment> findAllByBookId(String _id);
 }

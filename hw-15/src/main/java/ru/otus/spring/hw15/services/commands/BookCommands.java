@@ -36,19 +36,19 @@ public class BookCommands {
     }
 
     @ShellMethod(value = "Find book by id", key = "-b")
-    public String findBookById(Long id) {
-        Book book = bookService.findById(id, false);
+    public String findBookById(String _id) {
+        Book book = bookService.findById(_id);
         if (book != null) {
-            return "Found book id: " + book.getId() + ", name: " + book.getName();
+            return "Found book id: " + book.get_id() + ", name: " + book.getName();
         }
         return "Book not found";
     }
 
     @ShellMethod(value = "Find book by id with all parameters", key = "-B")
-    public String findBookWithAllParametersById(Long id) {
-        Book book = bookService.findById(id, true);
+    public String findBookWithAllParametersById(String _id) {
+        Book book = bookService.findById(_id);
         if (book != null) {
-            return "Found book id: " + book.getId() + ", name: " + book.getName() +
+            return "Found book id: " + book.get_id() + ", name: " + book.getName() +
                     "\nAuthors: " + book.getAuthors().stream()
                     .map(author -> author.getName() + " " + author.getSurname())
                     .collect(Collectors.joining(", ")) +
@@ -65,47 +65,47 @@ public class BookCommands {
     public String findAll() {
         List<Book> books = bookService.findAll();
         return "Found:\n" + books.stream()
-                .map(book -> book.getName() + " id: " + book.getId())
+                .map(book -> book.getName() + " id: " + book.get_id())
                 .collect(Collectors.joining(";\n"));
     }
 
     @ShellMethod(value = "Edit book name by id", key = "-eb")
     public void editAuthor(
-            @ShellOption(help = "Input id book") Long id,
+            @ShellOption(help = "Input id book") String _id,
             @ShellOption(help = "Input new name book") String changedName
     ) {
-        bookService.updateNameById(id, changedName);
+        bookService.updateNameById(_id, changedName);
     }
 
     @ShellMethod(value = "Add author book by id", key = "-aab")
     public void addAuthorBookById(
-            @ShellOption(help = "Input id Book") Long id,
+            @ShellOption(help = "Input id Book") String _id,
             @ShellOption(help = "Input name author") String nameAuthor,
             @ShellOption(help = "Input surname author") String surnameAuthor
     ) {
-        bookService.addAuthor(id, nameAuthor, surnameAuthor);
+        bookService.addAuthor(_id, nameAuthor, surnameAuthor);
     }
 
     @ShellMethod(value = "Add genre book by id", key = "-agb")
     public void addGenreBookById(
-            @ShellOption(help = "Input id book") Long id,
+            @ShellOption(help = "Input id book") String _id,
             @ShellOption(help = "Input name genre") String nameGenre
     ) {
-        bookService.addGenre(id, nameGenre);
+        bookService.addGenre(_id, nameGenre);
     }
 
     @ShellMethod(value = "Add comment book by id", key = "-acb")
     public void addCommentBookById(
-            @ShellOption(help = "Input id book") Long id,
+            @ShellOption(help = "Input id book") String _id,
             @ShellOption(help = "Input text comment") String textComment
     ) {
-        bookService.addCommentById(id, textComment);
+        bookService.addCommentById(_id, textComment);
     }
 
     @ShellMethod(value = "Delete book by id", key = "-db")
     public void deleteById(
-            @ShellOption(help = "Input id book") Long id
+            @ShellOption(help = "Input id book") String _id
     ) {
-        bookService.delete(id);
+        bookService.delete(_id);
     }
 }

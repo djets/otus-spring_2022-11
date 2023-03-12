@@ -5,17 +5,17 @@ import ru.otus.spring.hw15.model.Author;
 import java.util.List;
 
 public interface AuthorService {
-    Long save(String name, String surname);
+    String save(String name, String surname);
 
-    Author findById(Long id, boolean loadBooks);
+    Author findById(String _id);
 
-    List<Long> findByNameAndSurname(String name, String surname);
+    List<String> findByNameAndSurname(String name, String surname);
 
     List<Author> findAll();
 
-    void updateNameAuthor(Long id, String name);
+    void updateNameAuthor(String _id, String name);
 
-    void updateSurnameAuthor(Long id, String surname);
+    void updateSurnameAuthor(String _id, String surname);
 
-    void delete(Long id);
+    void delete(String _id);
 }

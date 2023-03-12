@@ -3,9 +3,9 @@ package ru.otus.spring.hw15.services;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import ru.otus.spring.hw15.dao.CommentRepository;
+import ru.otus.spring.hw15.repository.CommentRepository;
 import ru.otus.spring.hw15.model.Comment;
 
 import java.util.List;
@@ -14,18 +14,18 @@ import java.util.List;
 @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
 @RequiredArgsConstructor
 public class CommentsServiceImpl implements CommentsService {
+    @Autowired
     CommentRepository repository;
+    @Autowired
     BookService bookService;
 
     @Override
-    @Transactional
-    public void delete(Long id) {
-        repository.findById(id).ifPresent(repository::delete);
+    public void delete(String _id) {
+        repository.findById(_id).ifPresent(repository::delete);
     }
 
     @Override
-    @Transactional(readOnly = true)
-    public List<Comment> findAllByBookId(Long id) {
-        return bookService.findById(id, true).getComments();
+    public List<Comment> findAllByBookId(String _id) {
+        return bookService.findById(_id).getComments();
     }
 }

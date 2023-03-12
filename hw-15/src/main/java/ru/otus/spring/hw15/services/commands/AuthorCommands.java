@@ -25,10 +25,10 @@ public class AuthorCommands {
     }
 
     @ShellMethod(value = "Find author by id", key = "-a")
-    public String findAuthorById(@ShellOption(help = "Input id author") Long id) {
-        Author author = authorService.findById(id, false);
+    public String findAuthorById(@ShellOption(help = "Input id author") String _id) {
+        Author author = authorService.findById(_id);
         if (author != null) {
-            return "Found author id: " + author.getId() +
+            return "Found author id: " + author.get_id() +
                     ", name: " + author.getName() +
                     ", surname: " + author.getSurname();
         }
@@ -36,10 +36,10 @@ public class AuthorCommands {
     }
 
     @ShellMethod(value = "Find author by id with Books ", key = "-A")
-    public String findAuthorWithBooksById(@ShellOption(help = "Input id author") Long id) {
-        Author author = authorService.findById(id, true);
+    public String findAuthorWithBooksById(@ShellOption(help = "Input id author") String _id) {
+        Author author = authorService.findById(_id);
         if (author != null) {
-            return "Found author id: " + author.getId() +
+            return "Found author id: " + author.get_id() +
                     ", name: " + author.getName() +
                     ", surname: " + author.getSurname() +
                     "\nBooks:\n" + author.getBooks().stream()
@@ -52,32 +52,32 @@ public class AuthorCommands {
     @ShellMethod(value = "Find all authors", key = "-fa")
     public String findAuthors() {
         List<Author> authors = authorService.findAll();
-        return authors.stream()
+        return "Found:\n" + authors.stream()
                 .map(author -> author.getName() + " " + author.getSurname() +
-                        " id: " + author.getId())
+                        " id: " + author.get_id())
                 .collect(Collectors.joining(";\n"));
     }
 
     @ShellMethod(value = "Edit name author by id", key = "-ena")
     public void editNameAuthor(
-            @ShellOption(help = "Input id author") Long id,
+            @ShellOption(help = "Input id author") String _id,
             @ShellOption(help = "Input new name author") String updatedName
     ) {
-        authorService.updateNameAuthor(id, updatedName);
+        authorService.updateNameAuthor(_id, updatedName);
     }
 
     @ShellMethod(value = "Edit surname author by id", key = "-esa")
     public void editSurnameAuthor(
-            @ShellOption(help = "Input id author") Long id,
+            @ShellOption(help = "Input id author") String _id,
             @ShellOption(help = "Input new surname author") String updatedSurname
     ) {
-        authorService.updateSurnameAuthor(id, updatedSurname);
+        authorService.updateSurnameAuthor(_id, updatedSurname);
     }
 
     @ShellMethod(value = "Delete author by id", key = "-da")
     public void deleteById(
-            @ShellOption(help = "Input id author") Long id
+            @ShellOption(help = "Input id author") String _id
     ) {
-        authorService.delete(id);
+        authorService.delete(_id);
     }
 }

@@ -6,23 +6,23 @@ import java.util.List;
 
 public interface BookService {
 
-    Long save(String name);
+    String save(String name);
 
-    Long saveBookWithGenreAndAuthor(String name, String authorName, String authorSurname, String genreName);
+    String saveBookWithGenreAndAuthor(String name, String authorName, String authorSurname, String genreName);
 
-    Book findById(Long id, boolean loadComments);
+    Book findById(String id);
 
-    List<Long> findByName(String name);
+    List<String> findByName(String name);
 
     List<Book> findAll();
 
-    void addAuthor(Long id, String authorName, String authorSurname);
+    void addAuthor(String id, String authorName, String authorSurname);
 
-    void addGenre(Long id, String nameGenre);
+    void addGenre(String _id, String nameGenre);
 
-    void addCommentById(Long id, String commentText);
+    void addCommentById(String _id, String commentText);
 
-    void updateNameById(Long id, String changedName);
+    void updateNameById(String _id, String changedName);
 
-    void delete(Long id);
+    void delete(String _id);
 }

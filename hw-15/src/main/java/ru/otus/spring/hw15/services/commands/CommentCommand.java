@@ -20,9 +20,9 @@ public class CommentCommand {
 
     @ShellMethod(value = "find all by book id", key = "-c")
     public String findAllByBookId(
-            @ShellOption(help = "Input id book") Long id
+            @ShellOption(help = "Input id book") String _id
     ) {
-        List<Comment> comments = commentsService.findAllByBookId(id);
+        List<Comment> comments = commentsService.findAllByBookId(_id);
         return "\nComments:\n" + comments.stream()
                 .map(comment -> comment.getCreateData().toString().substring(0,19) +
                         " " + comment.getTextComment())
@@ -31,8 +31,8 @@ public class CommentCommand {
 
     @ShellMethod(value = "Delete comment by id", key = "-dc")
     public void deleteById(
-            @ShellOption(help = "Input id comment") Long id
+            @ShellOption(help = "Input id comment") String _id
     ) {
-        commentsService.delete(id);
+        commentsService.delete(_id);
     }
 }

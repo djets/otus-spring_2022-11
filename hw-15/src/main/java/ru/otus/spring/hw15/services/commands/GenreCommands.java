@@ -24,10 +24,10 @@ public class GenreCommands {
     }
 
     @ShellMethod(value = "Find genre by id", key = "-g")
-    public String findGenreById(Long id) {
-        Genre genre = genreService.findById(id);
+    public String findGenreById(String _id) {
+        Genre genre = genreService.findById(_id);
         if (genre != null) {
-            return "Found genre id: " + genre.getId() + ", name: " + genre.getName();
+            return "Found genre id: " + genre.get_id() + ", name: " + genre.getName();
         }
         return "Genre not found";
     }
@@ -36,22 +36,22 @@ public class GenreCommands {
     public String findAll() {
         List<Genre> genres = genreService.findAll();
         return "Found:\n" + genres.stream()
-                .map(genre -> genre.getName() + " id: " + genre.getId())
+                .map(genre -> genre.getName() + " id: " + genre.get_id())
                 .collect(Collectors.joining(";\n"));
     }
 
     @ShellMethod(value = "Edit genre name by id", key = "-eg")
     public void editGenreNameById(
-            @ShellOption(help = "Input id genre") Long id,
+            @ShellOption(help = "Input id genre") String _id,
             @ShellOption(help = "Input new name Genre") String name
     ) {
-        genreService.updateNameById(id, name);
+        genreService.updateNameById(_id, name);
     }
 
     @ShellMethod(value = "Delete genre by id", key = "-dg")
     public void deleteById(
-            @ShellOption(help = "Input id genre") Long id
+            @ShellOption(help = "Input id genre") String _id
     ) {
-        genreService.delete(id);
+        genreService.delete(_id);
     }
 }
