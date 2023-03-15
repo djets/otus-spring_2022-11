@@ -3,10 +3,9 @@ package ru.otus.spring.hw15.services;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import ru.otus.spring.hw15.repository.AuthorRepository;
 import ru.otus.spring.hw15.model.Author;
+import ru.otus.spring.hw15.repository.AuthorRepository;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,7 +15,6 @@ import java.util.stream.Collectors;
 @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
 @RequiredArgsConstructor
 public class AuthorServiceImpl implements AuthorService {
-    @Autowired
     AuthorRepository repository;
 
     @Override

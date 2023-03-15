@@ -3,16 +3,15 @@ package ru.otus.spring.hw15.services;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import ru.otus.spring.hw15.repository.AuthorRepository;
-import ru.otus.spring.hw15.repository.BookRepository;
-import ru.otus.spring.hw15.repository.CommentRepository;
-import ru.otus.spring.hw15.repository.GenreRepository;
 import ru.otus.spring.hw15.model.Author;
 import ru.otus.spring.hw15.model.Book;
 import ru.otus.spring.hw15.model.Comment;
 import ru.otus.spring.hw15.model.Genre;
+import ru.otus.spring.hw15.repository.AuthorRepository;
+import ru.otus.spring.hw15.repository.BookRepository;
+import ru.otus.spring.hw15.repository.CommentRepository;
+import ru.otus.spring.hw15.repository.GenreRepository;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,13 +22,9 @@ import java.util.stream.Collectors;
 @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
 @RequiredArgsConstructor
 public class BookServiceImpl implements BookService {
-    @Autowired
     BookRepository repository;
-    @Autowired
     AuthorRepository authorRepository;
-    @Autowired
     GenreRepository genreRepository;
-    @Autowired
     CommentRepository commentRepository;
 
     @Override

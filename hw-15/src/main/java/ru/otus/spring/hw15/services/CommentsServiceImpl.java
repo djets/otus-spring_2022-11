@@ -14,9 +14,7 @@ import java.util.List;
 @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
 @RequiredArgsConstructor
 public class CommentsServiceImpl implements CommentsService {
-    @Autowired
     CommentRepository repository;
-    @Autowired
     BookService bookService;
 
     @Override

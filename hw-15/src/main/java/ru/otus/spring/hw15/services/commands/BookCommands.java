@@ -6,10 +6,14 @@ import lombok.experimental.FieldDefaults;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
 import org.springframework.shell.standard.ShellOption;
+import ru.otus.spring.hw15.model.Author;
 import ru.otus.spring.hw15.model.Book;
+import ru.otus.spring.hw15.model.Comment;
 import ru.otus.spring.hw15.services.BookService;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 
