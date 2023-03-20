@@ -2,6 +2,7 @@ package ru.otus.spring.hw18.repository;
 
 import org.springframework.data.mongodb.repository.MongoRepository;
 import ru.otus.spring.hw18.model.Book;
+import ru.otus.spring.hw18.model.Genre;
 
 import java.util.List;
 

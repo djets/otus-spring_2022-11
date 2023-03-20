@@ -6,7 +6,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.context.TestPropertySource;
+import ru.otus.spring.hw18.model.Author;
 import ru.otus.spring.hw18.model.Book;
+import ru.otus.spring.hw18.model.Genre;
+import ru.otus.spring.hw18.repository.BookRepository;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -18,6 +24,9 @@ class BookServiceImplTest {
 
     @Autowired
     private BookService bookService;
+
+    @Autowired
+    private BookRepository repository;
 
     @Test
     @DisplayName("добавлять книгу")
@@ -38,11 +47,21 @@ class BookServiceImplTest {
         String authorName = "Lev";
         String authorSurname = "Tolstoy";
         String genreName = "Historical fiction";
-        String bookId = bookService.saveBookWithGenreAndAuthor(
-                bookName,
-                authorName,
-                authorSurname,
-                genreName);
+//        String bookId = bookService.saveBookWithGenreAndAuthor(
+//                bookName,
+//                authorName,
+//                authorSurname,
+//                genreName);
+
+        Book book = new Book();
+        book.setName(bookName);
+        Genre genre = new Genre();
+        genre.setName(genreName);
+        book.setGenre(genre);
+//        book.getAuthors().add(new Author(null, authorName, authorSurname, new ArrayList<>()));
+        Book savedBook = repository.save(book);
+        String bookId = savedBook.get_id();
+
 
         Book actualBook = bookService.findById(bookId);
         assertThat(actualBook).isNotNull();

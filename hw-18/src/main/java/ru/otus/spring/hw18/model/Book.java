@@ -5,6 +5,7 @@ import lombok.experimental.FieldDefaults;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
+import ru.otus.spring.hw18.annotation.CascadeSave;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,11 +28,11 @@ public class Book {
     List<Author> authors = new ArrayList<>();
 
     @DBRef
-//    @CascadeSave
+    @CascadeSave
     Genre genre;
 
     @DBRef(lazy = true)
-//    @CascadeSave
+    @CascadeSave
     List<Comment> comments = new ArrayList<>();
 
     @Override
