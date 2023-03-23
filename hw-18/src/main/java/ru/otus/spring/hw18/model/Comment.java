@@ -10,7 +10,6 @@ import java.util.Date;
 
 @Document(collection = "comments")
 @Getter
-@Data
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
@@ -23,7 +22,7 @@ public class Comment {
 
     Date createData = new Date();
 
-    @DBRef
+    @DBRef(lazy = true)
     Book book;
 
     @Override

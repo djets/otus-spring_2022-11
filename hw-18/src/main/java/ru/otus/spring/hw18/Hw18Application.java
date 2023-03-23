@@ -11,6 +11,7 @@ import org.springframework.data.mongodb.repository.config.EnableMongoRepositorie
 public class Hw18Application {
     public static void main(String[] args) {
         SpringApplication.run(Hw18Application.class);
+        System.out.printf("Чтобы перейти на страницу сайта открывай: %n%s%n",
+                "http://localhost:8080");
     }
-
 }

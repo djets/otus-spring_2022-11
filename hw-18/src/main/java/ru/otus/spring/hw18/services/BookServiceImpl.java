@@ -4,6 +4,7 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.stereotype.Service;
+import ru.otus.spring.hw18.controller.exception.NotFoundException;
 import ru.otus.spring.hw18.model.Author;
 import ru.otus.spring.hw18.model.Book;
 import ru.otus.spring.hw18.model.Comment;
@@ -66,7 +67,7 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public Book findById(String _id) {
-        return repository.findById(_id).orElse(null);
+        return repository.findById(_id).orElseThrow(RuntimeException::new);
     }
 
     @Override
@@ -92,8 +93,8 @@ public class BookServiceImpl implements BookService {
             if (authors.isEmpty()) {
                 Author author = new Author(null, authorName, authorSurname, new ArrayList<>());
                 author.getBooks().add(book);
-                Author savedAuthor = authorRepository.save(author);
-                book.getAuthors().add(savedAuthor);
+//                Author savedAuthor = authorRepository.save(author);
+                book.getAuthors().add(author);
             } else {
                 authors.forEach(author -> {
                     if (book.getAuthors() !=null) {
@@ -116,8 +117,8 @@ public class BookServiceImpl implements BookService {
             if (genres.isEmpty()) {
                 Genre genre = new Genre(null, nameGenre, new ArrayList<>());
                 genre.getBooks().add(book);
-                Genre savedGenre = genreRepository.save(genre);
-                savedGenre.getBooks().add(book);
+//                Genre savedGenre = genreRepository.save(genre);
+//                savedGenre.getBooks().add(book);
                 book.setGenre(genre);
             } else {
                 genres.forEach(genre -> genre.getBooks().add(book));
@@ -152,5 +153,11 @@ public class BookServiceImpl implements BookService {
     @Override
     public void delete(String _id) {
         repository.findById(_id).ifPresent(repository::delete);
+    }
+
+    @Override
+    public void save(Book book) {
+        String id = book.get_id();
+        repository.save(book);
     }
 }

@@ -1,11 +1,12 @@
 package ru.otus.spring.hw18.repository.event;
 
-import java.lang.reflect.Field;
-
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.util.ReflectionUtils;
 import ru.otus.spring.hw18.annotation.CascadeSave;
+
+import java.lang.reflect.Field;
+import java.util.Collection;
 
 public class CascadeCallback implements ReflectionUtils.FieldCallback {
 
@@ -21,19 +22,33 @@ public class CascadeCallback implements ReflectionUtils.FieldCallback {
     public void doWith(final Field field) throws IllegalArgumentException, IllegalAccessException {
         ReflectionUtils.makeAccessible(field);
 
-        if (field.isAnnotationPresent(DBRef.class) && field.isAnnotationPresent(CascadeSave.class)) {
-            final Object fieldValue = field.get(getSource());
+        if (field.isAnnotationPresent(DBRef.class)
+                        && field.isAnnotationPresent(CascadeSave.class)) {
+            if (Collection.class.isAssignableFrom(field.getType())) {
+                final Iterable<Object> iterableFieldValue = (Iterable<Object>) field.get(getSource());
+                if (iterableFieldValue != null) {
+                    iterableFieldValue.forEach(object -> {
+                        if (object != null) {
+                            final FieldCallback callback = new FieldCallback();
+                            ReflectionUtils.doWithFields(object.getClass(), callback);
+                            getMongoOperations().save(object);
+                        }
+                    });
+                }
+            } else {
+                final Object fieldValue = field.get(getSource());
 
-            if (fieldValue != null) {
-                final FieldCallback callback = new FieldCallback();
+                if (fieldValue != null) {
+                    final FieldCallback callback = new FieldCallback();
 
-                ReflectionUtils.doWithFields(fieldValue.getClass(), callback);
+                    ReflectionUtils.doWithFields(fieldValue.getClass(), callback);
 
-                getMongoOperations().save(fieldValue);
+                    getMongoOperations().save(fieldValue);
+                }
             }
         }
-
     }
+
 
     private Object getSource() {
         return source;

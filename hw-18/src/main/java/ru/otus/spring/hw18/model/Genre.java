@@ -3,8 +3,10 @@ package ru.otus.spring.hw18.model;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
+import ru.otus.spring.hw18.annotation.CascadeSave;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,7 +23,7 @@ public class Genre {
 
     String name;
 
-    @DBRef
+    @Transient
     List<Book> books = new ArrayList<>();
 
     @Override

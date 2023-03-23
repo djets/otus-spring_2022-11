@@ -3,6 +3,7 @@ package ru.otus.spring.hw18.model;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 import ru.otus.spring.hw18.annotation.CascadeSave;
@@ -23,16 +24,15 @@ public class Book {
 
     String name;
 
-    @DBRef(lazy = true)
-//    @CascadeSave
+    @DBRef
+    @CascadeSave
     List<Author> authors = new ArrayList<>();
 
     @DBRef
     @CascadeSave
     Genre genre;
 
-    @DBRef(lazy = true)
-    @CascadeSave
+    @Transient
     List<Comment> comments = new ArrayList<>();
 
     @Override

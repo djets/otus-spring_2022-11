@@ -1,10 +1,11 @@
 spring:
   data:
     mongodb:
-      database: books
-
+      database: booking
+      host: localhost
+      port: 30001
 mongock:
-#  runner-type: "ApplicationRunner" # default
-  runner-type: "InitializingBean"
+  runner-type: "ApplicationRunner" # default
+#  runner-type: "InitializingBean"
   change-logs-scan-package:
-    - ru.otus.spring.hw15.mongock.changelog
+    - ru.otus.spring.hw18.mongock.changelog

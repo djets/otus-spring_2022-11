@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Comments of book</title>
+    <style type="text/css">
+        body {
+            padding: 50px;
+        }
+
+        .persons {
+            border: 1px solid steelblue;
+            width: 300px;
+            border-collapse: collapse;
+        }
+
+        .persons tr td, th {
+            padding: 5px;
+            border: 1px solid steelblue;
+        }
+
+        .persons td:last-child, td:first-child {
+            width: 50px;
+        }
+
+        h3 {
+            background-image: url("../static/listmark.png");
+            background-repeat: no-repeat;
+            padding: 2px;
+            padding-left: 30px;
+        }
+
+    </style>
+
+    <style type="text/css" th:inline="text">
+        [[h3]] {
+            background-image: url([[@{/listmark.png}]]);
+            background-repeat: no-repeat;
+            padding: 2px;
+            padding-left: 30px;
+        }
+
+    </style>
+</head>
+<body>
+
+<h3 th:text="#{books-table-header}">Comments:</h3>
+
+<table class="comments">
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Data</th>
+        <th>Text comment</th>
+        <th>Action</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="comment : ${comments}">
+        <td th:text="${comment._id}">1</td>
+        <td th:text="${comment.text}">Comment</td>
+        <td th:text="${comment.data}">Now</td>
+        <td>
+            <a th:href="@{/comment-edit(id=${commet._id})}" href="commetn-edit.html" th:text="#{edit-button-caption}">Edit</a>
+        </td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>

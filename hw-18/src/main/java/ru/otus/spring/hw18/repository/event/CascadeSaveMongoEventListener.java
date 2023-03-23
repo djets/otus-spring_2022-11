@@ -7,14 +7,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.mapping.event.AbstractMongoEventListener;
 import org.springframework.data.mongodb.core.mapping.event.BeforeConvertEvent;
-import org.springframework.stereotype.Component;
 import org.springframework.util.ReflectionUtils;
 
 @RequiredArgsConstructor
-@FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class CascadeSaveMongoEventListener extends AbstractMongoEventListener<Object> {
 
-    private MongoOperations mongoOperations;
+    @Autowired
+    MongoOperations mongoOperations;
 
     @Override
     public void onBeforeConvert(final BeforeConvertEvent<Object> event) {

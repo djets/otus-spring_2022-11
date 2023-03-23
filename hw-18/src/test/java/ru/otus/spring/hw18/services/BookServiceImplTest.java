@@ -1,11 +1,14 @@
 package ru.otus.spring.hw18.services;
 
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
+import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.context.TestPropertySource;
+import ru.otus.spring.hw18.config.CascadeSaveConfig;
 import ru.otus.spring.hw18.model.Author;
 import ru.otus.spring.hw18.model.Book;
 import ru.otus.spring.hw18.model.Genre;
@@ -18,8 +21,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @DataMongoTest
 @TestPropertySource(properties = "mongock.enabled=false")
-@Import(BookServiceImpl.class)
+@TestConfiguration(value = "application-test.yml")
+@Import({BookServiceImpl.class, CascadeSaveConfig.class})
 @DisplayName("Класс BookServiceImpl должен")
+@Slf4j
 class BookServiceImplTest {
 
     @Autowired
@@ -58,10 +63,9 @@ class BookServiceImplTest {
         Genre genre = new Genre();
         genre.setName(genreName);
         book.setGenre(genre);
-//        book.getAuthors().add(new Author(null, authorName, authorSurname, new ArrayList<>()));
+        book.getAuthors().add(new Author(null, authorName, authorSurname, new ArrayList<>()));
         Book savedBook = repository.save(book);
         String bookId = savedBook.get_id();
-
 
         Book actualBook = bookService.findById(bookId);
         assertThat(actualBook).isNotNull();

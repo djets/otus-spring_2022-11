@@ -25,4 +25,6 @@ public interface BookService {
     void updateNameById(String _id, String changedName);
 
     void delete(String _id);
+
+    void save(Book book);
 }

@@ -7,4 +7,6 @@ import java.util.List;
 
 public interface AuthorRepository extends MongoRepository<Author, String> {
     List<Author> findByNameAndSurname(String authorName, String authorSurname);
+    List<Author> findByName(String authorName);
+    List<Author> findBySurname (String authorSurname);
 }
