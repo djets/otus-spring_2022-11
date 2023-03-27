@@ -4,6 +4,8 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.stereotype.Service;
+import ru.otus.spring.hw18.dto.AuthorDto;
+import ru.otus.spring.hw18.dto.mapper.AuthorDtoMapper;
 import ru.otus.spring.hw18.model.Author;
 import ru.otus.spring.hw18.repository.AuthorRepository;
 
@@ -16,14 +18,11 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class AuthorServiceImpl implements AuthorService {
     AuthorRepository repository;
+    AuthorDtoMapper authorDtoMapper;
 
     @Override
-    public String save(String name, String surname) {
-        Author author = new Author();
-        author.setName(name);
-        author.setSurname(surname);
-        Author savedAuthor = repository.save(author);
-        return savedAuthor.get_id();
+    public void save(AuthorDto authorDto) {
+        repository.save(authorDtoMapper.fromDto(authorDto));
     }
 
     @Override

@@ -39,15 +39,15 @@ public class Author {
         return getSurname().equals(author.getSurname());
     }
 
-    @Override
-    public int hashCode() {
-        int result = getName().hashCode();
-        result = 31 * result + getSurname().hashCode();
-        return result;
-    }
-
-    @Override
-    public String toString() {
-        return name + " " + surname;
-    }
+//    @Override
+//    public int hashCode() {
+//        int result = getName().hashCode();
+//        result = 31 * result + getSurname().hashCode();
+//        return result;
+//    }
+//
+//    @Override
+//    public String toString() {
+//        return name + " " + surname;
+//    }
 }

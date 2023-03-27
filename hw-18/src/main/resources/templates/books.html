@@ -64,15 +64,15 @@
     </tr>
     </thead>
     <tbody>
-    <tr th:each="book : ${books}">
-        <td th:text="${book._id}">1</td>
-        <td th:text="${book.name}">Name Book</td>
-        <td th:text="${book.genre != null ? book.genre.name : ''}">Name Genre</td>
+    <tr th:each="bookDto : ${bookDtoList}">
+        <td th:text="${bookDto.id}">1</td>
+        <td th:text="${bookDto.nameBook}">Name Book</td>
+        <td th:text="${bookDto.genreDto != null ? bookDto.genreDto.nameGenre : ''}">Name Genre</td>
         <td>
             <table>
                 <tbody>
-                <tr th:each="author : ${book.authors}">
-                    <td th:text="${author.name}">Name author</td>
+                <tr th:each="authorDto : ${bookDto.authorDtoList}">
+                    <td th:text="${bookDto.authorDtoList != null ? authorDto.name + ' ' + authorDto.surname : ''}">Name author</td>
                 </tr>
                 </tbody>
             </table>
@@ -81,7 +81,7 @@
             <a href="">Comments</a>
         </td>
         <td>
-            <a th:href="@{/book-edit(id=${book._id})}" href="book-edit.html" th:text="#{edit-button-caption}">Edit</a>
+            <a th:href="@{/book-edit(id=${bookDto.id})}" href="book-edit.html" th:text="#{edit-button-caption}">Edit</a>
         </td>
     </tr>
     </tbody>

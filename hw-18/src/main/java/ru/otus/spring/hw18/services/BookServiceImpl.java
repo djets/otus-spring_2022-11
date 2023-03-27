@@ -28,42 +28,9 @@ public class BookServiceImpl implements BookService {
     GenreRepository genreRepository;
     CommentRepository commentRepository;
 
-    @Override
-    public String save(String name) {
-        return repository.save(new Book(null, name, null, null, null)).get_id();
-    }
-
-    @Override
-    public String saveBookWithGenreAndAuthor(String name, String authorName, String authorSurname, String genreName) {
-        List<Book> optionalBook = repository.findByName(name);
-        List<Author> optionalAuthor = authorRepository.findByNameAndSurname(authorName, authorSurname);
-        List<Genre> optionalGenre = genreRepository.findByName(genreName);
-        if (optionalBook.isEmpty()) {
-            Book book = new Book(null, name, new ArrayList<>(), null, new ArrayList<>());
-            Book savedBook = repository.save(book);
-
-            if (optionalAuthor.isEmpty()) {
-                Author author = new Author(null, authorName, authorSurname, List.of(savedBook));
-                authorRepository.save(author);
-                book.getAuthors().add(author);
-            } else {
-                optionalAuthor.forEach(author -> book.getAuthors().add(author));
-                savedBook.getAuthors().addAll(optionalAuthor);
-            }
-            if (optionalGenre.isEmpty()) {
-                Genre genre = new Genre(null, genreName, List.of(savedBook));
-                genreRepository.save(genre);
-                book.setGenre(genre);
-            } else {
-                optionalGenre.forEach(genre -> genre.getBooks().add(book));
-                savedBook.setGenre(optionalGenre.stream().findFirst().orElse(null));
-            }
-            repository.save(savedBook);
-            return savedBook.get_id();
-        } else {
-            return optionalBook.get(0).get_id();
-        }
-    }
+    AuthorService authorService;
+    GenreService genreService;
+    CommentsService commentsService;
 
     @Override
     public Book findById(String _id) {
@@ -97,11 +64,11 @@ public class BookServiceImpl implements BookService {
                 book.getAuthors().add(author);
             } else {
                 authors.forEach(author -> {
-                    if (book.getAuthors() !=null) {
-                        book.getAuthors().add(author);
-                    }
-                    book.setAuthors(List.of(author));
-                }
+                            if (book.getAuthors() != null) {
+                                book.getAuthors().add(author);
+                            }
+                            book.setAuthors(List.of(author));
+                        }
                 );
             }
             repository.save(book);
@@ -147,7 +114,6 @@ public class BookServiceImpl implements BookService {
             author.setName(changedName);
             repository.save(author);
         });
-
     }
 
     @Override
@@ -156,8 +122,27 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public void save(Book book) {
-        String id = book.get_id();
-        repository.save(book);
+    public String save(Book book) {
+        if (book.getGenre() != null) {
+            List<String> foundedIdGenreList = genreService.findByName(book.getGenre().getName());
+            if (foundedIdGenreList != null && foundedIdGenreList.size() == 1) {
+                foundedIdGenreList.forEach(s -> book.getGenre().set_id(s));
+                book.getGenre().set_id(foundedIdGenreList.get(0));
+            }
+        }
+        if (book.getAuthors() != null && !book.getAuthors().isEmpty()) {
+            book.getAuthors()
+                    .forEach(author -> {
+                        if (author.get_id() != null) {
+                            List<String> foundedIdAuthorList = authorService.findByNameAndSurname(author.getName(), author.getSurname());
+                            if (foundedIdAuthorList != null) {
+                                foundedIdAuthorList.forEach(author::set_id);
+                            }
+                        }
+                    });
+        }
+
+        Book saveBook = repository.save(book);
+        return saveBook.get_id();
     }
 }

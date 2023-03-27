@@ -6,10 +6,6 @@ import java.util.List;
 
 public interface BookService {
 
-    String save(String name);
-
-    String saveBookWithGenreAndAuthor(String name, String authorName, String authorSurname, String genreName);
-
     Book findById(String id);
 
     List<String> findByName(String name);
@@ -26,5 +22,5 @@ public interface BookService {
 
     void delete(String _id);
 
-    void save(Book book);
+    String save(Book book);
 }

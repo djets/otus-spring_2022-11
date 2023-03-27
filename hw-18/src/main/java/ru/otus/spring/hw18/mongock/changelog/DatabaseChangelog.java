@@ -51,7 +51,10 @@ public class DatabaseChangelog {
         Book book = new Book();
         book.setName("TestBookName");
         book.setGenre(new Genre(null, "TestGenreName", new ArrayList<>()));
-        book.setAuthors(List.of(new Author(null, "AuthorName", "Surname", new ArrayList<>())));
+        book.setAuthors(List.of(
+                new Author(null, "AuthorName", "Surname", new ArrayList<>()),
+                new Author(null, "AuthorName2", "Surname2", new ArrayList<>())
+                ));
         book.setComments(new ArrayList<>());
 
         mongockTemplate.save(book);

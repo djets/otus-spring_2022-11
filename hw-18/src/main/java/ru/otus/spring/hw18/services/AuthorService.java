@@ -1,11 +1,13 @@
 package ru.otus.spring.hw18.services;
 
+import ru.otus.spring.hw18.dto.AuthorDto;
 import ru.otus.spring.hw18.model.Author;
 
 import java.util.List;
 
 public interface AuthorService {
-    String save(String name, String surname);
+
+    void save(AuthorDto authorDto);
 
     Author findById(String _id);
 
