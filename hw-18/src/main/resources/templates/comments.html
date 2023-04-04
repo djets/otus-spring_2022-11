@@ -8,18 +8,18 @@
             padding: 50px;
         }
 
-        .books {
+        .comments {
             border: 1px solid steelblue;
             width: 300px;
             border-collapse: collapse;
         }
 
-        .books tr td, th {
+        .comments tr td, th {
             padding: 5px;
             border: 1px solid steelblue;
         }
 
-        .books td:last-child, td:first-child {
+        .comments td:last-child, td:first-child {
             width: 50px;
         }
 
@@ -50,38 +50,22 @@
     <div><a href="#" th:href="@{/(lang=ru)}" th:text="#{ru-lang-switch-button-caption}">Language - RU</a></div>
 </div>
 
-<h3 th:text="#{books-table-header}">Books:</h3>
+<h3 th:text="#{comments-table-header}">Books:</h3>
 
-<table class="books">
+<table class="comments">
     <thead>
     <tr>
-        <th>ID</th>
-        <th>Name</th>
-        <th>Genre</th>
-        <th>Authors</th>
-        <th>View Comments</th>
+        <th>Create data</th>
+        <th>Text</th>
         <th>Action</th>
     </tr>
     </thead>
     <tbody>
-    <tr th:each="bookDto : ${bookDtoList}">
-        <td th:text="${bookDto.id}">1</td>
-        <td th:text="${bookDto.getTitle}">Name Book</td>
-        <td th:text="${bookDto.genreDto != null ? bookDto.genreDto.nameGenre : ''}">Name Genre</td>
+    <tr th:each="commmentDto : ${commentDtoList}">
+        <td th:text="${commmentDto.createData}">Create data</td>
+        <td th:text="${commmentDto.text}">Text comment</td>
         <td>
-            <table>
-                <tbody>
-                <tr th:each="authorDto : ${bookDto.authorDtoList}">
-                    <td th:text="${bookDto.authorDtoList != null ? authorDto.name + ' ' + authorDto.surname : ''}">Name author</td>
-                </tr>
-                </tbody>
-            </table>
-        </td>
-        <td>
-            <a th:href="@{/comments(id=${bookDto.id})}">Comments</a>
-        </td>
-        <td>
-            <a th:href="@{/book-edit(id=${bookDto.id})}" href="book-edit.html" th:text="#{edit-button-caption}">Edit</a>
+            <a th:href="@{/comment-edit(id=${commmentDto.id})}" href="commets-edit.html" th:text="#{edit-button-caption}">Edit</a>
         </td>
     </tr>
     </tbody>

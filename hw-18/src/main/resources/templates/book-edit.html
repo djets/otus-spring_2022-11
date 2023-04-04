@@ -55,9 +55,9 @@
 
     <div class="row">
         <label for="book-name">Name:</label>
-        <input id="book-name" type="text" th:field="*{nameBook}" value="New Books Name"/>
+        <input id="book-name" type="text" th:field="*{getTitle}" value="New Books Name"/>
 
-        <div class="errors" th:if="${#fields.hasErrors('nameBook')}" th:errors="*{nameBook}">Wrong book name error</div>
+        <div class="errors" th:if="${#fields.hasErrors('nameBook')}" th:errors="*{getTitle}">Wrong book name error</div>
     </div>
 
     <div class="row">
@@ -65,10 +65,11 @@
         <input id="genre-name-input" name="genreDto" type="text" th:field="*{genreDto.nameGenre}" value="New Genre Name"/>
     </div>
 
-    <div class="row" th:each="authorDto : ${bookDto.authorDtoList}">
+    <div class="row" th:each="authorDto : *{authorDtoList}">
         <label for="author-name-input">Author:</label>
-            <input id="author-name-input" name="authorDto" type="text" th:value="${bookDto.authorDtoList != null ? authorDto.name + ' ' + authorDto.surname : ''}" value="New Author Name"/>
+        <input id="author-name-input" name="authorDto" type="text" th:value="${bookDto.authorDtoList != null ? authorDto.name + ' ' + authorDto.surname : ''}" value="New Author Name"/>
     </div>
+    <!--        <input id="author-name-input" name="authorDto" type="text" th:value="${authorDto.name + ' ' + authorDto.surname}" value="New Author Name"/>-->
 
     <div class="row">
         <button type="submit" th:text="#{save-button-caption}">Save</button>

@@ -22,7 +22,7 @@ public class Comment {
 
     Date createData = new Date();
 
-    @DBRef(lazy = true)
+    @DBRef
     Book book;
 
     @Override

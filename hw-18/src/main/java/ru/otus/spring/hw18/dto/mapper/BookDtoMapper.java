@@ -7,7 +7,6 @@ import org.springframework.stereotype.Component;
 import ru.otus.spring.hw18.dto.BookDto;
 import ru.otus.spring.hw18.model.Book;
 import ru.otus.spring.hw18.model.Comment;
-import ru.otus.spring.hw18.model.Genre;
 
 import java.util.List;
 import java.util.Optional;
@@ -25,7 +24,7 @@ public class BookDtoMapper implements DtoMapper<Book, BookDto> {
     public BookDto toDto(Book book) {
         BookDto bookDto = new BookDto();
         bookDto.setId(book.get_id());
-        bookDto.setNameBook(book.getName());
+        bookDto.setTitle(book.getTitle());
         Optional.ofNullable(book.getGenre())
                 .ifPresent(genre -> bookDto.setGenreDto(genreDtoMapper.toDto(genre)));
         Optional.ofNullable(book.getAuthors())
@@ -55,7 +54,7 @@ public class BookDtoMapper implements DtoMapper<Book, BookDto> {
     public Book fromDto(BookDto bookDto) {
         Book book = new Book();
         book.set_id(bookDto.getId());
-        book.setName(bookDto.getNameBook());
+        book.setTitle(bookDto.getTitle());
         if (bookDto.getGenreDto() != null) {
             book.setGenre(genreDtoMapper.fromDto(bookDto.getGenreDto()));
             book.getGenre().setBooks(List.of(book));

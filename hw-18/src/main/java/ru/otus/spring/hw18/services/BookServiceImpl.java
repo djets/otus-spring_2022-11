@@ -5,6 +5,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.stereotype.Service;
 import ru.otus.spring.hw18.controller.exception.NotFoundException;
+import ru.otus.spring.hw18.dto.CommentDto;
+import ru.otus.spring.hw18.dto.mapper.BookDtoMapper;
+import ru.otus.spring.hw18.dto.mapper.CommentDtoMapper;
 import ru.otus.spring.hw18.model.Author;
 import ru.otus.spring.hw18.model.Book;
 import ru.otus.spring.hw18.model.Comment;
@@ -32,14 +35,17 @@ public class BookServiceImpl implements BookService {
     GenreService genreService;
     CommentsService commentsService;
 
+    BookDtoMapper bookDtoMapper;
+    CommentDtoMapper commentDtoMapper;
+
     @Override
     public Book findById(String _id) {
         return repository.findById(_id).orElseThrow(RuntimeException::new);
     }
 
     @Override
-    public List<String> findByName(String name) {
-        return repository.findByName(name).stream()
+    public List<String> findByName(String title) {
+        return repository.findByTitle(title).stream()
                 .map(Book::get_id)
                 .collect(Collectors.toList());
     }
@@ -111,7 +117,7 @@ public class BookServiceImpl implements BookService {
     @Override
     public void updateNameById(String _id, String changedName) {
         repository.findById(_id).ifPresent(author -> {
-            author.setName(changedName);
+            author.setTitle(changedName);
             repository.save(author);
         });
     }
@@ -133,16 +139,29 @@ public class BookServiceImpl implements BookService {
         if (book.getAuthors() != null && !book.getAuthors().isEmpty()) {
             book.getAuthors()
                     .forEach(author -> {
-                        if (author.get_id() != null) {
-                            List<String> foundedIdAuthorList = authorService.findByNameAndSurname(author.getName(), author.getSurname());
+                        if (author.get_id() == null) {
+                            List<String> foundedIdAuthorList = authorService
+                                    .findByNameAndSurname(author.getName(), author.getSurname());
                             if (foundedIdAuthorList != null) {
                                 foundedIdAuthorList.forEach(author::set_id);
                             }
                         }
                     });
         }
-
+        if (book.get_id() != null) {
+            book.setComments(repository.findById(book.get_id())
+                    .orElseThrow(NotFoundException::new).getComments());
+        }
         Book saveBook = repository.save(book);
         return saveBook.get_id();
+    }
+
+    @Override
+    public List<CommentDto> findCommentsByBookId(String bookId) {
+        Book book = repository.findById(bookId).orElseThrow(NotFoundException::new);
+        return book.getComments()
+                .stream()
+                .map(commentDtoMapper::toDto)
+                .collect(Collectors.toList());
     }
 }

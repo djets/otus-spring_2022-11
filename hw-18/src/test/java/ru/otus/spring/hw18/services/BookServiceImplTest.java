@@ -15,7 +15,6 @@ import ru.otus.spring.hw18.model.Genre;
 import ru.otus.spring.hw18.repository.BookRepository;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -42,7 +41,7 @@ class BookServiceImplTest {
 
         Book actualBook = bookService.findById(bookId);
         assertThat(actualBook).isNotNull();
-        assertThat(actualBook.getName()).isEqualTo(bookName);
+        assertThat(actualBook.getTitle()).isEqualTo(bookName);
     }
 
     @Test
@@ -59,7 +58,7 @@ class BookServiceImplTest {
 //                genreName);
 
         Book book = new Book();
-        book.setName(bookName);
+        book.setTitle(bookName);
         Genre genre = new Genre();
         genre.setName(genreName);
         book.setGenre(genre);
@@ -69,7 +68,7 @@ class BookServiceImplTest {
 
         Book actualBook = bookService.findById(bookId);
         assertThat(actualBook).isNotNull();
-        assertThat(actualBook.getName()).isEqualTo(bookName);
+        assertThat(actualBook.getTitle()).isEqualTo(bookName);
         assertThat(actualBook.getAuthors()).hasSize(1);
         assertThat(actualBook.getAuthors().get(0).getName()).isEqualTo(authorName);
         assertThat(actualBook.getAuthors().get(0).getSurname()).isEqualTo(authorSurname);
@@ -89,7 +88,7 @@ class BookServiceImplTest {
 
         Book actualBook = bookService.findById(bookId);
         assertThat(actualBook).isNotNull();
-        assertThat(actualBook.getName()).isEqualTo(bookName);
+        assertThat(actualBook.getTitle()).isEqualTo(bookName);
         assertThat(actualBook.getAuthors()).hasSize(1);
         assertThat(actualBook.getAuthors().get(0).getName()).isEqualTo(authorName);
         assertThat(actualBook.getAuthors().get(0).getSurname()).isEqualTo(authorSurname);
@@ -106,7 +105,7 @@ class BookServiceImplTest {
 
         Book actualBook = bookService.findById(bookId);
         assertThat(actualBook).isNotNull();
-        assertThat(actualBook.getName()).isEqualTo(bookName);
+        assertThat(actualBook.getTitle()).isEqualTo(bookName);
         assertThat(actualBook.getGenre()).isNotNull();
         assertThat(actualBook.getGenre().getName()).isEqualTo(genreName);
     }

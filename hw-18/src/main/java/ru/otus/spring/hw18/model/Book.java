@@ -3,13 +3,10 @@ package ru.otus.spring.hw18.model;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 import ru.otus.spring.hw18.annotation.CascadeSave;
 
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Size;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,7 +21,7 @@ public class Book {
     @Id
     String _id;
 
-    String name;
+    String title;
 
     @DBRef
     @CascadeSave
@@ -34,7 +31,8 @@ public class Book {
     @CascadeSave
     Genre genre;
 
-    @Transient
+    @DBRef
+    @CascadeSave
     List<Comment> comments = new ArrayList<>();
 
     @Override
@@ -44,11 +42,11 @@ public class Book {
 
         Book book = (Book) o;
 
-        return getName().equals(book.getName());
+        return getTitle().equals(book.getTitle());
     }
 
     @Override
     public int hashCode() {
-        return getName().hashCode();
+        return getTitle().hashCode();
     }
 }
