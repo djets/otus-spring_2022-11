@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.stereotype.Service;
 import ru.otus.spring.hw18.controller.exception.NotFoundException;
+import ru.otus.spring.hw18.dto.BookDto;
 import ru.otus.spring.hw18.dto.CommentDto;
 import ru.otus.spring.hw18.dto.mapper.BookDtoMapper;
 import ru.otus.spring.hw18.dto.mapper.CommentDtoMapper;
@@ -39,8 +40,8 @@ public class BookServiceImpl implements BookService {
     CommentDtoMapper commentDtoMapper;
 
     @Override
-    public Book findById(String _id) {
-        return repository.findById(_id).orElseThrow(RuntimeException::new);
+    public BookDto findById(String id) {
+        return bookDtoMapper.toDto(repository.findById(id).orElseThrow(RuntimeException::new));
     }
 
     @Override
@@ -51,10 +52,8 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public List<Book> findAll() {
-        List<Book> books = new ArrayList<>();
-        repository.findAll().forEach(books::add);
-        return books;
+    public List<BookDto> findAll() {
+        return repository.findAll().stream().map(bookDtoMapper::toDto).collect(Collectors.toList());
     }
 
     @Override
@@ -128,7 +127,8 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public String save(Book book) {
+    public String save(BookDto bookDto) {
+        Book book = bookDtoMapper.fromDto(bookDto);
         if (book.getGenre() != null) {
             List<String> foundedIdGenreList = genreService.findByName(book.getGenre().getName());
             if (foundedIdGenreList != null && foundedIdGenreList.size() == 1) {

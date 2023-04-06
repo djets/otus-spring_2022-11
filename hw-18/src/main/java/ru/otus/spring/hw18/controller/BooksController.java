@@ -3,10 +3,8 @@ package ru.otus.spring.hw18.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
+import ru.otus.spring.hw18.dto.BookDto;
 import ru.otus.spring.hw18.services.BookService;
 
 @Controller
@@ -16,45 +14,34 @@ public class BooksController {
     @Autowired
     private BookService bookService;
 
-    @GetMapping(value = "/all")
+    @GetMapping(value = "")
     public String showAll(Model model) {
-        model.addAttribute("books", bookService.findAll());
-
-        return "allBooks";
+        model.addAttribute("booksDto", bookService.findAll());
+        return "books";
     }
 
     @GetMapping(value = "/create")
-    public String showCreateForm(Model model) {
-//        BooksCreationDto booksForm = new BooksCreationDto();
-//
-//        for (int i = 1; i <= 3; i++) {
-//            booksForm.addBook(new Book());
-//        }
-//
-//        model.addAttribute("form", booksForm);
-
-        return "createBooksForm";
+    public String addBookPage(Model model) {
+        BookDto bookDto = new BookDto();
+        model.addAttribute("bookDto", bookDto);
+        return "createBook";
     }
 
-    @GetMapping(value = "/edit")
-    public String showEditForm(Model model) {
-//        List<Book> books = new ArrayList<>();
-//        bookService.findAll()
-//                .iterator()
-//                .forEachRemaining(books::add);
-//
-//        model.addAttribute("form", new BooksCreationDto(books));
-
-        return "editBooksForm";
+    @GetMapping(value = "/edit{id}")
+    public String editBookPage(@PathVariable("id") String id, Model model) {
+        BookDto bookDto = bookService.findById(id);
+        model.addAttribute("bookDto", bookDto);
+        return "editBook";
     }
 
-//    @PostMapping(value = "/save")
-//    public String saveBooks(@ModelAttribute BooksCreationDto form, Model model) {
-//        bookService.saveAll(form.getBooks());
-//
-//        model.addAttribute("books", bookService.findAll());
-//
-//        return "redirect:/books/all";
-//    }
+    @PostMapping(value = "/save")
+    public String saveBooks(@ModelAttribute BookDto bookDto, Model model) {
+
+        bookService.save(bookDto);
+
+        model.addAttribute("books", bookService.findAll());
+
+        return "redirect:/books";
+    }
 
 }

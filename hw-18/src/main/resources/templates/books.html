@@ -1,90 +1,66 @@
-<!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8"/>
-    <title>List of all books</title>
-    <style type="text/css">
-        body {
-            padding: 50px;
-        }
-
-        .books {
-            border: 1px solid steelblue;
-            width: 300px;
-            border-collapse: collapse;
-        }
-
-        .books tr td, th {
-            padding: 5px;
-            border: 1px solid steelblue;
-        }
-
-        .books td:last-child, td:first-child {
-            width: 50px;
-        }
-
-        h3 {
-            background-image: url("../static/listmark.png");
-            background-repeat: no-repeat;
-            padding: 2px;
-            padding-left: 30px;
-        }
-
-    </style>
-
-    <style type="text/css" th:inline="text">
-        [[h3]] {
-            background-image: url([[@{/listmark.png}]]);
-            background-repeat: no-repeat;
-            padding: 2px;
-            padding-left: 30px;
-        }
-
-    </style>
+    <title>All Books</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 </head>
 <body>
-
-<h3 th:text="#{lang-switcher-header}">Select language</h3>
-<div>
-    <div><a href="#" th:href="@{/(lang=en)}" th:text="#{en-lang-switch-button-caption}">Language - EN</a></div>
-    <div><a href="#" th:href="@{/(lang=ru)}" th:text="#{ru-lang-switch-button-caption}">Language - RU</a></div>
-</div>
-
-<h3 th:text="#{books-table-header}">Books:</h3>
-
-<table class="books">
-    <thead>
-    <tr>
-        <th>ID</th>
-        <th>Name</th>
-        <th>Genre</th>
-        <th>Authors</th>
-        <th>View Comments</th>
-        <th>Action</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr th:each="bookDto : ${bookDtoList}">
-        <td th:text="${bookDto.id}">1</td>
-        <td th:text="${bookDto.getTitle}">Name Book</td>
-        <td th:text="${bookDto.genreDto != null ? bookDto.genreDto.nameGenre : ''}">Name Genre</td>
-        <td>
-            <table>
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <h1> Books </h1>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th> Select </th>
+                    <th> Title </th>
+                    <th> Genre </th>
+                    <th> Authors </th>
+                    <th> Comments </th>
+                </tr>
+                </thead>
                 <tbody>
-                <tr th:each="authorDto : ${bookDto.authorDtoList}">
-                    <td th:text="${bookDto.authorDtoList != null ? authorDto.name + ' ' + authorDto.surname : ''}">Name author</td>
+                <tr th:if="${booksDto.empty}">
+                    <td colspan="2"> No Books Available </td>
+                </tr>
+                <tr th:each="bookDto : ${booksDto}">
+                    <td>
+                        <div class="form-check">
+                            <input type="radio" name="bookId" th:value="${bookDto.id}" class="form-check-input">
+                        </div>
+                    </td>
+                    <td><span th:text="${bookDto.title}"> Title </span></td>
+                    <td><span th:if="${bookDto.genreDto != null}" th:text="${bookDto.genreDto.nameGenre}"> Genre </span></td>
+                    <td>
+                        <div th:each="authorDto, iterStat : ${bookDto.authorDtoList}">
+                            <span th:text="${authorDto.name + ' ' + authorDto.surname + ', '}" th:if="${!iterStat.last}"> Author </span>
+                            <span th:text="${authorDto.name + ' ' + authorDto.surname}" th:if="${iterStat.last}"> Author </span>
+                        </div>
+                    </td>
+                    <td><a class="link-primary" href="#" th:href="@{/books/{id}/comments(id=${bookDto.id})}"> Comments </a></td>
                 </tr>
                 </tbody>
             </table>
-        </td>
-        <td>
-            <a th:href="@{/comments(id=${bookDto.id})}">Comments</a>
-        </td>
-        <td>
-            <a th:href="@{/book-edit(id=${bookDto.id})}" href="book-edit.html" th:text="#{edit-button-caption}">Edit</a>
-        </td>
-    </tr>
-    </tbody>
-</table>
+        </div>
+        <div class="col-md-6">
+            <a class="btn btn-success" href="#" th:href="@{/books/create}"> Add Book </a>
+            <a class="btn btn-primary" href="#" onclick="editBook()"> Edit Books</a>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    function editBook() {
+        var selectedBookId = $('input[name=bookId]:checked').val();
+        if (selectedBookId) {
+            window.location.href = '/books/edit' + selectedBookId;
+        } else { event.preventDefault();
+            alert('Please select a book.'); }
+    }
+</script>
 </body>
 </html>
