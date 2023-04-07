@@ -6,10 +6,11 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import ru.otus.spring.hw18.dto.AuthorDto;
 import ru.otus.spring.hw18.dto.BookDto;
+import ru.otus.spring.hw18.dto.CommentDto;
 import ru.otus.spring.hw18.services.BookService;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/books")
@@ -41,11 +42,15 @@ public class BooksController {
 
     @PostMapping(value = "/save")
     public String saveBooks(@ModelAttribute BookDto bookDto, Model model) {
-        List<AuthorDto> newAuthors = new ArrayList<>();
-        for (AuthorDto authorDto : bookDto.getAuthorDtoList()) {
-            if (authorDto.getId() == null) { // this author is new
-                newAuthors.add(authorDto);
-            }
+        BookDto foundBook = bookService.findById(bookDto.getId());
+        if(foundBook.getCommentDtoList() != null) {
+            List<AuthorDto> newAuthors = bookDto.getAuthorDtoList()
+                    .stream()
+                    .filter(authorDto -> authorDto.getId() == null)
+                    .collect(Collectors.toList());
+            foundBook.getAuthorDtoList().addAll(newAuthors);
+        } else {
+            foundBook.setAuthorDtoList(bookDto.getAuthorDtoList());
         }
         bookService.save(bookDto);
         model.addAttribute("books", bookService.findAll());

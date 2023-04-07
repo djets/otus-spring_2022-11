@@ -41,7 +41,7 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public BookDto findById(String id) {
-        return bookDtoMapper.toDto(repository.findById(id).orElseThrow(RuntimeException::new));
+        return bookDtoMapper.toDto(repository.findById(id).orElseThrow(NotFoundException::new));
     }
 
     @Override
@@ -148,10 +148,15 @@ public class BookServiceImpl implements BookService {
                         }
                     });
         }
-        if (book.get_id() != null) {
-            book.setComments(repository.findById(book.get_id())
-                    .orElseThrow(NotFoundException::new).getComments());
+
+        if (!book.getComments().isEmpty()) {
+            book.getComments().forEach(comment -> comment.setBook(book));
         }
+
+//        if (book.get_id() != null) {
+//            book.setComments(repository.findById(book.get_id())
+//                    .orElseThrow(NotFoundException::new).getComments());
+//        }
         Book saveBook = repository.save(book);
         return saveBook.get_id();
     }
