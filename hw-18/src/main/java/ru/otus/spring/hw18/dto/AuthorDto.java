@@ -14,6 +14,7 @@ import javax.validation.constraints.Size;
 @NoArgsConstructor
 @AllArgsConstructor
 public class AuthorDto {
+    String id;
 
     @NotBlank(message = "{name-field-should-not-be-blank}")
     @Size(min = 2, max = 100)

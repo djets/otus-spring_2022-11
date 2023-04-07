@@ -2,6 +2,7 @@
 <head>
     <title>Edit Books</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
 <div class="container">
@@ -34,53 +35,47 @@
                         <tr>
                             <td hidden="hidden"><input th:field="*{id}" required/></td>
                             <td>
-                                <input th:placeholder="Title + ' '" th:field="*{title}" required/>
+                                <input class="form-control" th:placeholder="Title + ' '" th:field="*{title}" required/>
+                            </td>
+                            <td th:field="*{genreDto}">
+<!--                                <span hidden="hidden" th:field="*{genreDto.id}"></span>-->
+                                <input class="form-control" th:placeholder="Genre + ' '"
+                                       th:field="*{genreDto.nameGenre}" required/>
                             </td>
                             <td>
-                                <span hidden="hidden" th:field="*{genreDto.id}"></span>
-                                <input th:placeholder="Genre + ' '" th:field="*{genreDto.nameGenre}" required/>
-                            </td>
-                            <td>
-                                <div th:each="authorDto, itemStat : ${bookDto.authorDtoList}" th:field="*{authorDtoList}" th:placeholder="Author" th:if="${bookDto.authorDtoList}" >
-                                    <span hidden="hidden" th:value="authorDto.id"></span>
-                                    <input  th:value="*{authorDto.name + ' ' + authorDto.surname}" required/>
+                                <div id="authorDtoList">
+                                    <div th:each="authorDto, itemStat : *{authorDtoList}" th:field="*{authorDtoList}">
+                                        <input class="form-control" type="text"
+                                               th:attr="name='authorDtoList[' + ${itemStat.index} + '].name'"
+                                               th:value="${authorDto.name}"/>
+                                        <input class="form-control" type="text"
+                                               th:attr="name='authorDtoList[' + ${itemStat.index} + '].surname'"
+                                               th:value="${authorDto.surname}"/><br>
+                                    </div>
                                 </div>
                             </td>
+                            <td>
+                                <button type="button" class="btn btn-primary" onclick="addAuthor()">Add Author</button>
+                            </td>
                         </tr>
-                        <!--                                    <tr th:each="authorDto, itemStat : ${bookDto.getAuthorDtoList()}">-->
-                        <!--&lt;!&ndash;                                      <td><input th:placeholder="Title + ' ' + ${itemStat.count}" th:field="*{books[__${itemStat.index}__].title}" required/></td>&ndash;&gt;-->
-                        <!--                                      <td><input th:placeholder="Author + ' ' + ${itemStat.count}" th:field="*{books[__${itemStat.index}__].author}" required/></td>-->
-                        <!--                                    </tr>-->
                         </tbody>
                     </table>
                 </fieldset>
-<!--                <fieldset>-->
-<!--					<span class="pull-right">-->
-<!--						    <input type="submit" id="submitButton" class="btn btn-success" th:value="Save">-->
-<!--						    <input type="reset" id="resetButton" class="btn btn-danger" th:value="Reset"/>-->
-<!--					</span>-->
-<!--                    <table class="table">-->
-<!--                        <thead>-->
-<!--                        <tr>-->
-<!--                            <th></th>-->
-<!--                            <th> Title</th>-->
-<!--                            <th> Author</th>-->
-<!--                        </tr>-->
-<!--                        </thead>-->
-<!--                        <tbody>-->
-<!--                        <tr th:each="book, itemStat : ${form.books}">-->
-<!--                            <td><input hidden th:name="|books[${itemStat.index}].id|" th:value="${book.getId()}"/></td>-->
-<!--                            <td><input th:placeholder="Title + ' ' + ${itemStat.count}" th:name="|books[${itemStat.index}].title|" th:value="${book.getTitle()}"-->
-<!--                                       required/></td>-->
-<!--                            <td><input th:placeholder="Author + ' ' + ${itemStat.count}" th:name="|books[${itemStat.index}].author|"-->
-<!--                                       th:value="${book.getAuthor()}" required/></td>-->
-<!--                        </tr>-->
-<!--                        </tbody>-->
-<!--                    </table>-->
-<!--                </fieldset>-->
             </form>
         </div>
     </div>
 </div>
+
+<script>
+    function addAuthor() {
+        var index = document.querySelectorAll('#authorDtoList input').length /2;
+        var authorHtml =
+            '<div>' +
+            '<input class="form-control" type="text" name="authorDtoList[' + index + '].name" placeholder="Name" required/>' +
+            '<input class="form-control" type="text" name="authorDtoList[' + index + '].surname" placeholder="Surname" required/><br>' +
+            '</div>';
+        document.getElementById('authorDtoList').insertAdjacentHTML('beforeend', authorHtml);
+    }
+</script>
 </body>
 </html>

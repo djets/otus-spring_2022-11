@@ -10,11 +10,11 @@ import java.util.ArrayList;
 public class AuthorDtoMapper implements DtoMapper<Author, AuthorDto> {
     @Override
     public AuthorDto toDto(Author author) {
-        return new AuthorDto(author.getName(), author.getSurname());
+        return new AuthorDto(author.get_id(), author.getName(), author.getSurname());
     }
 
     @Override
     public Author fromDto(AuthorDto authorDto) {
-        return new Author(null, authorDto.getName(), authorDto.getSurname(), new ArrayList<>());
+        return new Author(authorDto.getId(), authorDto.getName(), authorDto.getSurname(), new ArrayList<>());
     }
 }

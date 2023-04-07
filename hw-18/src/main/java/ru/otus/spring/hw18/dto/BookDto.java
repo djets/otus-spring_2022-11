@@ -8,11 +8,11 @@ import lombok.experimental.FieldDefaults;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
 @FieldDefaults(level = AccessLevel.PRIVATE)
-@NoArgsConstructor
 @AllArgsConstructor
 public class BookDto {
     String id;
@@ -23,4 +23,9 @@ public class BookDto {
     GenreDto genreDto;
     List<CommentDto> commentDtoList;
     List<AuthorDto> authorDtoList;
+
+    public BookDto() {
+        this.authorDtoList = new ArrayList<>();
+        this.commentDtoList = new ArrayList<>();
+    }
 }
