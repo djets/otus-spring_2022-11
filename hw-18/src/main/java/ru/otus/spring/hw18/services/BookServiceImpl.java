@@ -9,18 +9,10 @@ import ru.otus.spring.hw18.dto.BookDto;
 import ru.otus.spring.hw18.dto.CommentDto;
 import ru.otus.spring.hw18.dto.mapper.BookDtoMapper;
 import ru.otus.spring.hw18.dto.mapper.CommentDtoMapper;
-import ru.otus.spring.hw18.model.Author;
 import ru.otus.spring.hw18.model.Book;
-import ru.otus.spring.hw18.model.Comment;
-import ru.otus.spring.hw18.model.Genre;
-import ru.otus.spring.hw18.repository.AuthorRepository;
 import ru.otus.spring.hw18.repository.BookRepository;
-import ru.otus.spring.hw18.repository.CommentRepository;
-import ru.otus.spring.hw18.repository.GenreRepository;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -28,13 +20,9 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class BookServiceImpl implements BookService {
     BookRepository repository;
-    AuthorRepository authorRepository;
-    GenreRepository genreRepository;
-    CommentRepository commentRepository;
 
     AuthorService authorService;
     GenreService genreService;
-    CommentsService commentsService;
 
     BookDtoMapper bookDtoMapper;
     CommentDtoMapper commentDtoMapper;
@@ -54,71 +42,6 @@ public class BookServiceImpl implements BookService {
     @Override
     public List<BookDto> findAll() {
         return repository.findAll().stream().map(bookDtoMapper::toDto).collect(Collectors.toList());
-    }
-
-    @Override
-    public void addAuthor(String _id, String authorName, String authorSurname) {
-        Optional<Book> optionalBook = repository.findById(_id);
-        List<Author> authors = authorRepository.findByNameAndSurname(authorName, authorSurname);
-        if (optionalBook.isPresent()) {
-            Book book = optionalBook.get();
-            if (authors.isEmpty()) {
-                Author author = new Author(null, authorName, authorSurname, new ArrayList<>());
-                author.getBooks().add(book);
-//                Author savedAuthor = authorRepository.save(author);
-                book.getAuthors().add(author);
-            } else {
-                authors.forEach(author -> {
-                            if (book.getAuthors() != null) {
-                                book.getAuthors().add(author);
-                            }
-                            book.setAuthors(List.of(author));
-                        }
-                );
-            }
-            repository.save(book);
-        }
-    }
-
-    @Override
-    public void addGenre(String _id, String nameGenre) {
-        Optional<Book> optionalBook = repository.findById(_id);
-        List<Genre> genres = genreRepository.findByName(nameGenre);
-        if (optionalBook.isPresent()) {
-            Book book = optionalBook.get();
-            if (genres.isEmpty()) {
-                Genre genre = new Genre(null, nameGenre, new ArrayList<>());
-                genre.getBooks().add(book);
-//                Genre savedGenre = genreRepository.save(genre);
-//                savedGenre.getBooks().add(book);
-                book.setGenre(genre);
-            } else {
-                genres.forEach(genre -> genre.getBooks().add(book));
-            }
-            repository.save(book);
-        }
-    }
-
-    @Override
-    public void addCommentById(String _id, String commentText) {
-        Optional<Book> optionalBook = repository.findById(_id);
-        if (optionalBook.isPresent()) {
-            Book book = optionalBook.get();
-            Comment comment = new Comment();
-            comment.setTextComment(commentText);
-            comment.setBook(book);
-            Comment savedComment = commentRepository.save(comment);
-            book.getComments().add(savedComment);
-            repository.save(book);
-        }
-    }
-
-    @Override
-    public void updateNameById(String _id, String changedName) {
-        repository.findById(_id).ifPresent(author -> {
-            author.setTitle(changedName);
-            repository.save(author);
-        });
     }
 
     @Override
@@ -152,11 +75,6 @@ public class BookServiceImpl implements BookService {
         if (!book.getComments().isEmpty()) {
             book.getComments().forEach(comment -> comment.setBook(book));
         }
-
-//        if (book.get_id() != null) {
-//            book.setComments(repository.findById(book.get_id())
-//                    .orElseThrow(NotFoundException::new).getComments());
-//        }
         Book saveBook = repository.save(book);
         return saveBook.get_id();
     }

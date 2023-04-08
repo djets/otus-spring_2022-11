@@ -4,8 +4,8 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.stereotype.Service;
-import ru.otus.spring.hw18.repository.GenreRepository;
 import ru.otus.spring.hw18.model.Genre;
+import ru.otus.spring.hw18.repository.GenreRepository;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,9 +39,7 @@ public class GenreServiceImpl implements GenreService {
 
     @Override
     public List<Genre> findAll() {
-        List<Genre> genres = new ArrayList<>();
-        repository.findAll().forEach(genres::add);
-        return genres;
+        return new ArrayList<>(repository.findAll());
     }
 
     @Override

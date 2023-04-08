@@ -5,7 +5,6 @@ import ru.otus.spring.hw18.dto.GenreDto;
 import ru.otus.spring.hw18.model.Genre;
 
 import java.util.ArrayList;
-import java.util.Optional;
 
 @Component
 public class GenreDtoMapper implements DtoMapper<Genre, GenreDto> {
@@ -20,6 +19,6 @@ public class GenreDtoMapper implements DtoMapper<Genre, GenreDto> {
                 genreDto.getId(),
                 genreDto.getNameGenre(),
                 new ArrayList<>()
-                );
+        );
     }
 }

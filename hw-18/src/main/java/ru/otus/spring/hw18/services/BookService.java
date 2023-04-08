@@ -14,14 +14,6 @@ public interface BookService {
 
     List<BookDto> findAll();
 
-    void addAuthor(String id, String authorName, String authorSurname);
-
-    void addGenre(String _id, String nameGenre);
-
-    void addCommentById(String _id, String commentText);
-
-    void updateNameById(String _id, String changedName);
-
     void delete(String _id);
 
     String save(BookDto bookDto);

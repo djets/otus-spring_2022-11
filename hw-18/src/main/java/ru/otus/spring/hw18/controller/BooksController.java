@@ -1,22 +1,24 @@
 package ru.otus.spring.hw18.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import ru.otus.spring.hw18.dto.AuthorDto;
 import ru.otus.spring.hw18.dto.BookDto;
-import ru.otus.spring.hw18.dto.CommentDto;
 import ru.otus.spring.hw18.services.BookService;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Controller
+@FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
+@RequiredArgsConstructor
 @RequestMapping("/books")
 public class BooksController {
 
-    @Autowired
     private BookService bookService;
 
     @GetMapping(value = "")
@@ -43,7 +45,7 @@ public class BooksController {
     @PostMapping(value = "/save")
     public String saveBooks(@ModelAttribute BookDto bookDto, Model model) {
         BookDto foundBook = bookService.findById(bookDto.getId());
-        if(foundBook.getCommentDtoList() != null) {
+        if (foundBook.getAuthorDtoList() != null) {
             List<AuthorDto> newAuthors = bookDto.getAuthorDtoList()
                     .stream()
                     .filter(authorDto -> authorDto.getId() == null)
@@ -51,6 +53,9 @@ public class BooksController {
             foundBook.getAuthorDtoList().addAll(newAuthors);
         } else {
             foundBook.setAuthorDtoList(bookDto.getAuthorDtoList());
+        }
+        if (bookDto.getCommentDtoList().isEmpty() && !foundBook.getCommentDtoList().isEmpty()) {
+            bookDto.setCommentDtoList(foundBook.getCommentDtoList());
         }
         bookService.save(bookDto);
         model.addAttribute("books", bookService.findAll());

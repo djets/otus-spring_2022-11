@@ -18,7 +18,8 @@ import java.util.stream.Collectors;
 
 @Controller
 @RequiredArgsConstructor
-@FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE) public class CommentController {
+@FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
+public class CommentController {
 
     BookService bookService;
 
@@ -34,7 +35,7 @@ import java.util.stream.Collectors;
     @PostMapping(value = "/books/{id}/comments/save")
     public String saveComments(@ModelAttribute BookDto bookDto, Model model) {
         BookDto foundBook = bookService.findById(bookDto.getId());
-        if(foundBook.getCommentDtoList() != null) {
+        if (foundBook.getCommentDtoList() != null) {
             List<CommentDto> newComment = bookDto.getCommentDtoList()
                     .stream()
                     .filter(commentDto -> commentDto.getId() == null)
@@ -48,3 +49,4 @@ import java.util.stream.Collectors;
         return "redirect:/books";
     }
 }
+

@@ -28,6 +28,6 @@ public class CommentDtoMapper implements DtoMapper<Comment, CommentDto> {
                 commentDto.getText(),
                 commentDto.getCreateData(),
                 null
-                );
+        );
     }
 }

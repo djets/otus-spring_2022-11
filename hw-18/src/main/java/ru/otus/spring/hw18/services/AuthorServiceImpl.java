@@ -39,9 +39,7 @@ public class AuthorServiceImpl implements AuthorService {
 
     @Override
     public List<Author> findAll() {
-        List<Author> authors = new ArrayList<>();
-        repository.findAll().forEach(authors::add);
-        return authors;
+        return new ArrayList<>(repository.findAll());
     }
 
     @Override

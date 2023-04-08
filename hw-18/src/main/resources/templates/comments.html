@@ -13,7 +13,7 @@
     </div>
     <div class="row">
         <div class="col-md-6">
-            <a class="btn btn-info" href="#" th:href="@{/books}"> Back to All Books </a>
+            <a class="btn btn-info" href="#" th:text="#{back-to-books}" th:href="@{/books}"> Back to All Books </a>
             <form action="#" class="form-horizontal"
                   th:action="@{/books/{id}/comments/save(id=${bookDto.id})}"
                   th:object="${bookDto}"
@@ -21,12 +21,12 @@
                 <fieldset>
                     <br>
                     <span class="pull-left">
-                        <button type="button" class="btn btn-secondary" onclick="addComment()">Add Comment </button>
+                        <button type="button" class="btn btn-secondary" th:text="#{add-button-caption}" onclick="addComment()">Add Comment </button>
                         <!--                        <button type="button" class="btn btn-secondary" onclick="editComment()">Edit Comment </button>-->
                     </span>
                     <span class="pull-right">
-						    <input type="submit" id="submitButton" class="btn btn-success" th:value="Save">
-						    <input type="reset" id="resetButton" class="btn btn-danger" th:value="Reset"/>
+						    <input type="submit" id="submitButton"class="btn btn-success" th:value="#{save-button-caption}">
+						    <input type="reset" id="resetButton" class="btn btn-danger" th:value="#{cancel-button-caption}"/>
 					</span>
                     <table class="table">
                         <thead>
