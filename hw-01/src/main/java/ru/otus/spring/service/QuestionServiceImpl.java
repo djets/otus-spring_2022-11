@@ -21,17 +21,17 @@ public class QuestionServiceImpl implements QuestionService {
 
     @Override
     public Map<Question, Set<Answer>> getQuestions() {
-        return questionDao.getAll().get();
+        return questionDao.getAll().orElseThrow();
     }
 
     @Override
     public void printAllQuestions() {
         getQuestions().forEach((k, v) -> {
             var i = new AtomicInteger(1);
-            consoleOutput.stdout(k.getText() + "\n" + v.stream()
+            consoleOutput.stdout("\n" + k.getText() + "\n" + v.stream()
                     .map(Answer::getText)
-                    .map(s -> i.getAndIncrement() + ": " + s)
-                    .collect(Collectors.joining("\n")));
+                    .map(s -> i.getAndIncrement() + ": " + s + "\n")
+                    .collect(Collectors.joining("")));
         });
     }
 }
