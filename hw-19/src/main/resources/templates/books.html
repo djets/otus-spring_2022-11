@@ -20,6 +20,11 @@
     </div>
 
 <div class="row">
+    <div class="col-md-8">
+        <a type="button" class="btn btn-success" href="#" th:text="#{add-button-caption}" th:href="@{/books/create}"> Add Book </a>
+        <button type="button" class="btn btn-primary" th:text="#{edit-button-caption}" onclick="editBook()"> Edit Books </button>
+        <button type="button" class="btn btn-danger" th:text="#{delete-button-caption}" onclick="deleteBook()"> Delete Book </button>
+    </div>
     <div class="col-md-6">
         <table class="table">
             <thead>
@@ -57,10 +62,6 @@
             </tbody>
         </table>
     </div>
-    <div class="col-md-6">
-        <a class="btn btn-success" href="#" th:text="#{add-button-caption}" th:href="@{/books/create}"> Add Book </a>
-        <a class="btn btn-primary" href="#" th:text="#{edit-button-caption}" onclick="editBook()"> Edit Books</a>
-    </div>
 </div>
 </div>
 
@@ -69,6 +70,15 @@
         var selectedBookId = $('input[name=bookId]:checked').val();
         if (selectedBookId) {
             window.location.href = '/books/edit' + selectedBookId;
+        } else {
+            event.preventDefault();
+            alert('Please select a book.');
+        }
+    }
+    function deleteBook() {
+        var selectedBookId = $('input[name=bookId]:checked').val();
+        if (selectedBookId) {
+            window.location.href = '/books/delete' + selectedBookId;
         } else {
             event.preventDefault();
             alert('Please select a book.');

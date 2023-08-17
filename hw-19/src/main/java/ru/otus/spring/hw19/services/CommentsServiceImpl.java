@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import ru.otus.spring.hw19.dto.CommentDto;
 import ru.otus.spring.hw19.dto.CommentsBookDto;
 import ru.otus.spring.hw19.dto.mapper.CommentDtoMapper;
+import ru.otus.spring.hw19.dto.mapper.DtoMapper;
 import ru.otus.spring.hw19.model.Comment;
 import ru.otus.spring.hw19.repository.CommentRepository;
 
@@ -19,7 +20,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class CommentsServiceImpl implements CommentsService {
     CommentRepository repository;
-    CommentDtoMapper commentDtoMapper;
+    DtoMapper<Comment, CommentDto> commentDtoMapper;
 
     @Override
     public void save(CommentDto commentDto) {

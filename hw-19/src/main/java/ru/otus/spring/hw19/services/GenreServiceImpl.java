@@ -6,6 +6,7 @@ import lombok.experimental.FieldDefaults;
 import org.springframework.stereotype.Service;
 import ru.otus.spring.hw19.controller.exception.NotFoundException;
 import ru.otus.spring.hw19.dto.GenreDto;
+import ru.otus.spring.hw19.dto.mapper.DtoMapper;
 import ru.otus.spring.hw19.dto.mapper.GenreDtoMapper;
 import ru.otus.spring.hw19.model.Genre;
 import ru.otus.spring.hw19.repository.GenreRepository;
@@ -18,7 +19,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class GenreServiceImpl implements GenreService {
     GenreRepository repository;
-    GenreDtoMapper genreDtoMapper;
+    DtoMapper<Genre, GenreDto> genreDtoMapper;
 
     @Override
     public GenreDto save(GenreDto genreDto) {

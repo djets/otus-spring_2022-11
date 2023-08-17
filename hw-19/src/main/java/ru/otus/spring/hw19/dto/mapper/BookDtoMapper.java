@@ -4,8 +4,12 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.stereotype.Component;
+import ru.otus.spring.hw19.dto.AuthorDto;
 import ru.otus.spring.hw19.dto.BookDto;
+import ru.otus.spring.hw19.dto.GenreDto;
+import ru.otus.spring.hw19.model.Author;
 import ru.otus.spring.hw19.model.Book;
+import ru.otus.spring.hw19.model.Genre;
 
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -14,8 +18,8 @@ import java.util.stream.Collectors;
 @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
 @RequiredArgsConstructor
 public class BookDtoMapper implements DtoMapper<Book, BookDto> {
-    AuthorDtoMapper authorDtoMapper;
-    GenreDtoMapper genreDtoMapper;
+    DtoMapper<Author, AuthorDto> authorDtoMapper;
+    DtoMapper<Genre, GenreDto> genreDtoMapper;
 
     @Override
     public BookDto toDto(Book book) {
@@ -51,12 +55,6 @@ public class BookDtoMapper implements DtoMapper<Book, BookDto> {
                     .map(authorDtoMapper::fromDto)
                     .collect(Collectors.toList()));
         }
-//        if (bookDto.getCommentDtoList() != null && !bookDto.getCommentDtoList().isEmpty()) {
-//            List<Comment> commentList = bookDto.getCommentDtoList()
-//                    .stream()
-//                    .map(commentDtoMapper::fromDto)
-//                    .collect(Collectors.toList());
-//        }
         return book;
     }
 }

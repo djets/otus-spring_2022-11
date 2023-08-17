@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import ru.otus.spring.hw19.controller.exception.NotFoundException;
 import ru.otus.spring.hw19.dto.AuthorDto;
 import ru.otus.spring.hw19.dto.mapper.AuthorDtoMapper;
+import ru.otus.spring.hw19.dto.mapper.DtoMapper;
 import ru.otus.spring.hw19.model.Author;
 import ru.otus.spring.hw19.repository.AuthorRepository;
 
@@ -18,7 +19,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class AuthorServiceImpl implements AuthorService {
     AuthorRepository repository;
-    AuthorDtoMapper authorDtoMapper;
+    DtoMapper<Author, AuthorDto> authorDtoMapper;
 
     @Override
     public void save(AuthorDto authorDto) {

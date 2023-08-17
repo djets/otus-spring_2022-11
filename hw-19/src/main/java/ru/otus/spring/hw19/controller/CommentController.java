@@ -32,8 +32,6 @@ public class CommentController {
 
     @PostMapping(value = "/books/{id}/comments/save")
     public String saveComments(@ModelAttribute BookDto bookDto, CommentsBookDto commentsBookDto, Model model) {
-        System.out.println(commentsBookDto.getCommentDtoList().size());
-        System.out.println(bookDto.getId());
         if (!commentsBookDto.getCommentDtoList().isEmpty()) {
             commentsBookDto.getCommentDtoList().stream()
                     .filter(commentDto -> commentDto.getId() == null)

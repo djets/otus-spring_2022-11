@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 import ru.otus.spring.hw19.controller.exception.NotFoundException;
 import ru.otus.spring.hw19.dto.BookDto;
 import ru.otus.spring.hw19.dto.GenreDto;
-import ru.otus.spring.hw19.dto.mapper.BookDtoMapper;
+import ru.otus.spring.hw19.dto.mapper.DtoMapper;
 import ru.otus.spring.hw19.model.Book;
 import ru.otus.spring.hw19.repository.BookRepository;
 
@@ -23,7 +23,7 @@ public class BookServiceImpl implements BookService {
     AuthorService authorService;
     GenreService genreService;
 
-    BookDtoMapper bookDtoMapper;
+    DtoMapper<Book, BookDto> bookDtoMapper;
 
     @Override
     public BookDto findById(String id) {

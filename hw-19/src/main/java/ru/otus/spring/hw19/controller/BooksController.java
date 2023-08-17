@@ -44,22 +44,25 @@ public class BooksController {
 
     @PostMapping(value = "/save")
     public String saveBooks(@ModelAttribute BookDto bookDto, Model model) {
-        BookDto foundBook = bookService.findById(bookDto.getId());
-        if (foundBook.getAuthorDtoList() != null) {
-            List<AuthorDto> newAuthors = bookDto.getAuthorDtoList()
-                    .stream()
-                    .filter(authorDto -> authorDto.getId() == null)
-                    .collect(Collectors.toList());
-            foundBook.getAuthorDtoList().addAll(newAuthors);
-        } else {
-            foundBook.setAuthorDtoList(bookDto.getAuthorDtoList());
+        if (bookDto.getId() != null) {
+            BookDto foundBook = bookService.findById(bookDto.getId());
+            if (foundBook.getAuthorDtoList() != null) {
+                List<AuthorDto> newAuthors = bookDto.getAuthorDtoList()
+                        .stream()
+                        .filter(authorDto -> authorDto.getId() == null)
+                        .collect(Collectors.toList());
+                foundBook.getAuthorDtoList().addAll(newAuthors);
+            } else {
+                foundBook.setAuthorDtoList(bookDto.getAuthorDtoList());
+            }
         }
-//        if (bookDto.getCommentDtoList().isEmpty() && !foundBook.getCommentDtoList().isEmpty()) {
-//            bookDto.setCommentDtoList(foundBook.getCommentDtoList());
-//        }
         bookService.save(bookDto);
         model.addAttribute("books", bookService.findAll());
         return "redirect:/books";
     }
-
+    @GetMapping(value = "/delete{id}")
+    public String deleteBook(@PathVariable("id") String id, Model model) {
+        bookService.delete(id);
+        return "redirect:/books";
+    }
 }
