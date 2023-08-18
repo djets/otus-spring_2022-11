@@ -3,6 +3,7 @@ package ru.otus.spring.hw19.api.v1;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import ru.otus.spring.hw19.dto.CommentDto;
 import ru.otus.spring.hw19.dto.CommentsBookDto;

@@ -30,6 +30,14 @@ public class CommentController {
         return "comments";
     }
 
+    @GetMapping("/api/books/{id}/comments")
+    public String getCommentsByBookIdRest(@PathVariable String id, Model model) {
+        BookDto bookDto = bookService.findById(id);
+        model.addAttribute("commentsBookDto", commentsService.findCommentsByBookId(id));
+        model.addAttribute("bookDto", bookDto);
+        return "comment_rest";
+    }
+
     @PostMapping(value = "/books/{id}/comments/save")
     public String saveComments(@ModelAttribute BookDto bookDto, CommentsBookDto commentsBookDto, Model model) {
         if (!commentsBookDto.getCommentDtoList().isEmpty()) {

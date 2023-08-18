@@ -17,21 +17,26 @@
             <form action="#" class="form-horizontal"
                   th:action="@{/books/{id}/comments/save(id=${bookDto.getId()})}"
                   th:object="${commentsBookDto}"
-            method="post">
+                  method="post">
                 <fieldset>
                     <br>
                     <span class="pull-left">
-                        <button type="button" class="btn btn-secondary" th:text="#{add-button-caption}" onclick="addComment()">Add Comment </button>
+                        <button type="button" class="btn btn-secondary" th:text="#{add-button-caption}"
+                                onclick="addComment()">Add Comment </button>
                     </span>
                     <span class="pull-right">
-						    <input type="submit" id="submitButton"class="btn btn-success" th:value="#{save-button-caption}">
-						    <input type="reset" id="resetButton" class="btn btn-danger" th:value="#{cancel-button-caption}"/>
+						    <input type="submit" id="submitButton" class="btn btn-success"
+                                   th:value="#{save-button-caption}"/>
+						    <input type="reset" id="resetButton" class="btn btn-danger"
+                                   th:value="#{cancel-button-caption}"/>
+                        <button class="btn btn-secondary" th:value="#{save-button-rest}" type="button"
+                                onclick="saveCommentsDtoList()">Save REST</button>
 					</span>
 
                     <table class="table">
                         <thead>
                         <tr>
-                            <th hidden="hidden"><input th:field="${bookDto.id}" required/> BookID </th>
+                            <th hidden="hidden"><input th:field="${bookDto.id}" required/> BookID</th>
                             <th> Data</th>
                             <th> Text</th>
                         </tr>
@@ -44,7 +49,7 @@
                             <td hidden="hidden">
                                 <input class="form-control" type="text"
                                        th:attr="name='commentDtoList[' + ${itemStat.index} + '].id'"
-                                       th:value="${commentDto.id}" required />
+                                       th:value="${commentDto.id}" required/>
                             </td>
                             <td>
                                 <span th:text="${commentDto.createData}"
@@ -75,6 +80,24 @@
                 '</td>' +
                 '</td>';
             document.getElementById('commentDtoList').insertAdjacentHTML('beforeend', commentHtml);
+        }
+    </script>
+
+    <script>
+        function saveCommentsDtoList() {
+            const saveCommentsDtoListContainer = document.getElementById("saved-comments")
+            const nameInput = document.getElementById("person-name-input")
+            const person = {name: nameInput.value}
+            fetch("/api/v1/books/{id}/comments", {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(person)
+            })
+                .then(rawResponse => rawResponse.json())
+                .then(json => saveCommentsDtoListContainer.innerHTML = JSON.stringify(json, null, 4))
         }
     </script>
 </div>

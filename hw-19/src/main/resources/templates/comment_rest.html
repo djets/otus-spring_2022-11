@@ -1,0 +1,96 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Comments of book</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+</head>
+<body>
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <h1 th:text="'Comments of book ' + ${bookDto.title}"> Comments </h1>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <a class="btn btn-info" href="#" th:text="#{back-to-books}" th:href="@{/books}"> Back to All Books </a>
+            <form action="comment_rest.html" class="form-horizontal"
+                  th:method="post">
+                <br>
+                <span class="pull-left">
+                        <button type="button" class="btn btn-secondary" th:text="#{add-button-caption}"
+                                onclick="addComment()">Add Comment </button>
+                    </span>
+                <span class="pull-right">
+                        <button class="btn btn-success" th:value="#{save-button-rest}" type="button"
+                                onclick="saveCommentsDtoList()">Save REST</button>
+						    <input type="reset" id="resetButton" class="btn btn-danger"
+                                   th:value="#{cancel-button-caption}"/>
+					</span>
+
+                <table class="table">
+                    <thead class="table-header">
+                    <tr>
+                        <th hidden="hidden"> ID</th>
+                        <th> Data</th>
+                        <th> Text</th>
+                    </tr>
+                    </thead>
+                    <tbody id="commentDtoList"></tbody>
+                </table>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        $(function getCommentsDto() {
+            const bookId = document.URL.substring(32, 56);
+            const url = `/api/v1/books/${bookId}/comments`;
+            fetch(url)
+                .then(rawResponse => rawResponse.json())
+                .then(function (data) {
+                    let commentsDto = data.commentDtoList;
+                    return commentsDto.map(function (comment) {
+                        comment.createData = comment.createData;
+                        $('tbody').append(`
+                        <tr>
+                        <td hidden="hidden">${comment.id}</td>
+                        <td><span>${comment.createData}</span></td>
+                        <td><span>${comment.text}</span></td>
+                        </tr>
+                        `)
+                    })
+                })
+        })
+
+        function addComment() {
+            var index = document.querySelectorAll('#commentDtoList input').length / 2;
+            var commentHtml =
+                '<tr>' +
+                '<td><span name="commentDtoList[' + index + '].createData"></span></td>' +
+                '<td>' +
+                '<input class="form-control" type="text" id="text-comment-input" name="commentDtoList[' + index + '].text" placeholder="Text" required/>' +
+                '</td>' +
+                '</td>';
+            document.getElementById('commentDtoList').insertAdjacentHTML('beforeend', commentHtml);
+        }
+
+        function saveCommentsDtoList() {
+            const textCommentInput = document.getElementById("text-comment-input")
+            const bookId = document.URL.substring(32, 56);
+            const comment = {text: textCommentInput.value, bookId: bookId}
+            const url = `/api/v1/books/${bookId}/comments`;
+            fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(comment)
+            })
+                .then(rawResponse => rawResponse.json())
+        }
+    </script>
+</div>
+</body>
+</html>

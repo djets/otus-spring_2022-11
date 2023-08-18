@@ -57,7 +57,9 @@
                               th:if="${iterStat.last}"> Author </span>
                     </div>
                 </td>
-                <td><a class="link-primary" href="#" th:href="@{/books/{id}/comments(id=${bookDto.id})}"> Comments </a></td>
+                <td><a class="link-primary" href="#" th:href="@{/books/{id}/comments(id=${bookDto.id})}"> Comments </a>
+                    <a class="link-primary" href="#" th:href="@{/api/books/{id}/comments(id=${bookDto.id})}"> Comments a REST </a>
+                </td>
             </tr>
             </tbody>
         </table>
