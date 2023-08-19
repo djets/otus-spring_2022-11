@@ -33,7 +33,7 @@ public class CommentController {
     @GetMapping("/api/books/{id}/comments")
     public String getCommentsByBookIdRest(@PathVariable String id, Model model) {
         BookDto bookDto = bookService.findById(id);
-        model.addAttribute("commentsBookDto", commentsService.findCommentsByBookId(id));
+        model.addAttribute("commentsBookDto", commentsService.findCommentsByBookId(id).getCommentDtoList());
         model.addAttribute("bookDto", bookDto);
         return "comment_rest";
     }

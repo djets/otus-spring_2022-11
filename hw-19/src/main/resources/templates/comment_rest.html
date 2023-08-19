@@ -43,35 +43,55 @@
     </div>
 
     <script>
-        $(function getCommentsDto() {
+        function createNode(element) {
+            return document.createElement(element);
+        }
+
+        function remove(node) {
+            while (node.firstChild) {
+                node.removeChild(node.firstChild);
+            }
+        }
+
+        function getCommentsDto() {
             const bookId = document.URL.substring(32, 56);
             const url = `/api/v1/books/${bookId}/comments`;
+
             fetch(url)
-                .then(rawResponse => rawResponse.json())
-                .then(function (data) {
-                    let commentsDto = data.commentDtoList;
-                    return commentsDto.map(function (comment) {
-                        comment.createData = comment.createData;
-                        $('tbody').append(`
-                        <tr>
-                        <td hidden="hidden">${comment.id}</td>
-                        <td><span>${comment.createData}</span></td>
-                        <td><span>${comment.text}</span></td>
-                        </tr>
-                        `)
-                    })
+                .then(response => response.json())
+                .then(data => {
+                    const commentsDto = data.commentDtoList;
+                    const tableBody = document.querySelector('tbody');
+
+                    remove(tableBody);
+
+                    commentsDto.forEach(comment => {
+                        const row = createNode('tr');
+                        const idCell = createNode('td');
+                        const createDataCell = createNode('td');
+                        const textCell = createNode('td');
+
+                        idCell.textContent = comment.id;
+                        idCell.setAttribute('hidden', 'hidden')
+                        createDataCell.textContent = comment.createData;
+                        textCell.textContent = comment.text;
+
+                        row.appendChild(idCell);
+                        row.appendChild(createDataCell);
+                        row.appendChild(textCell);
+
+                        tableBody.appendChild(row);
+                    });
                 })
-        })
+                .catch(error => console.error(error));
+        }
 
         function addComment() {
-            var index = document.querySelectorAll('#commentDtoList input').length / 2;
-            var commentHtml =
+            const commentHtml =
                 '<tr>' +
-                '<td><span name="commentDtoList[' + index + '].createData"></span></td>' +
-                '<td>' +
-                '<input class="form-control" type="text" id="text-comment-input" name="commentDtoList[' + index + '].text" placeholder="Text" required/>' +
-                '</td>' +
-                '</td>';
+                '<td><span></span></td>' +
+                '<td><input class="form-control" type="text" id="text-comment-input" placeholder="Text" required/></td>' +
+                '</tr>';
             document.getElementById('commentDtoList').insertAdjacentHTML('beforeend', commentHtml);
         }
 
@@ -88,8 +108,14 @@
                 },
                 body: JSON.stringify(comment)
             })
-                .then(rawResponse => rawResponse.json())
+                .then(response => response.json())
+                .catch(error => console.error(error))
+                .then(date => getCommentsDto())
         }
+
+        $(function () {
+            getCommentsDto()
+        })
     </script>
 </div>
 </body>
