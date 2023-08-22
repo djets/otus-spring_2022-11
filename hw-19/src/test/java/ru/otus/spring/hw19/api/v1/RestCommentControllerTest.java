@@ -1,7 +1,6 @@
 package ru.otus.spring.hw19.api.v1;
 
 import lombok.AccessLevel;
-import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
@@ -59,10 +58,15 @@ public class RestCommentControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(result -> content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(result -> content().json(
-                        "{\"commentDtoList\":[{\"id\":\"1\",\"text\":\"Comment 1\",\"createDate\":\"" +
-                                commentsBookDto.getCommentDtoList().get(0).getCreateData() + "\", \"bookId\": \"1\"}," +
-                                "{\"id\":\"2\",\"text\":\"Comment 2\",\"createDate\":\"" +
-                                commentsBookDto.getCommentDtoList().get(1).getCreateData() + "\", \"bookId\": \"1\"}]}"));
+                        "{\"commentDtoList\":[{" +
+                                "\"id\":\"1\"," +
+                                "\"text\":\"Comment 1\"," +
+                                "\"createDate\":\"" + commentsBookDto.getCommentDtoList().get(0).getCreateData() + "\", " +
+                                "\"bookId\": \"1\"}," +
+                                "{\"id\":\"2\"," +
+                                "\"text\":\"Comment 2\"," +
+                                "\"createDate\":\"" + commentsBookDto.getCommentDtoList().get(1).getCreateData() + "\", " +
+                                "\"bookId\": \"1\"}]}"));
     }
 
     @Test
