@@ -1,0 +1,13 @@
+spring:
+  messages:
+    encoding: UTF-8
+  data:
+    mongodb:
+      database: booking
+      host: localhost
+      port: 30001
+mongock:
+  runner-type: "ApplicationRunner" # default
+#  runner-type: "InitializingBean"
+  change-logs-scan-package:
+    - ru.otus.spring.hw19.mongock.changelog

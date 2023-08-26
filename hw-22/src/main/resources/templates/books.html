@@ -1,0 +1,91 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>All Books</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+</head>
+<body>
+<div class="container">
+    <div class="col-md-12">
+        <p th:text="#{lang-switcher-header}"> Select language </p>
+        <div>
+            <a class="link-primary" href="#" th:href="@{/books/(lang=en)}" th:text="#{en-lang-switch-button-caption}">Language
+                - EN</a>
+        </div>
+        <div>
+            <a class="link-secondary" href="#" th:href="@{/books/(lang=ru)}" th:text="#{ru-lang-switch-button-caption}">Language
+                - RU</a>
+        </div>
+        <h1 th:text="#{books-table-header}"> Books </h1>
+    </div>
+
+<div class="row">
+    <div class="col-md-8">
+        <a type="button" class="btn btn-success" href="#" th:text="#{add-button-caption}" th:href="@{/books/create}"> Add Book </a>
+        <button type="button" class="btn btn-primary" th:text="#{edit-button-caption}" onclick="editBook()"> Edit Books </button>
+        <button type="button" class="btn btn-danger" th:text="#{delete-button-caption}" onclick="deleteBook()"> Delete Book </button>
+    </div>
+    <div class="col-md-6">
+        <table class="table">
+            <thead>
+            <tr>
+                <th th:text="#{select-table}"> Select</th>
+                <th th:text="#{title-table}"> Title</th>
+                <th th:text="#{genre-table}"> Genre</th>
+                <th th:text="#{author-table}"> Authors</th>
+                <th th:text="#{comments-table}"> Comments</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:if="${booksDto == null}">
+                <td colspan="2"> No Books Available</td>
+            </tr>
+            <tr th:each="bookDto : ${booksDto}">
+                <td>
+                    <div class="form-check">
+                        <input type="radio" name="bookId" th:value="${bookDto.id}" class="form-check-input">
+                    </div>
+                </td>
+                <td><span th:text="${bookDto.title}"> Title </span></td>
+                <td><span th:if="${bookDto.genreDto != null}" th:text="${bookDto.genreDto.getNameGenre()}"> Genre </span>
+                </td>
+                <td>
+                    <div th:each="authorDto, iterStat : ${bookDto.authorDtoList}">
+                            <span th:text="${authorDto.name + ' ' + authorDto.surname + ', '}"
+                                  th:if="${!iterStat.last}"> Author </span>
+                        <span th:text="${authorDto.name + ' ' + authorDto.surname}"
+                              th:if="${iterStat.last}"> Author </span>
+                    </div>
+                </td>
+                <td><a class="link-primary" href="#" th:href="@{/books/{id}/comments(id=${bookDto.id})}"> Comments </a>
+                    <a class="link-primary" href="#" th:href="@{/api/books/{id}/comments(id=${bookDto.id})}"> Comments a REST </a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+</div>
+
+<script type="text/javascript">
+    function editBook() {
+        var selectedBookId = $('input[name=bookId]:checked').val();
+        if (selectedBookId) {
+            window.location.href = '/books/edit' + selectedBookId;
+        } else {
+            event.preventDefault();
+            alert('Please select a book.');
+        }
+    }
+    function deleteBook() {
+        var selectedBookId = $('input[name=bookId]:checked').val();
+        if (selectedBookId) {
+            window.location.href = '/books/delete' + selectedBookId;
+        } else {
+            event.preventDefault();
+            alert('Please select a book.');
+        }
+    }
+</script>
+</body>
+</html>
