@@ -1,14 +1,18 @@
-package ru.otus.spring.hw19.repository;
+package ru.otus.spring.hw22.repository;
 
-import org.springframework.data.mongodb.repository.MongoRepository;
-import ru.otus.spring.hw19.model.Book;
+import org.springframework.data.mongodb.repository.ReactiveMongoRepository;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
+import ru.otus.spring.hw22.model.Book;
 
-import java.util.List;
+import javax.validation.constraints.NotNull;
 
-public interface BookRepository extends MongoRepository<Book, String> {
-    List<Book> findByTitle(String title);
+public interface BookRepository extends ReactiveMongoRepository<Book, String> {
+    @NotNull Mono<Book> findBy_id(@NotNull String book_id);
 
-    List<Book> findBooksByGenre__id(String genre_id);
+    Flux<Book> findByTitle(String title);
 
-    List<Book> findBooksByAuthors__id(String authors_id);
+    Flux<Book> findBooksByGenre__id(String genre_id);
+
+    Flux<Book> findBooksByAuthors__id(String authors_id);
 }

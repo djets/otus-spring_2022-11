@@ -1,4 +1,4 @@
-package ru.otus.spring.hw19.model;
+package ru.otus.spring.hw22.model;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;

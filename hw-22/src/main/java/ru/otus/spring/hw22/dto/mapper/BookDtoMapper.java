@@ -1,16 +1,15 @@
-package ru.otus.spring.hw19.dto.mapper;
+package ru.otus.spring.hw22.dto.mapper;
 
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.stereotype.Component;
-import ru.otus.spring.hw19.dto.AuthorDto;
-import ru.otus.spring.hw19.dto.BookDto;
-import ru.otus.spring.hw19.dto.GenreDto;
-import ru.otus.spring.hw19.model.Author;
-import ru.otus.spring.hw19.model.Book;
-import ru.otus.spring.hw19.model.Genre;
+import ru.otus.spring.hw22.dto.BookDto;
+import ru.otus.spring.hw22.model.Author;
+import ru.otus.spring.hw22.model.Book;
+import ru.otus.spring.hw22.model.Genre;
 
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -18,43 +17,38 @@ import java.util.stream.Collectors;
 @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
 @RequiredArgsConstructor
 public class BookDtoMapper implements DtoMapper<Book, BookDto> {
-    DtoMapper<Author, AuthorDto> authorDtoMapper;
-    DtoMapper<Genre, GenreDto> genreDtoMapper;
 
     @Override
     public BookDto toDto(Book book) {
-        BookDto bookDto = new BookDto();
-        bookDto.setId(book.get_id());
-        bookDto.setTitle(book.getTitle());
-        Optional.ofNullable(book.getGenre())
-                .ifPresent(genre -> bookDto.setGenreDto(genreDtoMapper.toDto(genre)));
-        Optional.ofNullable(book.getAuthors())
-                .ifPresent(authors -> {
-                            if (!book.getAuthors().isEmpty()) {
-                                bookDto.setAuthorDtoList(
-                                        authors.stream()
-                                                .map(authorDtoMapper::toDto)
-                                                .collect(Collectors.toList()));
-                            }
-                        }
-                );
-        return bookDto;
+        return new BookDto(
+                book.get_id(),
+                book.getTitle(),
+                Optional.of(book.getGenre()).orElse(null).getName(),
+                Optional.of(book.getAuthors()).orElse(null).stream()
+                        .filter(Objects::nonNull)
+                        .map(author -> author.getName() + " " + author.getSurname())
+                        .collect(Collectors.toList()));
     }
 
     @Override
     public Book fromDto(BookDto bookDto) {
-        Book book = new Book();
-        book.set_id(bookDto.getId());
-        book.setTitle(bookDto.getTitle());
-        if (bookDto.getGenreDto() != null) {
-            book.setGenre(genreDtoMapper.fromDto(bookDto.getGenreDto()));
+        if (bookDto.id() != null) {
+            return new Book(
+                    bookDto.id(),
+                    bookDto.title(),
+                    bookDto.authorList().stream()
+                            .map(s -> new Author(null, s.split(" ")[0], s.split(" ")[1]))
+                            .collect(Collectors.toList()),
+                    new Genre(null, bookDto.genreName())
+            );
         }
-        if (bookDto.getAuthorDtoList() != null && !bookDto.getAuthorDtoList().isEmpty()) {
-            book.setAuthors(bookDto.getAuthorDtoList()
-                    .stream()
-                    .map(authorDtoMapper::fromDto)
-                    .collect(Collectors.toList()));
-        }
-        return book;
+        return new Book(
+                null,
+                bookDto.title(),
+                bookDto.authorList().stream()
+                        .map(s -> new Author(null, s.split(" ")[0], s.split(" ")[1]))
+                        .collect(Collectors.toList()),
+                new Genre(null, bookDto.genreName())
+        );
     }
 }

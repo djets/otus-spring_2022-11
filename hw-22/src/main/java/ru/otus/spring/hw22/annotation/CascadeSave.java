@@ -1,4 +1,4 @@
-package ru.otus.spring.hw19.annotation;
+package ru.otus.spring.hw22.annotation;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

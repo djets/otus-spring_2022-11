@@ -1,8 +1,8 @@
-package ru.otus.spring.hw19.config;
+package ru.otus.spring.hw22.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import ru.otus.spring.hw19.repository.event.CascadeSaveMongoEventListener;
+import ru.otus.spring.hw22.repository.event.CascadeSaveMongoEventListener;
 
 @Configuration
 public class CascadeSaveConfig {

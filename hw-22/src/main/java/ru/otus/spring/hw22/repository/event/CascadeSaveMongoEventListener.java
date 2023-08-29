@@ -1,4 +1,4 @@
-package ru.otus.spring.hw19.repository.event;
+package ru.otus.spring.hw22.repository.event;
 
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;

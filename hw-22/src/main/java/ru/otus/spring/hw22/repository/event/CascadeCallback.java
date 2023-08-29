@@ -1,9 +1,9 @@
-package ru.otus.spring.hw19.repository.event;
+package ru.otus.spring.hw22.repository.event;
 
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.util.ReflectionUtils;
-import ru.otus.spring.hw19.annotation.CascadeSave;
+import ru.otus.spring.hw22.annotation.CascadeSave;
 
 import java.lang.reflect.Field;
 import java.util.Collection;

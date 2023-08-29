@@ -1,17 +1,9 @@
-package ru.otus.spring.hw19.config.changelog;
+package ru.otus.spring.hw22.config.changelog;
 
 import com.github.cloudyrock.mongock.ChangeLog;
 import com.github.cloudyrock.mongock.ChangeSet;
-import com.github.cloudyrock.mongock.driver.mongodb.springdata.v3.decorator.impl.MongockTemplate;
 import com.mongodb.client.MongoDatabase;
 import lombok.extern.slf4j.Slf4j;
-import ru.otus.spring.hw19.model.Author;
-import ru.otus.spring.hw19.model.Book;
-import ru.otus.spring.hw19.model.Comment;
-import ru.otus.spring.hw19.model.Genre;
-
-import java.util.Date;
-import java.util.List;
 
 @ChangeLog
 @Slf4j
