@@ -19,8 +19,8 @@ public class Comment {
     String textComment;
 
     Date createData;
-    @DBRef
-    Book book;
+
+    String bookId;
 
     @Override
     public String toString() {

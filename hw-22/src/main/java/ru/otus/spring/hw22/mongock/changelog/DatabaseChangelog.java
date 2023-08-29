@@ -33,8 +33,8 @@ public class DatabaseChangelog {
 
         Book savedBookOne = mongockTemplate.save(bookOne);
         List.of(
-                new Comment(null, "A splendid book!", new Date(), savedBookOne),
-                new Comment(null, "Excellent book!", new Date(), savedBookOne)
+                new Comment(null, "A splendid book!", new Date(), savedBookOne.get_id()),
+                new Comment(null, "Excellent book!", new Date(), savedBookOne.get_id())
         ).forEach(mongockTemplate::save);
 
 

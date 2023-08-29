@@ -5,6 +5,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.stereotype.Component;
 import ru.otus.spring.hw22.dto.CommentDto;
+import ru.otus.spring.hw22.exception.NotFoundException;
+import ru.otus.spring.hw22.model.Book;
 import ru.otus.spring.hw22.model.Comment;
 import ru.otus.spring.hw22.repository.BookRepository;
 
@@ -14,7 +16,6 @@ import java.util.Date;
 @RequiredArgsConstructor
 @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
 public class CommentDtoMapper implements DtoMapper<Comment, CommentDto> {
-    BookRepository bookRepository;
 
     @Override
     public CommentDto toDto(Comment comment) {
@@ -22,7 +23,7 @@ public class CommentDtoMapper implements DtoMapper<Comment, CommentDto> {
                 comment.get_id(),
                 comment.getTextComment(),
                 comment.getCreateData(),
-                comment.getBook().get_id()
+                comment.getBookId()
         );
     }
 
@@ -32,7 +33,7 @@ public class CommentDtoMapper implements DtoMapper<Comment, CommentDto> {
                 null,
                 commentDto.text(),
                 new Date(),
-                bookRepository.findBy_id(commentDto.bookId()).block()
+                commentDto.bookId()
         );
     }
 }

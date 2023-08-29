@@ -12,8 +12,8 @@ public interface CommentRepository extends ReactiveMongoRepository<Comment, Stri
 
 //    Mono<Comment> save(Mono<Comment> commentMono);
 
-    Flux<Comment> findAllByBook__id(String book_id);
+    Flux<Comment> findAllByBookId(String book_id);
 
-    Flux<Comment> findTop10ByBook__id(String book_id);
+    Flux<Comment> findTop10ByBookId(String book_id);
 }
 
