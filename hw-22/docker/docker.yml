@@ -1,0 +1,17 @@
+version: '3.5'
+services:
+
+  mongo:
+    hostname: mongo
+    container_name: localmongo
+    image: mongo:5.0
+    expose:
+      - 27017
+    ports:
+      - 30001:27017
+#    environment:
+#      MONGO_INITDB_ROOT_USERNAME: adm
+#      MONGO_INITDB_ROOT_PASSWORD: passwd
+#      MONGO_INITDB_DATABASE: booking
+    restart: "no"
+#    entrypoint: [ "/usr/bin/mongod", "--bind_ip_all", "--replSet", "rs0" ]

@@ -1,0 +1,277 @@
+<html>
+<head>
+    <title id="title"> Books </title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+</head>
+<body>
+<div class="container">
+    <div class="row">
+        <div class="col-md-12" id="header">
+            <h1> Books </h1>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="col-md-8">
+                <table class="table">
+                    <thead></thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+            <div class="col-md-1" id="save-buttons"></div>
+            <div class="col-md-1" id="default-buttons"></div>
+<!--            <div class="btn-group col-md-2" role="group" id="default-buttons"></div>-->
+        </div>
+
+        <script>
+            let selectedBookId;
+
+            function createNode(element) {
+                return document.createElement(element);
+            }
+
+            function remove(node) {
+                while (node.firstChild) {
+                    node.removeChild(node.firstChild);
+                }
+            }
+
+            function setHeader(text) {
+                const header = document.getElementById('header');
+                remove(header);
+                const h1 = createNode('h1');
+                h1.textContent = text;
+                header.appendChild(h1);
+            }
+
+            function getButtons(element, type) {
+                const buttons = document.getElementById(element);
+                remove(buttons);
+
+                if (element === 'default-buttons') {
+                    const add = createNode('button');
+                    const edit = createNode('button');
+                    const del = createNode('button');
+
+                    add.textContent = 'add';
+                    add.setAttribute('type', 'button');
+                    add.setAttribute('class', 'btn btn-secondary btn-success');
+                    add.setAttribute('onclick', 'add(\'' + type + '\')');
+                    // edit.textContent = 'edit';
+                    // edit.setAttribute('type', 'button');
+                    // edit.setAttribute('class', 'btn btn-secondary btn-primary');
+                    // edit.setAttribute('onclick', 'edit(\'' + type + '\')');
+                    // del.textContent = 'delete';
+                    // del.setAttribute('type', 'button');
+                    // del.setAttribute('class', 'btn btn-secondary btn-danger');
+                    // del.setAttribute('onclick', 'delete(\'' + type + '\')');
+
+                    buttons.appendChild(add);
+                    // buttons.appendChild(edit);
+                    // buttons.appendChild(del);
+                }
+
+                if ('save-buttons' === element) {
+                    const save = createNode('button');
+
+                    save.textContent = 'save';
+                    save.setAttribute('type', 'button');
+                    save.setAttribute('class', 'btn btn-secondary');
+                    save.setAttribute('onclick', 'save(\'' + type + '\')');
+
+                    buttons.appendChild(save);
+                }
+            }
+
+            function getBooks() {
+                const url = `/api/v2/books`;
+
+                fetch(url)
+                    .then(response => response.json())
+                    .then(data => {
+                        const books = data;
+
+                        setHeader('Books');
+
+                        const buttons = document.getElementById('default-buttons')
+                        remove(buttons);
+
+                        const thead = document.querySelector('thead');
+                        const tableBody = document.querySelector('tbody');
+
+                        remove(thead);
+                        remove(tableBody);
+
+                        const row = createNode('tr');
+                        const th1 = createNode('th');
+                        const th2 = createNode('th');
+                        const th3 = createNode('th');
+                        const th4 = createNode('th');
+                        const th5 = createNode('th');
+
+                        th1.textContent = 'Select';
+                        th2.textContent = 'Title';
+                        th3.textContent = 'Genre';
+                        th4.textContent = 'Authors';
+                        th5.textContent = 'Comments';
+
+                        row.appendChild(th1);
+                        row.appendChild(th2);
+                        row.appendChild(th3);
+                        row.appendChild(th4);
+                        row.appendChild(th5);
+
+                        thead.appendChild(row);
+
+                        books.forEach(book => {
+                            const row = createNode('tr');
+                            const select = createNode('td');
+                            const selectRadio = createNode('input');
+                            const title = createNode('td');
+                            const genre = createNode('td');
+                            const authors = createNode('td');
+                            const comments = createNode('td');
+                            const linkComments = createNode('a');
+
+                            selectRadio.setAttribute('type', 'radio');
+                            selectRadio.setAttribute('class', 'form-check-input');
+                            selectRadio.setAttribute('name', 'bookId')
+                            selectRadio.setAttribute('value', book.id)
+                            title.textContent = book.title;
+                            genre.textContent = book.genreName;
+                            authors.textContent = book.authorList;
+                            linkComments.textContent = "comments";
+                            linkComments.setAttribute('href', '#');
+                            linkComments.setAttribute('onclick', 'getComments()')
+
+                            select.appendChild(selectRadio);
+                            row.appendChild(select);
+
+                            row.appendChild(title);
+                            row.appendChild(genre);
+                            row.appendChild(authors);
+
+                            comments.appendChild(linkComments);
+                            row.appendChild(comments);
+
+                            tableBody.appendChild(row);
+                        });
+                    })
+                    .catch(error => console.error(error));
+            }
+
+            function getSelectBook() {
+                return $('input[name=bookId]:checked').val();
+            }
+
+            function getComments() {
+                selectedBookId = getSelectBook();
+                if (selectedBookId) {
+                    const url = '/api/v2/' + selectedBookId + '/comments';
+
+                    setHeader('Comments');
+                    getButtons('default-buttons', 'comment');
+                    getButtons('save-buttons', 'comment');
+
+                    fetch(url)
+                        .then(response => response.json())
+                        .then(data => {
+                            const comments = data;
+                            const thead = document.querySelector('thead');
+                            const tableBody = document.querySelector('tbody');
+
+                            remove(thead);
+                            remove(tableBody);
+
+                            const row = createNode('tr');
+                            const th1 = createNode('th');
+                            const th2 = createNode('th');
+
+                            th1.textContent = 'Create Data';
+                            th2.textContent = 'Text';
+
+                            row.appendChild(th1);
+                            row.appendChild(th2);
+
+                            thead.appendChild(row);
+
+                            comments.forEach(comment => {
+                                const row = createNode('tr');
+                                const id = createNode('td');
+                                const createData = createNode('td');
+                                const text = createNode('td');
+
+                                id.textContent = comment.id;
+                                id.setAttribute('hidden', 'hidden');
+                                createData.textContent = comment.createData;
+                                text.textContent = comment.text;
+
+                                row.appendChild(id);
+                                row.appendChild(createData);
+                                row.appendChild(text);
+
+                                tableBody.appendChild(row);
+                            });
+                        })
+                        .catch(error => console.error(error));
+                } else {
+                    event.preventDefault();
+                    alert('Please select a book.');
+                }
+            }
+
+            function add(type) {
+                if ('comment' === type) {
+                    const tr = createNode('tr');
+                    const commentInput = createNode('td');
+                    const createDate = createNode('td');
+                    const textComment = createNode('input');
+
+                    createDate.textContent = '';
+
+                    textComment.setAttribute('class', "form-control");
+                    textComment.setAttribute('type', 'text');
+                    textComment.setAttribute('placeholder', 'Text');
+                    textComment.setAttribute('id', 'text-comment-input');
+                    commentInput.appendChild(textComment);
+
+                    tr.appendChild(createDate);
+                    tr.appendChild(commentInput);
+                    document.querySelector('tbody').insertAdjacentElement('beforeend', tr);
+                }
+            }
+
+            function save(type) {
+                const textCommentInput = document.getElementById("text-comment-input");
+                const comment = {text: textCommentInput.value, bookId: selectedBookId}
+                let url;
+                if ('comment' === type) {
+                    url = `/api/v2/comment`;
+                }
+                if ('book' === type) {
+                    url = `/api/v2`;
+                }
+
+                fetch(url, {
+                    method: 'POST',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(comment)
+                })
+                    .then(response => response.json())
+                    .catch(error => console.error(error))
+                    .then(() => getBooks())
+            }
+
+            $(function () {
+                getBooks()
+            })
+        </script>
+    </div>
+</div>
+</body>
+</html>
