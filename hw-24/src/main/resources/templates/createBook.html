@@ -1,0 +1,88 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Add Books</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <p th:text="#{lang-switcher-header}"> Select language </p>
+            <div>
+                <a class="link-primary" href="#" th:href="@{/books/(lang=en)}" th:text="#{en-lang-switch-button-caption}">Language
+                    - EN</a>
+            </div>
+            <div>
+                <a class="link-secondary" href="#" th:href="@{/books/(lang=ru)}" th:text="#{ru-lang-switch-button-caption}">Language
+                    - RU</a>
+            </div>
+            <h1 th:text="#{add-book-header}"> Add Books </h1>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <a class="btn btn-info" href="#" th:text="#{back-to-books}" th:href="@{/books}"> Back to All Books </a>
+            <form action="#" class="form-horizontal"
+                  th:action="@{/books/save}"
+                  th:object="${bookDto}"
+                  method="post">
+                <fieldset>
+					<span class="pull-right">
+						    <input type="submit" id="submitButton" class="btn btn-success" th:value="#{save-button-caption}">
+						    <input type="reset" id="resetButton" class="btn btn-danger" th:value="#{cancel-button-caption}"/>
+					</span>
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th th:text="#{title-table}"> Title</th>
+                            <th th:text="#{genre-table}"> Genre</th>
+                            <th th:text="#{author-table}"> Author</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td>
+                                <input class="form-control" th:placeholder="Title + ' '" th:field="*{title}" required/>
+                            </td>
+                            <td>
+                                <input class="form-control" th:placeholder="Genre + ' '"
+                                       th:field="*{genreDto.nameGenre}" required/>
+                            </td>
+                            <td>
+                                <div id="authorDtoList">
+                                    <div th:each="authorDto, itemStat : *{authorDtoList}" >
+                                        <input class="form-control" type="text"
+                                               th:attr="name='authorDtoList[' + ${itemStat.index} + '].name'"
+                                               th:placeholder="Name + ' '" required/>
+                                        <input class="form-control" type="text"
+                                               th:attr="name='authorDtoList[' + ${itemStat.index} + '].surname'"
+                                               th:placeholder="Surname + ' '" required/><br>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <button type="button" class="btn btn-primary" th:text="#{add-button-caption}" onclick="addAuthor()">Add Author</button>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </fieldset>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    function addAuthor() {
+        var index = document.querySelectorAll('#authorDtoList input').length / 2;
+        var authorHtml =
+            '<div>' +
+            '<input class="form-control" type="text" name="authorDtoList[' + index + '].name" placeholder="Name" required/>' +
+            '<input class="form-control" type="text" name="authorDtoList[' + index + '].surname" placeholder="Surname" required/><br>' +
+            '</div>';
+        document.getElementById('authorDtoList').insertAdjacentHTML('beforeend', authorHtml);
+    }
+</script>
+</body>
+</html>

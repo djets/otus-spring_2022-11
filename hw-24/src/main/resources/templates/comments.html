@@ -1,0 +1,102 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Comments of book</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+</head>
+<body>
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <h1 th:text="'Comments of book ' + ${bookDto.title}"> Comments </h1>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <a class="btn btn-info" href="#" th:text="#{back-to-books}" th:href="@{/books}"> Back to All Books </a>
+            <form action="#" class="form-horizontal"
+                  th:action="@{/books/{id}/comments/save(id=${bookDto.id})}"
+                  th:object="${bookDto}"
+                  method="post">
+                <fieldset>
+                    <br>
+                    <span class="pull-left">
+                        <button type="button" class="btn btn-secondary" th:text="#{add-button-caption}" onclick="addComment()">Add Comment </button>
+                        <!--                        <button type="button" class="btn btn-secondary" onclick="editComment()">Edit Comment </button>-->
+                    </span>
+                    <span class="pull-right">
+						    <input type="submit" id="submitButton"class="btn btn-success" th:value="#{save-button-caption}">
+						    <input type="reset" id="resetButton" class="btn btn-danger" th:value="#{cancel-button-caption}"/>
+					</span>
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th hidden="hidden"><input th:field="*{id}" required/></th>
+<!--                            <th> Select</th>-->
+                            <th> Data</th>
+                            <th> Text</th>
+                        </tr>
+                        </thead>
+                        <tbody id="commentDtoList">
+                        <tr th:if="${commentDtoList.empty}">
+                            <td colspan="2"> No comments for Book</td>
+                        </tr>
+                        <tr th:each="commentDto, itemStat : *{commentDtoList}" th:field="*{commentDtoList}">
+<!--                            <td>-->
+<!--                                <div class="form-check">-->
+<!--                                    <input type="radio" th:value="${commentDto.id}"-->
+<!--                                           th:attr="name='commentDtoList[' + ${itemStat.index} + '].id'"-->
+<!--                                           class="form-check-input">-->
+<!--                                </div>-->
+<!--                            </td>-->
+                            <td hidden="hidden">
+                                <input class="form-control" type="text"
+                                       th:attr="name='commentDtoList[' + ${itemStat.index} + '].id'"
+                                       th:value="${commentDto.id}" required />
+                            </td>
+                            <td>
+                                <span th:text="${commentDto.createData}"
+                                      th:attr="name='commentDtoList[' + ${itemStat.index} + '].createData'"
+                                > Create data </span>
+                            </td>
+                            <td>
+                                <input class="form-control" th:placeholder="Text + ' '" type="text"
+                                       th:attr="name='commentDtoList[' + ${itemStat.index} + '].text'"
+                                       th:value="${commentDto.text}" required/>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </fieldset>
+            </form>
+        </div>
+    </div>
+
+    <!--    <script type="text/javascript">-->
+    <!--        function editComment() {-->
+    <!--            var selectedCommentId = $('input[name=commentId]:checked').val();-->
+    <!--            if (selectedCommentId) {-->
+    <!--                window.location.href = '/books/edit' + selectedCommentId;-->
+    <!--            } else {-->
+    <!--                event.preventDefault();-->
+    <!--                alert('Please select a comment.');-->
+    <!--            }-->
+    <!--        }-->
+    <!--    </script>-->
+
+    <script>
+        function addComment() {
+            var index = document.querySelectorAll('#commentDtoList input').length / 2;
+            var commentHtml =
+                '<tr>' +
+                '<td><span name="commentDtoList[' + index + '].createData"></span></td>' +
+                '<td>' +
+                '<input class="form-control" type="text" name="commentDtoList[' + index + '].text" placeholder="Text" required/>' +
+                '</td>' +
+                '</tr>';
+            document.getElementById('commentDtoList').insertAdjacentHTML('beforeend', commentHtml);
+        }
+    </script>
+
+</body>
+</html>
