@@ -4,7 +4,11 @@ import com.github.cloudyrock.mongock.ChangeLog;
 import com.github.cloudyrock.mongock.ChangeSet;
 import com.github.cloudyrock.mongock.driver.mongodb.springdata.v3.decorator.impl.MongockTemplate;
 import com.mongodb.client.MongoDatabase;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import ru.otus.spring.hw24.model.Author;
 import ru.otus.spring.hw24.model.Book;
@@ -19,8 +23,6 @@ import java.util.*;
 @ChangeLog
 @Slf4j
 public class DatabaseChangelog {
-
-    private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @ChangeSet(order = "001", id = "dropDb", author = "djet", runAlways = true)
     public void dropDb(MongoDatabase db) {
@@ -55,6 +57,7 @@ public class DatabaseChangelog {
 
     @ChangeSet(order = "003", id= "userLoad", author = "djet")
     public void userLoad(MongockTemplate mongockTemplate) {
+        BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
         final String USER_NAME = "user";
         final String ADMIN_NAME = "admin";
         final String PASSWORD = "pass";
@@ -66,25 +69,23 @@ public class DatabaseChangelog {
         User user = new User();
         user.setUsername(USER_NAME);
         user.setPassword(bCryptPasswordEncoder.encode(PASSWORD));
-        mongockTemplate.save(user);
 
         UserRole userRole = new UserRole();
         userRole.setRole(roleUser);
         user.setUserRoles(new HashSet<>(Collections.singletonList(userRole)));
-        mongockTemplate.save(userRole);
+        mongockTemplate.save(user);
 
         Role roleAdmin = new Role();
         roleAdmin.setName("ROLE_ADMIN");
         mongockTemplate.save(roleAdmin);
 
         User admin = new User();
-        admin.setUsername(USER_NAME);
+        admin.setUsername(ADMIN_NAME);
         admin.setPassword(bCryptPasswordEncoder.encode(PASSWORD));
-        mongockTemplate.save(admin);
 
         UserRole adminRole = new UserRole();
         adminRole.setRole(roleAdmin);
         admin.setUserRoles(new HashSet<>(Collections.singletonList(adminRole)));
-        mongockTemplate.save(adminRole);
+        mongockTemplate.save(admin);
     }
 }

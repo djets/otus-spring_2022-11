@@ -15,12 +15,10 @@ import ru.otus.spring.hw24.services.BookService;
 
 import javax.annotation.security.RolesAllowed;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Controller
 @RequiredArgsConstructor
 @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
-@RolesAllowed("ROLE_USER")
 public class CommentController {
 
     BookService bookService;
@@ -41,7 +39,7 @@ public class CommentController {
             List<CommentDto> newComment = bookDto.getCommentDtoList()
                     .stream()
                     .filter(commentDto -> commentDto.getId() == null)
-                    .collect(Collectors.toList());
+                    .toList();
             foundBook.getCommentDtoList().addAll(newComment);
         } else {
             foundBook.setCommentDtoList(bookDto.getCommentDtoList());

@@ -15,6 +15,7 @@ import java.util.List;
 @AllArgsConstructor
 public class BookDto {
     String id;
+
     @NotBlank(message = "{name-field-should-not-be-blank}")
     @Size(min = 2, max = 250, message = "{name-field-should-has-expected-size}")
     String title;

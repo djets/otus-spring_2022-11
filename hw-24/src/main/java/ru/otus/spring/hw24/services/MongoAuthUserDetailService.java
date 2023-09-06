@@ -18,19 +18,21 @@ import java.util.Set;
 @Service
 @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
 @RequiredArgsConstructor
-public class MongoAuthUserDetailService  implements UserDetailsService {
+public class MongoAuthUserDetailService implements UserDetailsService {
     UserRepository userRepository;
 
     @Override
     public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
+        User user = userRepository.findByUsername(userName);
+        if (user == null) {
+            throw new UsernameNotFoundException("Unknown user: " + userName);
+        }
+            Set<GrantedAuthority> grantedAuthoritySet = new HashSet<>();
 
-        User user = userRepository.findUserByUsername(userName);
-
-        Set<GrantedAuthority> grantedAuthoritySet = new HashSet<>();
-
-        user.getAuthorities().forEach(userRole -> {
-            grantedAuthoritySet.add(new SimpleGrantedAuthority(userRole.getRole().getName()));
-        });
-        return new User(user.getUsername(), user.getPassword(), grantedAuthoritySet);
+            user.getAuthorities()
+                    .forEach(role -> {
+                        grantedAuthoritySet.add(new SimpleGrantedAuthority(role.getRole().getName()));
+                    });
+            return user;
     }
 }
