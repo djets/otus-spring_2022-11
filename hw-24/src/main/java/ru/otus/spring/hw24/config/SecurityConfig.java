@@ -39,7 +39,7 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .csrf().disable()
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.ALWAYS)
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeHttpRequests((authorize) ->
                         authorize
@@ -48,7 +48,9 @@ public class SecurityConfig {
                                 .antMatchers("/books/*/comments").hasAnyRole("ADMIN", "USER")
                                 .anyRequest().permitAll()
                 )
-                .formLogin().permitAll()
+                .formLogin().permitAll().defaultSuccessUrl("/books")
+                .and()
+                .rememberMe()
                 .and()
                 .logout().permitAll();
 
