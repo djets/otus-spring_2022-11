@@ -15,11 +15,12 @@
     <description>hw-24</description>
     <properties>
         <java.version>17</java.version>
-        <!--        <spring-boot.version>2.7.6</spring-boot.version>-->
+        <spring-boot.version>2.7.8</spring-boot.version>
         <mongock.version>4.3.8</mongock.version>
         <!--        <lombok.version>1.18.22</lombok.version>-->
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <flapdoodle.version>4.6.1</flapdoodle.version>
     </properties>
     <dependencies>
         <dependency>
@@ -38,7 +39,7 @@
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-<!--            <version>${lombok.version}</version>-->
+            <!--            <version>${lombok.version}</version>-->
             <optional>true</optional>
         </dependency>
         <dependency>
@@ -87,7 +88,7 @@
             <dependency>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-dependencies</artifactId>
-<!--                <version>${spring-boot.version}</version>-->
+                <version>${spring-boot.version}</version>
                 <type>pom</type>
             </dependency>
         </dependencies>

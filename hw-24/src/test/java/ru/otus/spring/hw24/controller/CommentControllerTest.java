@@ -13,65 +13,60 @@ import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 import ru.otus.spring.hw24.config.MongoConfigTest;
 import ru.otus.spring.hw24.dto.BookDto;
+import ru.otus.spring.hw24.dto.CommentDto;
 import ru.otus.spring.hw24.services.BookService;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
-import static org.hamcrest.Matchers.notNullValue;
+import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@WebMvcTest(BooksController.class)
+@WebMvcTest(CommentController.class)
 @ActiveProfiles("test")
 @TestPropertySource(locations = "classpath:application-test.yml")
 @Import(MongoConfigTest.class)
 @FieldDefaults(level = AccessLevel.PRIVATE)
-class BooksControllerTest {
+class CommentControllerTest {
+
     @Autowired
     MockMvc mvc;
 
     @MockBean
     BookService bookService;
 
-    @WithMockUser(username = "admin", authorities = {"ROLE_ADMIN"})
+    @WithMockUser(username = "user", authorities = {"ROLE_USER"})
     @Test
-    void showAll() throws Exception {
-        given(bookService.findAll()).willReturn(List.of(new BookDto()));
-        this.mvc.perform(get("/books"))
-                .andExpect(status().isOk())
-                .andExpect(model().attributeExists("booksDto"));
-    }
-
-    @WithMockUser(username = "admin", authorities = {"ROLE_ADMIN"})
-    @Test
-    void addBookPage() throws Exception {
-        this.mvc.perform(get("/books/create"))
-                .andExpect(status().isOk());
-    }
-
-    @WithMockUser(username = "admin", authorities = {"ROLE_ADMIN"})
-    @Test
-    void editBookPage() throws Exception {
-        given(bookService.findById("643112ec9c7af15a9d628797"))
-                .willReturn(new BookDto());
-        this.mvc.perform(get("/books/edit643112ec9c7af15a9d628797"))
-                .andExpect(status().isOk())
-                .andExpect(model().attribute("bookDto", notNullValue()));
-    }
-
-    @WithMockUser(username = "admin", roles = {"ADMIN"})
-    @Test
-    void saveBooks() throws Exception {
+    void getCommentsByBookId() throws Exception {
         BookDto bookDto = new BookDto();
         bookDto.setId("643112ec9c7af15a9d628797");
+        bookDto.setCommentDtoList(List.of(new CommentDto()));
+        given(bookService.findById("643112ec9c7af15a9d628797")).willReturn(bookDto);
+        given(bookService.findCommentsByBookId("643112ec9c7af15a9d628797")).willReturn(List.of(new CommentDto()));
+        this.mvc.perform(get("/books/{id}/comments", bookDto.getId()))
+                .andExpect(status().isOk())
+                .andExpect(model().attribute("commentDtoList", hasSize(1)))
+                .andExpect(model().attributeExists("commentDtoList"));
+    }
+
+    @WithMockUser(username = "user", authorities = {"ROLE_USER"})
+    @Test
+    void saveComments() throws Exception {
+        BookDto bookDto = new BookDto();
+        bookDto.setId("643112ec9c7af15a9d628797");
+        CommentDto commentDto = new CommentDto();
+        commentDto.setText("This a test comment");
+        bookDto.setCommentDtoList(new ArrayList<>(Arrays.asList(commentDto)));
+
         given(bookService.findById(bookDto.getId())).willReturn(bookDto);
         given(bookService.save(bookDto)).willReturn(bookDto.getId());
-        this.mvc.perform(post("/books/save")
-                        .with(csrf())
-                        .param("id", "1"))
+        this.mvc.perform(post("/books/{id}/comments/save", bookDto.getId())
+                        .with(csrf()))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/books"));
     }
