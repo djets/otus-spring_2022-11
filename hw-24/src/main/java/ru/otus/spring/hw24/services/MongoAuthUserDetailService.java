@@ -19,6 +19,7 @@ import java.util.Set;
 @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
 @RequiredArgsConstructor
 public class MongoAuthUserDetailService implements UserDetailsService {
+
     UserRepository userRepository;
 
     @Override

@@ -8,6 +8,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -15,9 +16,9 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class SecurityServiceImpl implements SecurityService {
 
-    AuthenticationManager authenticationManager;
-
     UserDetailsService userDetailsService;
+
+    SecurityFilterChain securityFilterChain;
 
     @Override
     public boolean login(String username, String password) {
@@ -26,6 +27,7 @@ public class SecurityServiceImpl implements SecurityService {
         UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
                 new UsernamePasswordAuthenticationToken(userDetails, password, userDetails.getAuthorities());
 
+        AuthenticationManager authenticationManager = (AuthenticationManager) securityFilterChain;
         authenticationManager.authenticate(usernamePasswordAuthenticationToken);
 
         if(usernamePasswordAuthenticationToken.isAuthenticated()) {

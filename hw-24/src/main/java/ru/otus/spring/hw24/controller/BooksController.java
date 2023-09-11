@@ -34,7 +34,7 @@ public class BooksController {
         return "createBook";
     }
 
-    @GetMapping(value = "/edit{id}")
+    @GetMapping(value = "/edit/{id}")
     public String editBookPage(@PathVariable("id") String id, Model model) {
         BookDto bookDto = bookService.findById(id);
         model.addAttribute("bookDto", bookDto);

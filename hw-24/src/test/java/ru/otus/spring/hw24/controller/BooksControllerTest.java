@@ -55,9 +55,11 @@ class BooksControllerTest {
     @WithMockUser(username = "admin", authorities = {"ROLE_ADMIN"})
     @Test
     void editBookPage() throws Exception {
-        given(bookService.findById("643112ec9c7af15a9d628797"))
-                .willReturn(new BookDto());
-        this.mvc.perform(get("/books/edit643112ec9c7af15a9d628797"))
+        BookDto bookDto = new BookDto();
+        bookDto.setId("643112ec9c7af15a9d628797");
+        given(bookService.findById(bookDto.getId()))
+                .willReturn(bookDto);
+        this.mvc.perform(get("/books/edit/{id}", bookDto.getId()))
                 .andExpect(status().isOk())
                 .andExpect(model().attribute("bookDto", notNullValue()));
     }
@@ -71,7 +73,7 @@ class BooksControllerTest {
         given(bookService.save(bookDto)).willReturn(bookDto.getId());
         this.mvc.perform(post("/books/save")
                         .with(csrf())
-                        .param("id", "1"))
+                        .param("id", "643112ec9c7af15a9d628797"))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/books"));
     }
