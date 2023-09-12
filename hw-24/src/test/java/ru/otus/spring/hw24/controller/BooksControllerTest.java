@@ -25,8 +25,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(BooksController.class)
-@ActiveProfiles("test")
-@TestPropertySource(locations = "classpath:application-test.yml")
 @Import(MongoConfigTest.class)
 @FieldDefaults(level = AccessLevel.PRIVATE)
 class BooksControllerTest {
