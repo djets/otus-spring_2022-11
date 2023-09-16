@@ -1,17 +1,24 @@
 spring:
   messages:
     encoding: UTF-8
+
   data:
     mongodb:
       database: booking-test
       host: localhost
       port: 30001
 
+de:
+  flapdoodle:
+    mongodb:
+      embedded:
+        version: 4.0.2
+
 mongock:
   runner-type: "InitializingBean"
   change-logs-scan-package:
-    - ru.otus.spring.hw19.config.changelog
+    - ru.otus.spring.hw24.config.changelog
   mongo-db:
-   write-concern:
-    journal: false
-   read-concern: local
+    write-concern:
+      journal: false
+    read-concern: local
